@@ -14,7 +14,6 @@ add_library(${NAME}
 
 target_link_libraries(${NAME}
 	msftgsl
-	micro_boost
 	logger
 	terminal
 )
