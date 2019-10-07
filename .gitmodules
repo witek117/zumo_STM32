@@ -1,0 +1,3 @@
+[submodule "core/external/micro_boost"]
+	path = core/external/micro_boost
+	url = https://wsn.elektro.agh.edu.pl:1003/actislink/micro_boost
