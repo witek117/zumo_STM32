@@ -1,3 +1,6 @@
 [submodule "core/external/micro_boost"]
 	path = core/external/micro_boost
 	url = https://wsn.elektro.agh.edu.pl:1003/actislink/micro_boost
+[submodule "core/window_terminal"]
+	path = core/window_terminal
+	url = https://github.com/witek117/VT100_windows_terminal
