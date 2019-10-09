@@ -48,12 +48,11 @@ class DRV8833 {
         }
     };
 
+    GPIO &Sleep;
+    GPIO &FAULT;
 public:
     MotorChannel Motor_A;
     MotorChannel Motor_B;
-
-    GPIO &Sleep;
-    GPIO &FAULT;
 
     enum class EnableMode : bool {
         ENABLE = true,
