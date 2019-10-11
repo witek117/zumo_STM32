@@ -17,7 +17,7 @@ TEST(KTIR0711S, sensor) {
 TEST(KTIR0711S, sensors_line) {
     constexpr static size_t table_len = 8;
     uint16_t data[table_len] = {4,5,6,7,8,9,2,3};
-    LineSensors<uint16_t , 1000, table_len> line(data, LineSensorsNamespace::FindValue::SMALL);
+    LineSensors<uint16_t , 1000, table_len> line(data);
 
     constexpr static float max_value = 500.0;
 
@@ -28,10 +28,12 @@ TEST(KTIR0711S, sensors_line) {
     }
 }
 
+
+
 TEST(KTIR0711S, sensors_line_too_big_index) {
     constexpr static size_t table_len = 8;
     uint16_t data[table_len] = {4,5,6,7,8,9,2,3};
-    LineSensors<uint16_t , 1000, table_len> line(data, LineSensorsNamespace::FindValue::BIG);
+    LineSensors<uint16_t , 1000, table_len> line(data);
 
     constexpr static float max_value = 500.0;
 
@@ -40,4 +42,14 @@ TEST(KTIR0711S, sensors_line_too_big_index) {
         EXPECT_EQ(0, line.get_single_normalized_value(i));
         EXPECT_EQ(0, line.get_single_normalized_value(i, max_value));
     }
+}
+
+TEST(LINE_DETECTOR, weights) {
+    constexpr static size_t table_len = 7;
+    uint16_t data[table_len] = {8,9,100,988,78,9,2};
+    LineSensors<uint16_t , 1000, table_len> line(data);
+    LineDetector<uint16_t , table_len> detector(line);
+
+    float line_postion =  detector.calculate_line_position();
+    std::cout << line_postion << std::endl;
 }

@@ -64,7 +64,7 @@ public:
         WORKING
     };
 
-    DRV8833(PWM &AIN1, PWM &AIN2, PWM &BIN1, PWM &BIN2, GPIO &Sleep, GPIO &FAULT): Motor_A(AIN1, AIN2), Motor_B(BIN1, BIN2), Sleep(Sleep), FAULT(FAULT) {
+    DRV8833(PWM &AIN1, PWM &AIN2, PWM &BIN1, PWM &BIN2, GPIO &Sleep, GPIO &FAULT): Sleep(Sleep), FAULT(FAULT), Motor_A(AIN1, AIN2), Motor_B(BIN1, BIN2) {
         set_enable(EnableMode::DISABLE);
     }
 
