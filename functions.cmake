@@ -73,3 +73,36 @@ function(ReadVariables MKFile VARIABLE_NAME)
         endforeach()
     endforeach()
 endfunction()
+
+function(target_jlink_flash TARGET BASE_ADDRESS)
+    set(COMMAND_FILE ${CMAKE_BINARY_DIR}/jlink/${TARGET}.flash.jlink)
+
+    get_property(FLASH_FILE TARGET ${TARGET} PROPERTY HEX_FILE)
+
+    if("${FLASH_FILE}" STREQUAL "")
+        get_property(FLASH_FILE TARGET ${TARGET} PROPERTY BIN_FILE)
+    endif()
+
+    configure_file(${CMAKE_SOURCE_DIR}/jlink/flash.jlink.template ${COMMAND_FILE})
+
+    unset(FLASH_FILE)
+
+    message("Device ${DEVICE}")
+
+    set(JLINK_ARGS
+            "-device" ${DEVICE}
+            "-ExitOnError"
+            "-CommanderScript" ${COMMAND_FILE}
+            )
+
+    if(NOT ${JLINK_SN} STREQUAL "")
+        list(APPEND JLINK_ARGS -SelectEmuBySN ${JLINK_SN})
+    endif()
+
+    add_custom_target(${TARGET}.flash
+            COMMAND ${JLINK} ${JLINK_ARGS}
+            DEPENDS ${FLASH_FILE}
+            WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+            )
+
+endfunction(target_jlink_flash)

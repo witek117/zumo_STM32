@@ -1,4 +1,6 @@
 set(NAME arm)
+# TODO
+set(DEVICE STM32F103C8)
 
 function(LOAD_DRIVERS)
 	file(GLOB_RECURSE SOURCES
@@ -64,3 +66,5 @@ target_memory_report(${NAME})
 target_asm_listing(${NAME})
 
 target_format_sources(${NAME} "${SOURCES_PROJECT}")
+
+target_jlink_flash(${NAME} 0x8000000)
