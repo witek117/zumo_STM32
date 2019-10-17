@@ -101,7 +101,7 @@ function(target_jlink_flash TARGET BASE_ADDRESS)
 
     add_custom_target(${TARGET}.flash
             COMMAND ${JLINK} ${JLINK_ARGS}
-            DEPENDS ${FLASH_FILE}
+            DEPENDS ${TARGET}.hex ${FLASH_FILE}
             WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
             )
 
