@@ -99,10 +99,65 @@ function(target_jlink_flash TARGET BASE_ADDRESS)
         list(APPEND JLINK_ARGS -SelectEmuBySN ${JLINK_SN})
     endif()
 
-    add_custom_target(${TARGET}.flash
+    add_custom_target(${TARGET}.flash_jlink
             COMMAND ${JLINK} ${JLINK_ARGS}
             DEPENDS ${TARGET}.hex ${FLASH_FILE}
             WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
             )
 
 endfunction(target_jlink_flash)
+
+function(target_stlink_flash TARGET)
+    add_custom_target(${TARGET}.flash_stlink
+            openocd -f interface/stlink-v2-1.cfg
+            -c "transport select hla_swd"
+            -f target/stm32f1x.cfg
+            -c "init"
+            -c "reset halt"
+            -c "flash write_image erase ${TARGET}"
+            -c "reset run"
+            -c "shutdown"
+            DEPENDS ${TARGET}
+            COMMENT "Flashing target hardware"
+            WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+endfunction(target_stlink_flash)
+
+function(load_submodules)
+    find_package(Git QUIET)
+    set(SEARCH_STATUS "SEARCH SUBMODULE")
+    if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+        # Update submodules as needed
+        option(GIT_SUBMODULE "Check submodules during build" ON)
+        if(GIT_SUBMODULE)
+            file(READ "${CMAKE_CURRENT_SOURCE_DIR}/.gitmodules" FileContents)
+            string(REPLACE "\\\n" "" FileContents ${FileContents})
+            string(REPLACE "\n" ";" FileLines ${FileContents})
+            list(REMOVE_ITEM FileLines "")
+
+            foreach(line ${FileLines})
+                if (${SEARCH_STATUS} STREQUAL "READ URL")
+                    set(MODULE_URL ${line})
+                    set(SEARCH_STATUS "SEARCH SUBMODULE")
+
+                    string(REPLACE "path = " "" MODULE_PATH ${MODULE_PATH})
+                    string(REPLACE "url = " "" MODULE_URL ${MODULE_URL})
+
+                    execute_process(COMMAND ${GIT_EXECUTABLE} submodule add ${MODULE_URL} ${MODULE_PATH})
+                    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update)
+                endif()
+
+                if (${SEARCH_STATUS} STREQUAL "READ PATH")
+                    set(MODULE_PATH ${line})
+                    set(SEARCH_STATUS "READ URL")
+                endif()
+
+                if (${SEARCH_STATUS} STREQUAL "SEARCH SUBMODULE")
+                    string(FIND ${line} "submodule" FOUND_VARIABLE)
+                    if (${FOUND_VARIABLE} EQUAL 1)
+                        set(SEARCH_STATUS "READ PATH")
+                    endif()
+                endif()
+            endforeach()
+        endif()
+    endif()
+endfunction(load_submodules)

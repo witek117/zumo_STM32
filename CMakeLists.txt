@@ -14,6 +14,7 @@ message(STATUS "Target platform ${TARGET}")
 
 include(functions.cmake)
 include(${PLATFORM_PATH}/toolchain.cmake)
+load_submodules()
 
 project(ZUMO C CXX ASM)
 
@@ -40,4 +41,5 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_PATH}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH}/bin)
 
 add_subdirectory(core)
+
 add_subdirectory(${PLATFORM_PATH})

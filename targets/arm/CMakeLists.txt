@@ -28,6 +28,8 @@ foreach(file ${allDriversFiles})
 	set_source_files_properties(${file} PROPERTIES COMPILE_FLAGS "-w")
 endforeach(file)
 
+set_source_files_properties(Src/syscalls.c PROPERTIES COMPILE_FLAGS "-w")
+
 file(GLOB_RECURSE SOURCES_AUTO
 		Inc/*.h
 		Src/*.c
@@ -53,7 +55,7 @@ set(SOURCES
 
 add_executable(${NAME} ${SOURCES})
 
-set_target_properties(${NAME} PROPERTIES LINK_FLAGS "-T ${PLATFORM_LINKER_SCRIPT} -Wl,--gc-sections --specs=nano.specs -lc")
+set_target_properties(${NAME} PROPERTIES LINK_FLAGS "-T ${PLATFORM_LINKER_SCRIPT} -Wl,--gc-sections -specs=nano.specs -specs=nosys.specs -flto -lc ")
 
 target_link_libraries(${NAME}
 	core
@@ -68,3 +70,5 @@ target_asm_listing(${NAME})
 target_format_sources(${NAME} "${SOURCES_PROJECT}")
 
 target_jlink_flash(${NAME} 0x8000000)
+
+target_stlink_flash(${NAME})
