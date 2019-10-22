@@ -31,31 +31,33 @@ public:
 };
 
 
-//class STM32_PWM : public PWM {
-//    TIM_HandleTypeDef *htim;
-//    uint32_t Channel;
-//    uint32_t CCRx;
-//
-//public:
-//    STM32_PWM(TIM_HandleTypeDef *htim, uint32_t Channel, uint32_t CCRx) : htim(htim), Channel(Channel), CCRx(CCRx) {
-//
-//    }
-//
-//    void set_duty_cycle(float) {
-//        htim->Channel->Channel =
-//    }
-//
-//    void off() {
-//
-//    }
-//
-//    void on() {
-//
-//    }
-//
-//
-//
-//
-//};
+template <uint32_t max_value>
+class STM32_PWM : public PWM {
+    volatile uint32_t &CCRx;
+public:
+    STM32_PWM(volatile uint32_t &CCRx) : CCRx(CCRx) {
+
+    }
+
+    void set_duty_cycle(float duty_cycle) override {
+        if (duty_cycle < 0) {
+            CCRx = 0;
+            return;
+        } else if (duty_cycle >= 1) {
+            CCRx = max_value;
+            return;
+        }
+        duty_cycle *= 1000;
+        CCRx = static_cast<uint32_t>(duty_cycle);
+    }
+
+    void off() override {
+        CCRx = 0;
+    }
+
+    void on() override {
+        CCRx = max_value;
+    }
+};
 
 #endif //ZUMO_HAL_H
