@@ -19,7 +19,6 @@ public:
 
     virtual void set() = 0;
     virtual void reset() = 0;
-    virtual void setMode() = 0;
     virtual bool get() = 0;
 
 

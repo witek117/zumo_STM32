@@ -4,3 +4,4 @@
 [submodule "core/window_terminal"]
 	path = core/window_terminal
 	url = https://github.com/witek117/VT100_windows_terminal
+
