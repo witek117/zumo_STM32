@@ -4,6 +4,17 @@
 #include "GPIO/GPIO.h"
 #include "main.h"
 
+
+class STM32_GPIO_FAKE : public GPIO {
+public:
+    STM32_GPIO_FAKE () = default ;
+    void set() override { }
+    void reset() override { }
+    void toggle() { }
+    bool get() override { return false; }
+};
+
+
 class STM32_GPIO : public GPIO {
     GPIO_TypeDef *GPIOx;
     uint16_t GPIO_Pin;
@@ -57,6 +68,10 @@ public:
 
     void on() override {
         CCRx = max_value;
+    }
+
+    float get_duty_cycle() override {
+        return static_cast<float>(CCRx) / 1000.0f;
     }
 };
 

@@ -10,7 +10,7 @@ protected:
     GPIO &Pin_N;
 
     int encoder_prescaler = 1;
-    constexpr static int encoder_debounce_stable = 5;
+    constexpr static int encoder_debounce_stable = 1;
 
     volatile int encoderCount = 0;
 

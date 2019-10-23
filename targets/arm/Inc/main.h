@@ -60,10 +60,22 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SENS_IR_LED_Pin GPIO_PIN_14
+#define SENS_IR_LED_GPIO_Port GPIOC
 #define LED1_Pin GPIO_PIN_5
 #define LED1_GPIO_Port GPIOC
+#define FAULT_Pin GPIO_PIN_15
+#define FAULT_GPIO_Port GPIOB
 #define LED2_Pin GPIO_PIN_11
 #define LED2_GPIO_Port GPIOA
+#define MOT_L_A_Pin GPIO_PIN_4
+#define MOT_L_A_GPIO_Port GPIOB
+#define MOT_L_B_Pin GPIO_PIN_5
+#define MOT_L_B_GPIO_Port GPIOB
+#define MOT_R_A_Pin GPIO_PIN_6
+#define MOT_R_A_GPIO_Port GPIOB
+#define MOT_R_B_Pin GPIO_PIN_7
+#define MOT_R_B_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
