@@ -4,15 +4,18 @@
 #include "vector"
 #include "DRV8833.h"
 #include "encoder.h"
+#include "PID.h"
+#include "KTIR0711S.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 
-extern UART_HandleTypeDef huart1;
+//extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
 uint8_t Received;
-void usart_put_char(char ch) { HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 10); }
+void usart_put_char(char ch) { HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 10); }
 
 STM32_GPIO LED1(LED1_GPIO_Port, LED1_Pin);
 
@@ -30,6 +33,8 @@ void handle_usart_interrupt(UART_HandleTypeDef *huart) {
         /* UART in mode Receiver -------------------------------------------------*/
         if (((isrflags & USART_SR_RXNE) != RESET) && ((cr1its & USART_CR1_RXNEIE) != RESET)) {
             window_manager::in_RX_callback(static_cast<uint8_t >(huart->Instance->DR));
+
+
             return;
         }
     }
@@ -66,6 +71,7 @@ void change_motor_brakeB () {
     if (MotorBrakeB.get_value_index() == 0) {
         motor_driver.Motor_B.run();
     } else {
+
         motor_driver.Motor_B.brake();
     }
 }
@@ -89,6 +95,12 @@ Label Encoder_R("R", "", false, nullptr, 1, -1000, 1000);
 volatile bool _10Hz_flag = false;
 void _10Hz();
 
+PID pid_L(0.4, 0.1, 0.01, 1, 1, -1, 1);
+PID pid_R(0.4, 0.1, 0.01, 1, 1, -1, 1);
+
+Label Duty_R("R", "", false, nullptr, 100, 0, 100);
+Label Duty_L("L", "", false, nullptr, 100, 0, 100);
+
 extern "C"
 void Main() {
     // LED configuration
@@ -108,6 +120,7 @@ void Main() {
     windows.emplace_back(Window("Motor",  1, 1, 10, 5, true));
     windows.emplace_back(Window("IR",  13, 1, 16, 17, false));
     windows.emplace_back(Window("ENC",  31, 1, 16, 5, false));
+    windows.emplace_back(Window("Duty",  31, 7, 16, 5, false));
 
     Label IR_1("1", "",false, nullptr, 1, 0, 4095);
     Label IR_2("2", "",false, nullptr, 1, 0, 4095);
@@ -127,14 +140,15 @@ void Main() {
     windows[1].add_box(&IR_7);
     windows[1].add_box(&IR_8);
 
-
-
     windows[2].add_box(&Encoder_L);
     windows[2].add_box(&Encoder_R);
 
+    windows[3].add_box(&Duty_L);
+    windows[3].add_box(&Duty_R);
+
 //    HAL_UART_Receive_DMA(&huart1, &Received, 1);
 
-    __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 
     MotorBrakeA.add_text("ON");
     MotorBrakeA.add_text("OFF");
@@ -165,6 +179,9 @@ void Main() {
 
     HAL_TIM_Base_Start_IT(&htim3);
 
+    LineSensors <volatile uint16_t , 4095, 8>line_sensors(sensors);
+    LineDetector<volatile uint16_t, 8> line_detector(line_sensors);
+
     while(1) {
         window_manager::run();
 //        LED1.toggle();
@@ -180,6 +197,10 @@ void Main() {
             IR_6.set(sensors[5]);
             IR_7.set(sensors[6]);
             IR_8.set(sensors[7]);
+
+            VT::move_to(0, 25);
+            VT::print((int)(line_detector.calculate_line_position() * 1000.0));
+            VT::print("  ");
         }
 
         if (_10Hz_flag) {
@@ -200,8 +221,16 @@ void My_SysTick_Handler() {
 }
 
 void _10Hz() {
-    Encoder_R.set(-MOT_R.encoderGetCountAndReset());
-    Encoder_L.set( MOT_L.encoderGetCountAndReset());
+    int R_data = -MOT_R.encoderGetCountAndReset();
+    int L_data = MOT_L.encoderGetCountAndReset();
+    Encoder_R.set(R_data);
+    Encoder_L.set(L_data);
+
+    float ret_R = pid_R.tick(static_cast<float>(R_data) / 400.0);
+    float ret_L = pid_L.tick(static_cast<float>(L_data) / 400.0);
+
+    Duty_R.set((int)(ret_R * 100.0));
+    Duty_L.set((int)(ret_L * 100.0));
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {

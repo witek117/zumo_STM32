@@ -3,7 +3,6 @@
 
 #include "GPIO/GPIO.h"
 #include <array>
-#include <iostream>
 #include <gsl/span>
 #include <cmath>
 
@@ -33,7 +32,8 @@ public:
     float get_single_normalized_value(size_t index, T max = max_detected_value) {
         float ret_value = 0.0f;
         if (index < sensors_number) {
-            ret_value = static_cast<float>(head_data_pointer[index]) / static_cast<float>(max);
+            T single_data = max - head_data_pointer[index];
+            ret_value = static_cast<float>(single_data) / static_cast<float>(max);
         }
         if (ret_value > 1.0f) {
             return 1.0f;
