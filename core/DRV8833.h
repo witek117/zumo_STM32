@@ -114,6 +114,12 @@ public:
             Sleep.reset();
         }
     }
+
+//    template <int multiply>
+    void set_differential(float duty_cycle, float difference) {
+        Motor_A.set_duty_cycle(duty_cycle - difference);
+        Motor_B.set_duty_cycle(duty_cycle + difference );
+    }
 };
 
 

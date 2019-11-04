@@ -81,14 +81,14 @@ protected:
     LineSensorsBase<T, sensors_number> &sensors_line;
     std::array<int, sensors_number> sensors_weights;
     float line_position;
-    std::array<float, 5> line_history;
+    std::array<float, 20> line_history;
     bool line_detected = false;
     LineStatus line_status;
 
 public:
     LineDetector(LineSensorsBase<T, sensors_number> &sensors_line) : sensors_line(sensors_line),
                                                                      line_position(0),
-                                                                     line_history({0, 0, 0, 0, 0}),
+                                                                     line_history({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
                                                                      line_status(LineStatus::UNKNOWN) {
             calculate_sensors_weights();
     }
@@ -98,6 +98,8 @@ public:
     }
 
     float calculate_line_position() {
+
+//        static int index_in_history = 0;
         line_position = 0.0f;
         float sensors_sum = 0.0f;
 
@@ -107,23 +109,33 @@ public:
             sensors_sum += item;
         }
 
-        if (sensors_sum >= 1.0) { // line detected
+//        if (sensors_sum >= 1.0) { // line detected
 //            line_detected = true;
-            line_status = LineStatus::DETECTED;
+//            line_status = LineStatus::DETECTED;
             for(size_t i = 0; i < data.size(); i++) {
                 line_position += data[i] * sensors_weights[i] / sensors_sum;
             }
-            update_line_history();
+//            index_in_history = (index_in_history + 1) % line_history.size();
+//            line_history[index_in_history] = line_position;
+//
+//            line_position = 0;
+//            for (auto item : line_history) {
+//                line_position += item;
+//            }
+//            line_position /= 20.0;
 
-        } else { // line not detected
-            // check na what side was last line detection
-            line_position = std::round(line_history.at(0)) * 10.0;
-            if ( line_position > 0) {
-                line_status = LineStatus::LOST_ON_RIGHT;
-            } else {
-                line_status = LineStatus::LOST_ON_LEFT;
-            }
-        }
+
+//            update_line_history();
+
+//        } else { // line not detected
+//            // check na what side was last line detection
+//            line_position = std::round(line_history.at(0)) * 10.0;
+//            if ( line_position > 0) {
+//                line_status = LineStatus::LOST_ON_RIGHT;
+//            } else {
+//                line_status = LineStatus::LOST_ON_LEFT;
+//            }
+//        }
         return line_position;
     }
 
@@ -136,6 +148,10 @@ public:
             }
             line_history.at(0) = round_line_position;
         }
+    }
+
+    float get_line_position() {
+        return line_position;
     }
 
 //    void follow_line() {

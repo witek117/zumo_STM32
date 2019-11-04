@@ -15,6 +15,7 @@ public:
     float error;
     float prevError;
     float integral;
+    float calculated_value = 0;
 
     constexpr PID(float Kp, float Ki, float Kd, uint16_t max_power, float target, float lowerLimit, float upperLimit) noexcept :
         Kp(Kp), Ki(Ki), Kd(Kd), max_power(max_power),
@@ -37,7 +38,12 @@ public:
 
         prevError = error;
 
-        return std::clamp(pwr, lowerLimit, actualUpperLimit);
+        calculated_value = std::clamp(pwr, lowerLimit, actualUpperLimit);
+        return calculated_value;
+    }
+
+    float get_last_value() {
+        return calculated_value;
     }
 
     void reset() {

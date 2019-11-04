@@ -13,9 +13,10 @@ extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 
 //extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart2;
+//extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart3;
 uint8_t Received;
-void usart_put_char(char ch) { HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 10); }
+void usart_put_char(char ch) { HAL_UART_Transmit(&huart3, (uint8_t *)&ch, 1, 10); }
 
 STM32_GPIO LED1(LED1_GPIO_Port, LED1_Pin);
 
@@ -101,6 +102,26 @@ PID pid_R(0.4, 0.1, 0.01, 1, 1, -1, 1);
 Label Duty_R("R", "", false, nullptr, 100, 0, 100);
 Label Duty_L("L", "", false, nullptr, 100, 0, 100);
 
+
+volatile bool driver_enable = false;
+void change_motors_enable() ;
+Text MotorsEnable("EN",true, change_motors_enable);
+void change_motors_enable() {
+    if (MotorsEnable.get_value_index() == 0) {
+//        motor_driver.Motor_A.brake();
+//        motor_driver.Motor_B.brake();
+        driver_enable = false;
+    } else {
+        driver_enable = true;
+    }
+}
+
+
+LineSensors <volatile uint16_t , 4095, 8>line_sensors(sensors);
+LineDetector<volatile uint16_t, 8> line_detector(line_sensors);
+
+//PID LinePID(0.50, 0.1, 0, 1, 0, -0.3, 0.3);
+
 extern "C"
 void Main() {
     // LED configuration
@@ -121,6 +142,7 @@ void Main() {
     windows.emplace_back(Window("IR",  13, 1, 16, 17, false));
     windows.emplace_back(Window("ENC",  31, 1, 16, 5, false));
     windows.emplace_back(Window("Duty",  31, 7, 16, 5, false));
+    windows.emplace_back(Window("Nothing",  0, 19, 16, 5, true));
 
     Label IR_1("1", "",false, nullptr, 1, 0, 4095);
     Label IR_2("2", "",false, nullptr, 1, 0, 4095);
@@ -146,9 +168,14 @@ void Main() {
     windows[3].add_box(&Duty_L);
     windows[3].add_box(&Duty_R);
 
+    MotorsEnable.add_text("OFF");
+    MotorsEnable.add_text("ON");
+
+    windows[4].add_box(&MotorsEnable);
+
 //    HAL_UART_Receive_DMA(&huart1, &Received, 1);
 
-    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+    __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 
     MotorBrakeA.add_text("ON");
     MotorBrakeA.add_text("OFF");
@@ -166,8 +193,8 @@ void Main() {
 
     motor_driver.Motor_A.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
     motor_driver.Motor_B.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
-    motor_driver.Motor_A.set_duty_cycle(0.9);
-    motor_driver.Motor_B.set_duty_cycle(0.9);
+    motor_driver.Motor_A.set_duty_cycle(0.7);
+    motor_driver.Motor_B.set_duty_cycle(0.7);
     motor_driver.Motor_A.brake();
     motor_driver.Motor_B.brake();
 
@@ -179,10 +206,15 @@ void Main() {
 
     HAL_TIM_Base_Start_IT(&htim3);
 
-    LineSensors <volatile uint16_t , 4095, 8>line_sensors(sensors);
-    LineDetector<volatile uint16_t, 8> line_detector(line_sensors);
+
 
     while(1) {
+
+
+
+
+
+
         window_manager::run();
 //        LED1.toggle();
         LED2.toggle();
@@ -199,7 +231,8 @@ void Main() {
             IR_8.set(sensors[7]);
 
             VT::move_to(0, 25);
-            VT::print((int)(line_detector.calculate_line_position() * 1000.0));
+//            VT::print((int)(line_detector.calculate_line_position() * 1000.0));
+            VT::print((int)(line_detector.get_line_position() * 1000.0));
             VT::print("  ");
         }
 
@@ -214,7 +247,7 @@ extern "C"
 void My_SysTick_Handler() {
     static uint_fast16_t dd = 0;
     dd++;
-    if (dd == 500) {
+    if (dd == 200) {
         refresh_values = true;
         dd = 0;
     }
@@ -239,6 +272,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
         MOT_L.encoder10kHzTickISR();
 
         static uint16_t divider = 0;
+
+        if (divider == 100) {
+            line_detector.calculate_line_position();
+
+
+            if (driver_enable) {
+//            LinePID.tick(line_detector.calculate_line_position());
+                motor_driver.set_differential(0.25, line_detector.get_line_position());
+            } else {
+//            LinePID.reset();
+                motor_driver.Motor_A.set_duty_cycle(0);
+                motor_driver.Motor_B.set_duty_cycle(0);
+            }
+        }
+
         if (++divider == 1000) { // 10Hz
             divider = 0;
             _10Hz_flag = true;

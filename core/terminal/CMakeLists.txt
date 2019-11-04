@@ -1,12 +1,9 @@
 set(NAME terminal)
 
-add_library(${NAME} STATIC
-    terminal.cpp
-    terminal.h
-)
+add_library(${NAME} INTERFACE)
 
-target_link_libraries(${NAME}
+target_link_libraries(${NAME} INTERFACE
     msftgsl
 )
 
-target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
