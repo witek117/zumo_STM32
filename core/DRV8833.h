@@ -1,7 +1,7 @@
 #ifndef ZUMO_DRV8833_H
 #define ZUMO_DRV8833_H
 
-#include "GPIO/GPIO.h"
+#include "hal.h"
 
 class DRV8833 {
 public:
@@ -19,8 +19,8 @@ public:
             REVERSE_SLOW_DECAY
         };
     private:
-        PWM &IN1;
-        PWM &IN2;
+        hal::PWM &IN1;
+        hal::PWM &IN2;
 
         float last_IN1_duty_cycle = 0;
         float last_IN2_duty_cycle = 0;
@@ -28,7 +28,7 @@ public:
         Mode mode = Mode::FORWARD_FAST_DECAY;
         RunningMode runningMode = RunningMode::RUNNING;
     public:
-        MotorChannel(PWM &IN1, PWM &IN2): IN1(IN1), IN2(IN2) {
+        MotorChannel(hal::PWM &IN1, hal::PWM &IN2): IN1(IN1), IN2(IN2) {
 
         }
 
@@ -79,8 +79,8 @@ public:
     };
 
 private:
-    GPIO &Sleep;
-    GPIO &FAULT;
+    hal::GPIO &Sleep;
+    hal::GPIO &FAULT;
 public:
     MotorChannel Motor_A;
     MotorChannel Motor_B;
@@ -95,7 +95,7 @@ public:
         WORKING
     };
 
-    DRV8833(PWM &AIN1, PWM &AIN2, PWM &BIN1, PWM &BIN2, GPIO &Sleep, GPIO &FAULT): Sleep(Sleep), FAULT(FAULT), Motor_A(AIN1, AIN2), Motor_B(BIN1, BIN2) {
+    DRV8833(hal::PWM &AIN1, hal::PWM &AIN2, hal::PWM &BIN1, hal::PWM &BIN2, hal::GPIO &Sleep, hal::GPIO &FAULT): Sleep(Sleep), FAULT(FAULT), Motor_A(AIN1, AIN2), Motor_B(BIN1, BIN2) {
         set_enable(EnableMode::DISABLE);
     }
 

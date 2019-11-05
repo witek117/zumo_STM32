@@ -1,11 +1,10 @@
 #ifndef ZUMO_HAL_H
 #define ZUMO_HAL_H
 
-#include "GPIO/GPIO.h"
+#include <hal.h>
 #include "main.h"
 
-
-class STM32_GPIO_FAKE : public GPIO {
+class STM32_GPIO_FAKE : public hal::GPIO {
 public:
     STM32_GPIO_FAKE () = default ;
     void set() override { }
@@ -14,11 +13,9 @@ public:
     bool get() override { return false; }
 };
 
-
-class STM32_GPIO : public GPIO {
+class STM32_GPIO : public hal::GPIO {
     GPIO_TypeDef *GPIOx;
     uint16_t GPIO_Pin;
-
 public:
     STM32_GPIO (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin) : GPIOx(GPIOx), GPIO_Pin(GPIO_Pin) {
 
@@ -41,14 +38,11 @@ public:
     }
 };
 
-
 template <uint32_t max_value>
-class STM32_PWM : public PWM {
+class STM32_PWM : public hal::PWM {
     volatile uint32_t &CCRx;
 public:
-    STM32_PWM(volatile uint32_t &CCRx) : CCRx(CCRx) {
-
-    }
+    STM32_PWM(volatile uint32_t &CCRx) : CCRx(CCRx) { }
 
     void set_duty_cycle(float duty_cycle) override {
         if (duty_cycle < 0) {
@@ -74,5 +68,6 @@ public:
         return static_cast<float>(CCRx) / 1000.0f;
     }
 };
+
 
 #endif //ZUMO_HAL_H

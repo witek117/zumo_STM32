@@ -1,15 +1,18 @@
 #ifndef ZUMO_KTIR0711S_H
 #define ZUMO_KTIR0711S_H
 
-#include "GPIO/GPIO.h"
+#include <hal.h>
 #include <array>
 #include <gsl/span>
 #include <cmath>
+#include "mean.h"
 
 template <typename T, int sensors_number>
 class LineSensorsBase {
 public:
     virtual std::array<float, sensors_number> get_all_normalized_data() = 0;
+    virtual void init() = 0;
+    virtual void deinit() = 0;
 };
 
 template <typename T, int max_detected_value, int sensors_number>
@@ -17,10 +20,10 @@ class LineSensors : public LineSensorsBase<T, sensors_number> {
 
     gsl::span<T> head_data_pointer;
     std::array<float, sensors_number> sensors_normalized_data;
-
+    hal::GPIO& enable;
 public:
-    LineSensors(gsl::span<T> head_data_pointer) :
-            head_data_pointer(head_data_pointer) {}
+    LineSensors(gsl::span<T> head_data_pointer, hal::GPIO& enable) :
+            head_data_pointer(head_data_pointer), enable(enable) {}
 
     T get_single_raw_value(size_t index) {
         if (index < sensors_number) {
@@ -46,6 +49,14 @@ public:
             sensors_normalized_data[i] = get_single_normalized_value(i);
         }
         return sensors_normalized_data;
+    }
+
+    void init() override {
+        enable.set();
+    }
+
+    void deinit() override {
+        enable.reset();
     }
 };
 
@@ -80,17 +91,26 @@ public:
 protected:
     LineSensorsBase<T, sensors_number> &sensors_line;
     std::array<int, sensors_number> sensors_weights;
-    float line_position;
+    Mean<float , 5> line_position;
+//    float line_position;
     std::array<float, 20> line_history;
     bool line_detected = false;
     LineStatus line_status;
 
 public:
     LineDetector(LineSensorsBase<T, sensors_number> &sensors_line) : sensors_line(sensors_line),
-                                                                     line_position(0),
+                                                                     line_position(),
                                                                      line_history({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
                                                                      line_status(LineStatus::UNKNOWN) {
             calculate_sensors_weights();
+    }
+
+    void init() {
+        sensors_line.init();
+    }
+
+    void deinit() {
+        sensors_line.deinit();
     }
 
     std::array<int, sensors_number> get_sensors_weights() {
@@ -100,7 +120,7 @@ public:
     float calculate_line_position() {
 
 //        static int index_in_history = 0;
-        line_position = 0.0f;
+        float temp_line_position = 0.0f;
         float sensors_sum = 0.0f;
 
         auto data = sensors_line.get_all_normalized_data();
@@ -113,7 +133,7 @@ public:
 //            line_detected = true;
 //            line_status = LineStatus::DETECTED;
             for(size_t i = 0; i < data.size(); i++) {
-                line_position += data[i] * sensors_weights[i] / sensors_sum;
+                temp_line_position += data[i] * sensors_weights[i] / sensors_sum;
             }
 //            index_in_history = (index_in_history + 1) % line_history.size();
 //            line_history[index_in_history] = line_position;
@@ -136,11 +156,12 @@ public:
 //                line_status = LineStatus::LOST_ON_LEFT;
 //            }
 //        }
-        return line_position;
+        line_position.put_value(temp_line_position);
+        return line_position.get_value();
     }
 
     void update_line_history() {
-        float round_line_position = std::round(line_position);
+        float round_line_position = std::round(line_position.get_value());
 
         if (round_line_position != line_history.at(0)) {
             for (int i = line_history.size() - 1; i > 0; i--) {
@@ -151,7 +172,7 @@ public:
     }
 
     float get_line_position() {
-        return line_position;
+        return line_position.get_value();
     }
 
 //    void follow_line() {
