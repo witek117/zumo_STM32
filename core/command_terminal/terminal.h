@@ -2,8 +2,12 @@
 
 #include <gsl/span>
 #include <cstring>
+#include <functional>
 
 namespace terminal {
+
+void init ();
+
 
 template<class...> constexpr std::false_type always_false{};
 
@@ -54,8 +58,21 @@ struct Command {
 
 template<typename... T>
 class Terminal {
+    std::function<void(char)> print_char_fun = nullptr;
 public:
-    Terminal(T&... cmds) : commands(std::tuple<T&...>(cmds...)) {
+    Terminal(T&... cmds ) : commands(std::tuple<T&...>(cmds...)){ }
+
+
+    bool init (std::function<void(char)> fun) {
+        if (fun) {
+            print_char_fun = fun;
+            return true;
+        }
+        return false;
+    }
+
+    void send (char c) {
+        print_char_fun(c);
     }
 
     bool parse_line(char *line) {
@@ -103,4 +120,4 @@ private:
     std::tuple<T&...> commands;
 };
 
-}  // namespace terminal
+}  // namespace command_terminal

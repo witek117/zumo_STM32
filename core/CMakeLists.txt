@@ -24,5 +24,5 @@ target_format_sources(${NAME} "${SOURCES}")
 
 add_subdirectory(external)
 add_subdirectory(logger)
-add_subdirectory(terminal)
+add_subdirectory(command_terminal)
 add_subdirectory(window_terminal)

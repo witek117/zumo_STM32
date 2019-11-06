@@ -281,8 +281,8 @@ void TIM3_IRQHandler(void)
 void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
-//    void handle_usart_interrupt(UART_HandleTypeDef *huart);
-//    handle_usart_interrupt(&huart1);
+    void handle_usart1_interrupt();
+    handle_usart1_interrupt();
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
@@ -296,7 +296,8 @@ void USART1_IRQHandler(void)
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
-
+    void handle_usart2_interrupt();
+    handle_usart2_interrupt();
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
@@ -310,8 +311,8 @@ void USART2_IRQHandler(void)
 void USART3_IRQHandler(void)
 {
   /* USER CODE BEGIN USART3_IRQn 0 */
-    void handle_usart_interrupt(UART_HandleTypeDef *huart);
-    handle_usart_interrupt(&huart3);
+    void handle_usart3_interrupt();
+    handle_usart3_interrupt();
   /* USER CODE END USART3_IRQn 0 */
   HAL_UART_IRQHandler(&huart3);
   /* USER CODE BEGIN USART3_IRQn 1 */

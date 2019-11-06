@@ -69,5 +69,9 @@ public:
     }
 };
 
+class STC32_UART {
+
+};
+
 
 #endif //ZUMO_HAL_H

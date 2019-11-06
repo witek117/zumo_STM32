@@ -8,38 +8,27 @@
 #include "KTIR0711S.h"
 #include "ZUMO.h"
 #include "mean.h"
+#include "command_terminal/commands.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 
-//extern UART_HandleTypeDef huart1;
-//extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
-uint8_t Received;
-void usart_put_char(char ch) { HAL_UART_Transmit(&huart3, (uint8_t *)&ch, 1, 10); }
 
 STM32_GPIO LED1(LED1_GPIO_Port, LED1_Pin);
 
-extern "C"
-void handle_usart_interrupt(UART_HandleTypeDef *huart) {
-    uint32_t isrflags   = READ_REG(huart->Instance->SR);
-    uint32_t cr1its     = READ_REG(huart->Instance->CR1);
-    uint32_t errorflags = 0x00U;
-
-    /* If no error occurs */
-    errorflags = (isrflags & (uint32_t)(USART_SR_PE | USART_SR_FE | USART_SR_ORE | USART_SR_NE));
-    if (errorflags == RESET) {
-        /* UART in mode Receiver -------------------------------------------------*/
-        if (((isrflags & USART_SR_RXNE) != RESET) && ((cr1its & USART_CR1_RXNEIE) != RESET)) {
-            window_manager::in_RX_callback(static_cast<uint8_t >(huart->Instance->DR));
-            return;
-        }
-    }
+void hal::enable_interrupts() {
+    __enable_irq();
 }
 
-std::vector<Window> windows;
+
+void hal::disable_interrupts() {
+    __disable_irq();
+}
 
 STM32_PWM<1000> PWM_1_CH1(TIM1->CCR1);
 STM32_PWM<1000> PWM_1_CH2(TIM1->CCR2);
@@ -75,47 +64,83 @@ ZUMO& zumo (void) {
     return _zumo;
 }
 
-void change_motor_brakeA();
-Text MotorBrakeA("L", true, change_motor_brakeA);
-void change_motor_brakeA () {
-    if (MotorBrakeA.get_value_index() == 0) {
-        zumo().motor_driver.Motor_A.run();
-    } else {
-        zumo().motor_driver.Motor_A.brake();
+class STM32_UART {
+public:
+    enum class UARTMode {
+        TERMINAL,
+        COMMAND,
+        NONE
+    };
+    UARTMode uart_mode;
+private:
+    UART_HandleTypeDef &huart;
+    std::function<void(char)> fun;
+public:
+    STM32_UART(UART_HandleTypeDef &huart): uart_mode(UARTMode::NONE), huart(huart), fun(nullptr) {}
+
+    void send(char ch) {
+        HAL_UART_Transmit(&huart, reinterpret_cast<uint8_t *>(&ch), 1, 10);
     }
+
+    void interrupt() {
+        uint32_t isrflags   = READ_REG(huart.Instance->SR);
+        uint32_t cr1its     = READ_REG(huart.Instance->CR1);
+        uint32_t errorflags = 0x00U;
+
+        /* If no error occurs */
+        errorflags = (isrflags & (uint32_t)(USART_SR_PE | USART_SR_FE | USART_SR_ORE | USART_SR_NE));
+        if (errorflags == RESET) {
+            /* UART in mode Receiver -------------------------------------------------*/
+            if (((isrflags & USART_SR_RXNE) != RESET) && ((cr1its & USART_CR1_RXNEIE) != RESET)) {
+                on_receive(static_cast<char >(huart.Instance->DR));
+                return;
+            }
+        }
+    }
+
+    void on_receive(char c) {
+        if (uart_mode==UARTMode::NONE) {
+            if (c == 't') {
+                if (VT::init([this](char ch) {this->send(ch);})) {
+                    fun = &window_manager::in_RX_callback;
+                }
+            } else if (c == 'c' ) {
+                if (commands::terminal().init([this](char ch) {this->send(ch);})) {
+                    fun = &hal::receive_char_interrupt;
+                }
+            }
+            return;
+        } else {
+            if (fun) {
+                fun(c);
+            }
+        }
+    }
+};
+
+STM32_UART UART1(huart1);
+STM32_UART UART2(huart2);
+STM32_UART UART3(huart3);
+
+extern "C" void handle_usart1_interrupt() {
+    UART1.interrupt();
 }
 
-void change_motor_brakeB();
-Text MotorBrakeB("R", true, change_motor_brakeB);
-void change_motor_brakeB () {
-    if (MotorBrakeB.get_value_index() == 0) {
-        zumo().motor_driver.Motor_B.run();
-    } else {
-
-        zumo().motor_driver.Motor_B.brake();
-    }
+extern "C" void handle_usart2_interrupt() {
+    UART2.interrupt();
 }
 
-volatile bool refresh_values = false;
-volatile bool _10Hz_flag = false;
-void _10Hz();
+extern "C" void handle_usart3_interrupt() {
+    UART3.interrupt();
+}
 
 PID pid_L(0.4, 0.1, 0.01, 1, 1, -1, 1);
 PID pid_R(0.4, 0.1, 0.01, 1, 1, -1, 1);
 
-Label Duty_R("R", "", false, nullptr, 100, 0, 100);
-Label Duty_L("L", "", false, nullptr, 100, 0, 100);
-
-Label Encoder_L("L", "", false, nullptr, 1, -1000, 1000);
-Label Encoder_R("R", "", false, nullptr, 1, -1000, 1000);
-
-volatile bool driver_enable = false;
-void change_motors_enable() ;
-Text MotorsEnable("EN",true, change_motors_enable);
-void change_motors_enable() {
-    driver_enable = MotorsEnable.get_value_index() != 0;
-}
-
+float actual_line_position = 0.0;
+volatile bool refresh_values = false;
+volatile bool _10Hz_flag = false;
+void _10Hz();
 
 extern "C"
 void Main() {
@@ -131,68 +156,16 @@ void Main() {
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 
-    // terminal configuration
-    VT::init(usart_put_char);
-
-    windows.emplace_back(Window("Motor",  1, 1, 10, 5, true));
-    windows.emplace_back(Window("IR",  13, 1, 16, 17, false));
-    windows.emplace_back(Window("ENC",  31, 1, 16, 5, false));
-    windows.emplace_back(Window("Duty",  31, 7, 16, 5, false));
-    windows.emplace_back(Window("Nothing",  0, 19, 16, 5, true));
-
-    Label IR_1("1", "",false, nullptr, 1, 0, 4095);
-    Label IR_2("2", "",false, nullptr, 1, 0, 4095);
-    Label IR_3("3", "",false, nullptr, 1, 0, 4095);
-    Label IR_4("4", "",false, nullptr, 1, 0, 4095);
-    Label IR_5("5", "",false, nullptr, 1, 0, 4095);
-    Label IR_6("6", "",false, nullptr, 1, 0, 4095);
-    Label IR_7("7", "",false, nullptr, 1, 0, 4095);
-    Label IR_8("8", "",false, nullptr, 1, 0, 4095);
-
-    windows[1].add_box(&IR_1);
-    windows[1].add_box(&IR_2);
-    windows[1].add_box(&IR_3);
-    windows[1].add_box(&IR_4);
-    windows[1].add_box(&IR_5);
-    windows[1].add_box(&IR_6);
-    windows[1].add_box(&IR_7);
-    windows[1].add_box(&IR_8);
-
-    windows[2].add_box(&Encoder_L);
-    windows[2].add_box(&Encoder_R);
-
-    windows[3].add_box(&Duty_L);
-    windows[3].add_box(&Duty_R);
-
-    MotorsEnable.add_text("OFF");
-    MotorsEnable.add_text("ON");
-
-    windows[4].add_box(&MotorsEnable);
-
-//    HAL_UART_Receive_DMA(&huart1, &Received, 1);
-
     __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 
-    MotorBrakeA.add_text("ON");
-    MotorBrakeA.add_text("OFF");
+    // command_terminal configuration
+//    VT::init(usart_put_char);
 
-    MotorBrakeB.add_text("ON");
-    MotorBrakeB.add_text("OFF");
 
-    windows[0].add_box(&MotorBrakeA);
-    windows[0].add_box(&MotorBrakeB);
-    MotorBrakeA.increase();
-    MotorBrakeB.increase();
 
-    window_manager::init(&windows);
-    window_manager::refresh_all();
 
-    zumo().motor_driver.Motor_A.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
-    zumo().motor_driver.Motor_B.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
-    zumo().motor_driver.Motor_A.set_duty_cycle(0.7);
-    zumo().motor_driver.Motor_B.set_duty_cycle(0.7);
-    zumo().motor_driver.Motor_A.brake();
-    zumo().motor_driver.Motor_B.brake();
+
+
 
     LED1.set();
     LED2.reset();
@@ -202,35 +175,37 @@ void Main() {
 
     HAL_TIM_Base_Start_IT(&htim3);
 
+    hal::setup();
 
 
     while(1) {
+//        VT::print("d");
+//        HAL_Delay(10);
 
 
 
 
 
 
-        window_manager::run();
 //        LED1.toggle();
         LED2.toggle();
 
-        if (refresh_values) {
-            refresh_values = false;
-            IR_1.set(sensors[0]);
-            IR_2.set(sensors[1]);
-            IR_3.set(sensors[2]);
-            IR_4.set(sensors[3]);
-            IR_5.set(sensors[4]);
-            IR_6.set(sensors[5]);
-            IR_7.set(sensors[6]);
-            IR_8.set(sensors[7]);
-
-            VT::move_to(0, 25);
-//            VT::print((int)(line_detector.calculate_line_position() * 1000.0));
-            VT::print((int)(zumo().line_detector.get_line_position() * 1000.0));
-            VT::print("  ");
-        }
+//        if (refresh_values) {
+//            refresh_values = false;
+//            hal::IR_1.set(sensors[0]);
+//            IR_2.set(sensors[1]);
+//            IR_3.set(sensors[2]);
+//            IR_4.set(sensors[3]);
+//            IR_5.set(sensors[4]);
+//            IR_6.set(sensors[5]);
+//            IR_7.set(sensors[6]);
+//            IR_8.set(sensors[7]);
+//
+////            VT::move_to(0, 25);
+//////            VT::print((int)(line_detector.calculate_line_position() * 1000.0));
+////            VT::print((int)(actual_line_position * 1000.0));
+////            VT::print("  ");
+//        }
 
         if (_10Hz_flag) {
             _10Hz_flag = false;
@@ -250,16 +225,16 @@ void My_SysTick_Handler() {
 }
 
 void _10Hz() {
-    int R_data = -zumo().encoderR.encoderGetCountAndReset();
-    int L_data = zumo().encoderL.encoderGetCountAndReset();
-    Encoder_R.set(R_data);
-    Encoder_L.set(L_data);
+//    int R_data = -zumo().encoderR.encoderGetCountAndReset();
+//    int L_data = zumo().encoderL.encoderGetCountAndReset();
+//    Encoder_R.set(R_data);
+//    Encoder_L.set(L_data);
 
-    float ret_R = pid_R.tick(static_cast<float>(R_data) / 400.0);
-    float ret_L = pid_L.tick(static_cast<float>(L_data) / 400.0);
+//    float ret_R = pid_R.tick(static_cast<float>(R_data) / 400.0);
+//    float ret_L = pid_L.tick(static_cast<float>(L_data) / 400.0);
 
-    Duty_R.set((int)(ret_R * 100.0));
-    Duty_L.set((int)(ret_L * 100.0));
+//    Duty_R.set((int)(ret_R * 100.0));
+//    Duty_L.set((int)(ret_L * 100.0));
 }
 
 //Mean<float, 5>position;
@@ -269,20 +244,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
         zumo().encoderR.encoder10kHzTickISR();
         zumo().encoderL.encoder10kHzTickISR();
 
-        static uint16_t divider = 0;
+        static uint16_t divider_10Hz = 0;
+        static uint16_t divider_100Hz = 0;
 
-        if (divider == 10) {
+        if (++divider_100Hz == 100 ) {
+            divider_100Hz = 0;
             zumo().line_detector.calculate_line_position();
-            if (driver_enable) {
-                zumo().motor_driver.set_differential(0.25, zumo().line_detector.get_line_position()*0.5 );
-            } else {
-                zumo().motor_driver.Motor_A.set_duty_cycle(0);
-                zumo().motor_driver.Motor_B.set_duty_cycle(0);
-            }
+            actual_line_position = zumo().line_detector.get_line_position();
+
+//            if (driver_enable) {
+//                zumo().motor_driver.set_differential(0.3, zumo().line_detector.get_line_position()*0.25 );
+//            } else {
+//                zumo().motor_driver.Motor_A.set_duty_cycle(0);
+//                zumo().motor_driver.Motor_B.set_duty_cycle(0);
+//            }
         }
 
-        if (++divider == 1000) { // 10Hz
-            divider = 0;
+        if (++divider_10Hz == 1000) { // 10Hz
+            divider_10Hz = 0;
             _10Hz_flag = true;
         }
     }

@@ -26,14 +26,14 @@ public:
     int encoderGetCountAndReset() {
 
 #ifdef __arm__
-        __disable_irq();
+//        __disable_irq();
 #endif
         int toReturn = encoderCount / encoder_prescaler;
         if (toReturn != 0) {
             encoderCount = 0;
         }
 #ifdef __arm__
-        __enable_irq();
+//        __enable_irq();
 #endif
         return toReturn;
     }

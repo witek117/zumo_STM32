@@ -91,7 +91,7 @@ public:
 protected:
     LineSensorsBase<T, sensors_number> &sensors_line;
     std::array<int, sensors_number> sensors_weights;
-    Mean<float , 5> line_position;
+    Mean<float , 4> line_position;
 //    float line_position;
     std::array<float, 20> line_history;
     bool line_detected = false;
@@ -132,9 +132,10 @@ public:
 //        if (sensors_sum >= 1.0) { // line detected
 //            line_detected = true;
 //            line_status = LineStatus::DETECTED;
-            for(size_t i = 0; i < data.size(); i++) {
-                temp_line_position += data[i] * sensors_weights[i] / sensors_sum;
-            }
+
+        for(size_t i = 0; i < data.size(); i++) {
+            temp_line_position += data[i] * sensors_weights[i] / sensors_sum;
+        }
 //            index_in_history = (index_in_history + 1) % line_history.size();
 //            line_history[index_in_history] = line_position;
 //
@@ -156,7 +157,7 @@ public:
 //                line_status = LineStatus::LOST_ON_LEFT;
 //            }
 //        }
-        line_position.put_value(temp_line_position);
+        line_position.put_value(temp_line_position );
         return line_position.get_value();
     }
 
