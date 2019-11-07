@@ -1,12 +1,20 @@
 #ifndef ZUMO_COMMANDS_H
 #define ZUMO_COMMANDS_H
 
+#include "commands.h"
 #include "terminal.h"
 #include "ZUMO.h"
 
 namespace commands {
+    struct CommandMotor;
+    struct CommandTest;
+
+    using command_type = terminal::Terminal<CommandMotor, CommandTest>;
+
+    command_type terminal();
+
     struct CommandMotor : terminal::Command<float, float> {
-        CommandMotor() : Command("mot") {}
+        CommandMotor() : Command("mot") { }
 
         void callback(float m1, float m2) override {
             m1 = 1;
@@ -15,15 +23,16 @@ namespace commands {
                 m2 = 3;
                 m1 = m2;
             }
-//            &zumo().motor_driver.Motor_A.set_duty_cycle(m1);
-//            &zumo().motor_driver.Motor_B.set_duty_cycle(m2);
-
         }
     };
 
-    using command_type = terminal::Terminal<CommandMotor>;
+    struct CommandTest : terminal::Command<int> {
+        CommandTest() : Command("test") { }
+        void callback(int c) override {
+            terminal().send((char)c);
+        }
+    };
 
-    command_type terminal();
 }
 
 

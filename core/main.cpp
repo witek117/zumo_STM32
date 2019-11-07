@@ -44,12 +44,12 @@ volatile uint8_t commands_in_fifo = 0;
 
 char *copy_from_fifo_to_buffer();
 
-void hal::receive_char_interrupt(char chr) {
-    fifo.append(chr);
-    if (chr == '\n') {
-        commands_in_fifo++;
-    }
-}
+//void hal::receive_char_interrupt(char chr) {
+//    fifo.append(chr);
+//    if (/*chr == '\n' ||*/ chr == '\r') {
+//        commands_in_fifo++;
+//    }
+//}
 
 Label IR_1("1", "",false, nullptr, 1, 0, 4095);
 Label IR_2("2", "",false, nullptr, 1, 0, 4095);
@@ -107,21 +107,21 @@ void hal::setup() {
     zumo().motor_driver.Motor_B.brake();
 
     window_manager::init(&windows);
-    window_manager::refresh_all();
 }
 
 // executed in a loop
 void hal::loop() {
-    hal::disable_interrupts();
-    uint8_t commands_in_fifo_local = commands_in_fifo;
-    commands_in_fifo = 0;
-    hal::enable_interrupts();
+    if (commands::terminal().is_enabled()) {
+        hal::disable_interrupts();
+        uint8_t commands_in_fifo_local = commands_in_fifo;
+        commands_in_fifo = 0;
+        hal::enable_interrupts();
 
-    while (commands_in_fifo_local--) {
-        char* cmd_buffer = copy_from_fifo_to_buffer();
-        commands::terminal().parse_line(cmd_buffer);
+        while (commands_in_fifo_local--) {
+            char* cmd_buffer = copy_from_fifo_to_buffer();
+            commands::terminal().parse_line(cmd_buffer);
+        }
     }
-
     window_manager::run();
 }
 
@@ -134,7 +134,7 @@ char *copy_from_fifo_to_buffer() {
     hal::disable_interrupts();
     while (fifo.size() != 0 && it != cmd_buffer.end()) {
         *it = fifo.get();
-        if(*it == '\n') {
+        if(/* *it == '\n' ||*/ *it == '\r') {
             *it = '\0';
             break;
         }

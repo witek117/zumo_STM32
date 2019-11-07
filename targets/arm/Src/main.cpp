@@ -9,6 +9,7 @@
 #include "ZUMO.h"
 #include "mean.h"
 #include "command_terminal/commands.h"
+#include "command_terminal/fifo.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
@@ -79,6 +80,7 @@ public:
     STM32_UART(UART_HandleTypeDef &huart): uart_mode(UARTMode::NONE), huart(huart), fun(nullptr) {}
 
     void send(char ch) {
+
         HAL_UART_Transmit(&huart, reinterpret_cast<uint8_t *>(&ch), 1, 10);
     }
 
@@ -99,19 +101,25 @@ public:
     }
 
     void on_receive(char c) {
-        if (uart_mode==UARTMode::NONE) {
+        if (uart_mode == UARTMode::NONE) {
             if (c == 't') {
                 if (VT::init([this](char ch) {this->send(ch);})) {
                     fun = &window_manager::in_RX_callback;
+                    window_manager::init_all();
+                    window_manager::refresh_all();
+                    uart_mode = UARTMode::TERMINAL;
                 }
-            } else if (c == 'c' ) {
+            } else if (c == 'c') {
                 if (commands::terminal().init([this](char ch) {this->send(ch);})) {
+
                     fun = &hal::receive_char_interrupt;
+                    uart_mode = UARTMode::COMMAND;
                 }
             }
             return;
         } else {
             if (fun) {
+//                LED1.toggle();
                 fun(c);
             }
         }
@@ -142,43 +150,48 @@ volatile bool refresh_values = false;
 volatile bool _10Hz_flag = false;
 void _10Hz();
 
+
+extern FIFO<char, 1000> fifo;
+extern volatile uint8_t commands_in_fifo;
+
+void hal::receive_char_interrupt(char chr) {
+
+    fifo.append(chr);
+    if (/*chr == '\n' ||*/ chr == '\r') {
+//        LED1.toggle();
+        commands_in_fifo++;
+    }
+}
+
+
 extern "C"
 void Main() {
     zumo().line_detector.init();
-    // LED configuration
 
     STM32_GPIO LED2(LED2_GPIO_Port, LED2_Pin);
-
-
 
     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 
+    __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
     __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
-
-    // command_terminal configuration
-//    VT::init(usart_put_char);
-
-
-
-
-
-
 
     LED1.set();
     LED2.reset();
 
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 8);
-//    SENS_IR_LED.set();
 
     HAL_TIM_Base_Start_IT(&htim3);
 
     hal::setup();
 
-
     while(1) {
+        hal::loop();
+
+
 //        VT::print("d");
 //        HAL_Delay(10);
 
@@ -188,7 +201,7 @@ void Main() {
 
 
 //        LED1.toggle();
-        LED2.toggle();
+
 
 //        if (refresh_values) {
 //            refresh_values = false;
@@ -208,6 +221,8 @@ void Main() {
 //        }
 
         if (_10Hz_flag) {
+            commands::terminal().send('d');
+            LED2.toggle();
             _10Hz_flag = false;
             _10Hz();
         }

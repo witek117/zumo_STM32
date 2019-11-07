@@ -62,9 +62,8 @@ class Terminal {
 public:
     Terminal(T&... cmds ) : commands(std::tuple<T&...>(cmds...)){ }
 
-
     bool init (std::function<void(char)> fun) {
-        if (fun) {
+        if (fun && !print_char_fun) {
             print_char_fun = fun;
             return true;
         }
@@ -72,7 +71,13 @@ public:
     }
 
     void send (char c) {
-        print_char_fun(c);
+        if (print_char_fun) {
+            print_char_fun(c);
+        }
+    }
+
+    bool is_enabled() {
+        return (print_char_fun != nullptr);
     }
 
     bool parse_line(char *line) {
