@@ -1,6 +1,6 @@
 #include "hal.h"
-#include "command_terminal/fifo.h"
-#include "command_terminal/commands.h"
+#include "command_terminal_old/fifo.h"
+#include "command_terminal_old/commands.h"
 #include "window_terminal/window_manager.hpp"
 
 std::vector<Window> windows;
