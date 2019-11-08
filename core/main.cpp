@@ -1,10 +1,20 @@
 #include "hal.h"
-#include "command_terminal_old/fifo.h"
-#include "command_terminal_old/commands.h"
 #include "window_terminal/window_manager.hpp"
+#include "command_terminal/command_manager.h"
+#include "ZUMO.h"
+
+void test_callback(const char* data);
 
 std::vector<Window> windows;
 
+CommandManager <1,'\r', true>command_manager(hal::enable_interrupts, hal::disable_interrupts, {
+            Command("test", test_callback)
+        });
+
+void test_callback(const char* data){
+    (void)data;
+    print_flag = true;
+}
 void change_motor_brakeA();
 Text MotorBrakeA("L", true, change_motor_brakeA);
 void change_motor_brakeA () {
@@ -38,18 +48,6 @@ Text MotorsEnable("EN",true, change_motors_enable);
 void change_motors_enable() {
     driver_enable = MotorsEnable.get_value_index() != 0;
 }
-
-FIFO<char, 1000> fifo;
-volatile uint8_t commands_in_fifo = 0;
-
-char *copy_from_fifo_to_buffer();
-
-//void hal::receive_char_interrupt(char chr) {
-//    fifo.append(chr);
-//    if (/*chr == '\n' ||*/ chr == '\r') {
-//        commands_in_fifo++;
-//    }
-//}
 
 Label IR_1("1", "",false, nullptr, 1, 0, 4095);
 Label IR_2("2", "",false, nullptr, 1, 0, 4095);
@@ -111,35 +109,7 @@ void hal::setup() {
 
 // executed in a loop
 void hal::loop() {
-    if (commands::terminal().is_enabled()) {
-        hal::disable_interrupts();
-        uint8_t commands_in_fifo_local = commands_in_fifo;
-        commands_in_fifo = 0;
-        hal::enable_interrupts();
+    command_manager.run();
 
-        while (commands_in_fifo_local--) {
-            char* cmd_buffer = copy_from_fifo_to_buffer();
-            commands::terminal().parse_line(cmd_buffer);
-        }
-    }
-    window_manager::run();
-}
-
-
-char *copy_from_fifo_to_buffer() {
-    static std::array<char, 100> cmd_buffer;
-
-    auto it = cmd_buffer.begin();
-
-    hal::disable_interrupts();
-    while (fifo.size() != 0 && it != cmd_buffer.end()) {
-        *it = fifo.get();
-        if(/* *it == '\n' ||*/ *it == '\r') {
-            *it = '\0';
-            break;
-        }
-        it++;
-    }
-    hal::enable_interrupts();
-    return cmd_buffer.data();
+//    window_manager::run();
 }

@@ -1,20 +1,31 @@
 #include <gtest/gtest.h>
 #include <tuple>
 #include "KTIR0711S.h"
+#include <gmock/gmock.h>
+#include "hal.h"
+
+class GPIOMock : public hal::GPIO {
+public:
+    MOCK_METHOD(void, set, ());
+    MOCK_METHOD(void, reset, ());
+    MOCK_METHOD(void, setMode, ());
+    MOCK_METHOD(bool, get, ());
+};
 
 
 class LineDetectorMOCK : public LineDetector<uint16_t, 8> {
+    GPIOMock enable;
     constexpr static size_t table_len = 8;
     uint16_t data[table_len] = {0, 0, 0, 0, 0, 0, 0, 0};
     LineSensors<uint16_t , 1000, table_len> line;
 
 public:
-    LineDetectorMOCK() :  LineDetector(line), line(data) {
+    LineDetectorMOCK() :  LineDetector(line), line(data, enable) {
 
     }
 
     void update_line_position(float line_position) {
-        this->line_position = line_position;
+        this->line_position.put_value(line_position);
     }
 
     int get_sensors_number() {
@@ -27,9 +38,10 @@ public:
 };
 
 TEST(KTIR0711S, sensors_line) {
+    GPIOMock enable;
     constexpr static size_t table_len = 8;
     uint16_t data[table_len] = {4,5,6,7,8,9,2,3};
-    LineSensors<uint16_t , 1000, table_len> line(data);
+    LineSensors<uint16_t , 1000, table_len> line(data, enable);
 
     constexpr static float max_value = 500.0;
 
@@ -41,9 +53,10 @@ TEST(KTIR0711S, sensors_line) {
 }
 
 TEST(KTIR0711S, sensors_line_too_big_index) {
+    GPIOMock enable;
     constexpr static size_t table_len = 8;
     uint16_t data[table_len] = {4,5,6,7,8,9,2,3};
-    LineSensors<uint16_t , 1000, table_len> line(data);
+    LineSensors<uint16_t , 1000, table_len> line(data, enable);
 
     constexpr static float max_value = 500.0;
 
@@ -55,9 +68,10 @@ TEST(KTIR0711S, sensors_line_too_big_index) {
 }
 
 TEST(KTIR0711S, get_all_normalized_data) {
+    GPIOMock enable;
     constexpr static size_t table_len = 8;
     uint16_t data[table_len] = {4,5,6,7,8,9,2,3};
-    LineSensors<uint16_t , 1000, table_len> line(data);
+    LineSensors<uint16_t , 1000, table_len> line(data, enable);
 
     std::array<float, table_len> returned_data = line.get_all_normalized_data();
 
@@ -67,10 +81,11 @@ TEST(KTIR0711S, get_all_normalized_data) {
 }
 
 TEST(LINE_DETECTOR, get_sensors_weight) {
+    GPIOMock enable;
     {
         constexpr static size_t table_len_7 = 7;
         uint16_t data[table_len_7] = {8, 9, 100, 988, 78, 9, 2};
-        LineSensors<uint16_t , 1000, table_len_7> line(data);
+        LineSensors<uint16_t , 1000, table_len_7> line(data, enable);
         LineDetector<uint16_t , table_len_7> detector(line);
 
         auto weights = detector.get_sensors_weights();
@@ -82,7 +97,7 @@ TEST(LINE_DETECTOR, get_sensors_weight) {
     {
         constexpr static size_t table_len_8 = 8;
         uint16_t data[table_len_8] = {8, 9, 100, 988, 78, 9, 2, 6};
-        LineSensors<uint16_t , 1000, table_len_8> line(data);
+        LineSensors<uint16_t , 1000, table_len_8> line(data, enable);
         LineDetector<uint16_t , table_len_8> detector(line);
 
         auto weights = detector.get_sensors_weights();
@@ -94,9 +109,10 @@ TEST(LINE_DETECTOR, get_sensors_weight) {
 }
 
 TEST(LINE_DETECTOR, detect_line) {
+    GPIOMock enable;
     constexpr static size_t table_len = 7;
     uint16_t data[table_len] = {8,9,100,988,78,9,2};
-    LineSensors<uint16_t , 1000, table_len> line(data);
+    LineSensors<uint16_t , 1000, table_len> line(data, enable);
     LineDetector<uint16_t , table_len> detector(line);
 
     float line_position =  detector.calculate_line_position();
@@ -120,10 +136,10 @@ void fill_data(uint16_t * data, int data_length, size_t main_index ) {
 }
 
 TEST(LINE_DETECTOR, follow_line) {
+    GPIOMock enable;
     constexpr static size_t table_len = 7;
     uint16_t data[table_len] = {0, 0, 0, 0, 0, 0, 0};
-
-    LineSensors<uint16_t , 1000, table_len> line(data);
+    LineSensors<uint16_t , 1000, table_len> line(data, enable);
     LineDetector<uint16_t , table_len> detector(line);
 
     Direction direction = Direction::LEFT;
@@ -155,11 +171,6 @@ bool approximatelyEqual(float a, float b, float epsilon) {
     return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
-void print_line_position(LineDetectorMOCK detector) {
-
-}
-
-
 TEST(LINE_DETECTOR, follow_line_float_value) {
     LineDetectorMOCK detector;
 
@@ -167,17 +178,13 @@ TEST(LINE_DETECTOR, follow_line_float_value) {
 
     float line_position = 0.0;
 
-//    std::cout << detector.get_sensors_weights().at(0) << "    " << detector.get_sensors_weights().back() << std::endl;
-
     for (int i = 0; i < 1000; i++) {
         if (approximatelyEqual(line_position, static_cast<float>(detector.get_sensors_weights().at(0)), 0.01)) {
             direction = Direction::RIGHT;
-//            std::cout << "mam lewy" << std::endl;
         }
 
         if (approximatelyEqual(line_position, static_cast<float>(detector.get_sensors_weights().back()), 0.01)) {
             direction = Direction::LEFT;
-//            std::cout << "mam prawy" << std::endl;
         }
 
 

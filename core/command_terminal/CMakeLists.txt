@@ -1,9 +1,10 @@
-set(NAME terminal)
+set(NAME command_terminal)
 
-add_library(${NAME} INTERFACE)
-
-target_link_libraries(${NAME} INTERFACE
-    msftgsl
+add_library(${NAME} STATIC
+    Command.h
+    command_manager.cpp
+    command_manager.h
+    cyclicBuffer.hpp
 )
 
-target_include_directories(${NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -8,8 +8,8 @@
 #include "KTIR0711S.h"
 #include "ZUMO.h"
 #include "mean.h"
-#include "command_terminal/commands.h"
-#include "command_terminal/fifo.h"
+#include "command_terminal/Command.h"
+#include "command_terminal/command_manager.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
@@ -19,6 +19,8 @@ extern TIM_HandleTypeDef htim3;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
+
+extern CommandManager <1,'\r', true>command_manager;
 
 STM32_GPIO LED1(LED1_GPIO_Port, LED1_Pin);
 
@@ -65,6 +67,7 @@ ZUMO& zumo (void) {
     return _zumo;
 }
 
+volatile bool print_flag = false;
 class STM32_UART {
 public:
     enum class UARTMode {
@@ -110,16 +113,15 @@ public:
                     uart_mode = UARTMode::TERMINAL;
                 }
             } else if (c == 'c') {
-                if (commands::terminal().init([this](char ch) {this->send(ch);})) {
-
-                    fun = &hal::receive_char_interrupt;
+                if (command_manager.init([this](char ch) {this->send(ch);})) {
+                    fun = [](char ch) {command_manager.put_char(ch);};
                     uart_mode = UARTMode::COMMAND;
                 }
             }
             return;
         } else {
             if (fun) {
-//                LED1.toggle();
+//
                 fun(c);
             }
         }
@@ -142,26 +144,11 @@ extern "C" void handle_usart3_interrupt() {
     UART3.interrupt();
 }
 
-PID pid_L(0.4, 0.1, 0.01, 1, 1, -1, 1);
-PID pid_R(0.4, 0.1, 0.01, 1, 1, -1, 1);
 
 float actual_line_position = 0.0;
 volatile bool refresh_values = false;
 volatile bool _10Hz_flag = false;
 void _10Hz();
-
-
-extern FIFO<char, 1000> fifo;
-extern volatile uint8_t commands_in_fifo;
-
-void hal::receive_char_interrupt(char chr) {
-
-    fifo.append(chr);
-    if (/*chr == '\n' ||*/ chr == '\r') {
-//        LED1.toggle();
-        commands_in_fifo++;
-    }
-}
 
 
 extern "C"
@@ -180,48 +167,26 @@ void Main() {
     __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 
     LED1.set();
-    LED2.reset();
+    LED2.set();
 
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 8);
 
     HAL_TIM_Base_Start_IT(&htim3);
 
     hal::setup();
+    LED2.toggle();
 
     while(1) {
+        if (print_flag) {
+            print_flag = false;
+            LED1.toggle();
+        }
+
         hal::loop();
 
-
-//        VT::print("d");
-//        HAL_Delay(10);
-
-
-
-
-
-
-//        LED1.toggle();
-
-
-//        if (refresh_values) {
-//            refresh_values = false;
-//            hal::IR_1.set(sensors[0]);
-//            IR_2.set(sensors[1]);
-//            IR_3.set(sensors[2]);
-//            IR_4.set(sensors[3]);
-//            IR_5.set(sensors[4]);
-//            IR_6.set(sensors[5]);
-//            IR_7.set(sensors[6]);
-//            IR_8.set(sensors[7]);
-//
-////            VT::move_to(0, 25);
-//////            VT::print((int)(line_detector.calculate_line_position() * 1000.0));
-////            VT::print((int)(actual_line_position * 1000.0));
-////            VT::print("  ");
-//        }
-
         if (_10Hz_flag) {
-            commands::terminal().send('d');
+//            command_manager.print('d');
+
             LED2.toggle();
             _10Hz_flag = false;
             _10Hz();

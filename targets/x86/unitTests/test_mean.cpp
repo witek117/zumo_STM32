@@ -16,8 +16,8 @@ TEST(MEAN, basic) {
     std::array<int, 20> expects = {0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9};
 
     for (int i =0; i < 20; i ++) {
-        int ret_value = basic_data.calculate(i);
-        EXPECT_EQ(ret_value, expects.at(i));
+        basic_data.put_value(i);
+        EXPECT_EQ(basic_data.get_value(), expects.at(i));
     }
 
     ASSERT_THAT(basic_data.get_all_data(),
@@ -28,7 +28,7 @@ TEST(MEAN, basic_with_divider) {
     Mean<int, 20> basic_data;
 
     for (int i =0; i < 20; i ++) {
-        int ret_value = basic_data.calculate(i, 2);
+        basic_data.put_value(i, 2);
     }
 
     ASSERT_THAT(basic_data.get_all_data(),
