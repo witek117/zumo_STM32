@@ -1,7 +1,7 @@
-#ifndef ZUMO_HAL_H
-#define ZUMO_HAL_H
+#ifndef ZUMO_STM_HAL_H
+#define ZUMO_STM_HAL_H
 
-#include <hal.h>
+#include "hal.h"
 #include "main.h"
 
 class STM32_GPIO_FAKE : public hal::GPIO {
@@ -74,4 +74,4 @@ class STC32_UART {
 };
 
 
-#endif //ZUMO_HAL_H
+#endif //ZUMO_STM_HAL_H

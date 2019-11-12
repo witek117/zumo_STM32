@@ -4,17 +4,27 @@
 #include "ZUMO.h"
 
 void test_callback(const char* data);
+void get_sensors(const char* data);
+volatile bool get_sensors_flag = false;
 
 std::vector<Window> windows;
 
-CommandManager <1,'\r', true>command_manager(hal::enable_interrupts, hal::disable_interrupts, {
-            Command("test", test_callback)
+CommandManager <2,'\r', false> command_manager(hal::enable_interrupts, hal::disable_interrupts, {
+            Command("test", test_callback),
+            Command("s?", get_sensors)
         });
 
 void test_callback(const char* data){
     (void)data;
     print_flag = true;
 }
+
+void get_sensors(const char* data){
+    (void)data;
+    get_sensors_flag = true;
+    zumo().LED1.toggle();
+}
+
 void change_motor_brakeA();
 Text MotorBrakeA("L", true, change_motor_brakeA);
 void change_motor_brakeA () {
@@ -31,7 +41,6 @@ void change_motor_brakeB () {
     if (MotorBrakeB.get_value_index() == 0) {
         zumo().motor_driver.Motor_B.run();
     } else {
-
         zumo().motor_driver.Motor_B.brake();
     }
 }
@@ -61,6 +70,18 @@ Label IR_8("8", "",false, nullptr, 1, 0, 4095);
 // executed once, after hardware initialization
 void hal::setup() {
     windows.emplace_back(Window("Motor",  1, 1, 10, 5, true));
+
+    MotorBrakeA.add_text("ON");
+    MotorBrakeA.add_text("OFF");
+//
+    MotorBrakeB.add_text("ON");
+    MotorBrakeB.add_text("OFF");
+//
+    windows[0].add_box(&MotorBrakeA);
+    windows[0].add_box(&MotorBrakeB);
+    MotorBrakeA.increase();
+    MotorBrakeB.increase();
+
     windows.emplace_back(Window("IR",  13, 1, 16, 17, false));
     windows.emplace_back(Window("ENC",  31, 1, 16, 5, false));
     windows.emplace_back(Window("Duty",  31, 7, 16, 5, false));
@@ -86,17 +107,6 @@ void hal::setup() {
 
     windows[4].add_box(&MotorsEnable);
 
-    MotorBrakeA.add_text("ON");
-    MotorBrakeA.add_text("OFF");
-
-    MotorBrakeB.add_text("ON");
-    MotorBrakeB.add_text("OFF");
-
-    windows[0].add_box(&MotorBrakeA);
-    windows[0].add_box(&MotorBrakeB);
-    MotorBrakeA.increase();
-    MotorBrakeB.increase();
-
     zumo().motor_driver.Motor_A.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
     zumo().motor_driver.Motor_B.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
     zumo().motor_driver.Motor_A.set_duty_cycle(0.7);
@@ -110,6 +120,18 @@ void hal::setup() {
 // executed in a loop
 void hal::loop() {
     command_manager.run();
+    window_manager::run();
 
-//    window_manager::run();
+    if (get_sensors_flag) {
+        command_manager.print('S');
+        volatile unsigned short * data = zumo().line_sensors.get_data_pointer();
+        for (int i =0; i < zumo().line_sensors.size(); i ++) {
+            uint16_t val = *data++;
+            command_manager.print(static_cast<char>(val >> 8u));
+            command_manager.print(static_cast<char>(val));
+        }
+        get_sensors_flag = false;
+    }
+
+
 }

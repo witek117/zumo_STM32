@@ -1,5 +1,5 @@
 #include "main.h"
-#include "hal.h"
+#include "STM_hal.h"
 #include "window_terminal/window_manager.hpp"
 #include "vector"
 #include "DRV8833.h"
@@ -20,9 +20,7 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
-extern CommandManager <1,'\r', true>command_manager;
-
-STM32_GPIO LED1(LED1_GPIO_Port, LED1_Pin);
+extern CommandManager <2,'\r', false>command_manager;
 
 void hal::enable_interrupts() {
     __enable_irq();
@@ -51,7 +49,6 @@ STM32_GPIO MOT_R_B(MOT_R_A_GPIO_Port, MOT_R_B_Pin);
 STM32_GPIO SENS_IR_ENABLE(SENS_IR_LED_GPIO_Port, SENS_IR_LED_Pin);
 
 volatile uint16_t sensors[8];
-LineSensors <volatile uint16_t , 4095, 8>line_sensors(sensors, SENS_IR_ENABLE);
 
 ZUMO& zumo (void) {
     static DRV8833 motor_driver(PWM_1_CH1, PWM_1_CH2, PWM_2_CH3, PWM_2_CH4, nSleep, fault);
@@ -60,9 +57,13 @@ ZUMO& zumo (void) {
 
     static Encoder encoderR(MOT_R_A, MOT_R_B, 1);
 
-    static LineDetector<volatile uint16_t, 8> line_detector(line_sensors);
+    static LineSensors <volatile uint16_t , 4095, 8>line_sensors(&sensors[0], SENS_IR_ENABLE);
 
-    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_detector);
+    static STM32_GPIO LED1(LED1_GPIO_Port, LED1_Pin);
+
+    static STM32_GPIO LED2(LED2_GPIO_Port, LED2_Pin);
+
+    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2);
 
     return _zumo;
 }
@@ -108,7 +109,8 @@ public:
             if (c == 't') {
                 if (VT::init([this](char ch) {this->send(ch);})) {
                     fun = &window_manager::in_RX_callback;
-                    window_manager::init_all();
+                    VT::refresh();
+                    window_manager::refresh_value(true);
                     window_manager::refresh_all();
                     uart_mode = UARTMode::TERMINAL;
                 }
@@ -116,12 +118,12 @@ public:
                 if (command_manager.init([this](char ch) {this->send(ch);})) {
                     fun = [](char ch) {command_manager.put_char(ch);};
                     uart_mode = UARTMode::COMMAND;
+//                    zumo().LED1.toggle();
                 }
             }
             return;
         } else {
             if (fun) {
-//
                 fun(c);
             }
         }
@@ -153,10 +155,6 @@ void _10Hz();
 
 extern "C"
 void Main() {
-    zumo().line_detector.init();
-
-    STM32_GPIO LED2(LED2_GPIO_Port, LED2_Pin);
-
     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
@@ -166,28 +164,26 @@ void Main() {
     __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
     __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 
-    LED1.set();
-    LED2.set();
+//    LED1.set();
+//    LED2.set();
 
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 8);
 
     HAL_TIM_Base_Start_IT(&htim3);
 
     hal::setup();
-    LED2.toggle();
+    zumo().LED2.toggle();
 
     while(1) {
         if (print_flag) {
             print_flag = false;
-            LED1.toggle();
+//            zumo().LED1.toggle();
         }
 
         hal::loop();
 
         if (_10Hz_flag) {
-//            command_manager.print('d');
-
-            LED2.toggle();
+            zumo().LED2.toggle();
             _10Hz_flag = false;
             _10Hz();
         }
@@ -229,8 +225,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
         if (++divider_100Hz == 100 ) {
             divider_100Hz = 0;
-            zumo().line_detector.calculate_line_position();
-            actual_line_position = zumo().line_detector.get_line_position();
 
 //            if (driver_enable) {
 //                zumo().motor_driver.set_differential(0.3, zumo().line_detector.get_line_position()*0.25 );

@@ -18,18 +18,27 @@ public:
 template <typename T, int max_detected_value, int sensors_number>
 class LineSensors : public LineSensorsBase<T, sensors_number> {
 
-    gsl::span<T> head_data_pointer;
+    T* head_data_pointer;
     std::array<float, sensors_number> sensors_normalized_data;
     hal::GPIO& enable;
 public:
-    LineSensors(gsl::span<T> head_data_pointer, hal::GPIO& enable) :
+    LineSensors(T* head_data_pointer, hal::GPIO& enable) :
             head_data_pointer(head_data_pointer), enable(enable) {}
+
 
     T get_single_raw_value(size_t index) {
         if (index < sensors_number) {
             return head_data_pointer[index];
         }
         return static_cast<T>(0);
+    }
+
+    T* get_data_pointer() {
+        return head_data_pointer;
+    }
+
+    int size() {
+        return sensors_number;
     }
 
     float get_single_normalized_value(size_t index, T max = max_detected_value) {

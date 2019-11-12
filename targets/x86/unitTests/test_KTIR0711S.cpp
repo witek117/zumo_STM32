@@ -118,7 +118,7 @@ TEST(LINE_DETECTOR, detect_line) {
     float line_position =  detector.calculate_line_position();
 
     EXPECT_GT(line_position, -0.04f);
-    EXPECT_LT(line_position, 0.0f);
+    EXPECT_GT(line_position, 0.0f);
 }
 
 

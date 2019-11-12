@@ -15,6 +15,7 @@ namespace hal {
         virtual void set() = 0;
         virtual void reset() = 0;
         virtual bool get() = 0;
+        virtual void toggle() = 0;
     };
 
     class PWM {

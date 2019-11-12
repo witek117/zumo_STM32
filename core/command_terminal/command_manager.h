@@ -7,7 +7,6 @@
 #include "Command.h"
 
 extern volatile bool print_flag;
-
 template <int size, char end_char, bool echo>
 class CommandManager {
 

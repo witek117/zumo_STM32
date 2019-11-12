@@ -33,12 +33,12 @@ TEST(COMMAND, value_float) {
     EXPECT_EQ(h, 344);
 
     const char* data1 = "2.345 4.235";
-    auto [x1, y1] = parser::get<float, 2>(data1);
+    auto [x1, y1] = parser::get<float, float>(data1);
     EXPECT_EQ(x1, (float)2.345);
     EXPECT_EQ(y1, (float)4.235);
 
     const char* data2 = "-234 5432";
-    auto [x2, y2] = parser::get<int, 2>(data2);
+    auto [x2, y2] = parser::get<int, int>(data2);
     EXPECT_EQ(x2, -234);
     EXPECT_EQ(y2, 5432);
 
@@ -51,11 +51,16 @@ void enable_interrupts() {}
 
 void disable_interrupts() {}
 
+void print_function(char c) {
+    (void)c;
+}
+
 TEST (COMMAND_MANAGER, basic) {
     CommandBaseMock jeden("jeden");
     CommandBaseMock dwa("dwa");
 
-    CommandManager<2, '\n'> command_manager(&enable_interrupts, &disable_interrupts, {jeden, dwa});
+    CommandManager<2, '\n', true> command_manager(&enable_interrupts, &disable_interrupts, {jeden, dwa});
+    command_manager.init(print_function);
 
     const char * data = "jeden sdfg\ndwa 2345\n";
 
@@ -78,10 +83,11 @@ void callback1(const char* data) {
 }
 
 TEST (COMMAND_MANAGER, multi_commands) {
-    CommandManager<2, '\n'> command_manager(&enable_interrupts, &disable_interrupts, {
+    CommandManager<2, '\n', true> command_manager(&enable_interrupts, &disable_interrupts, {
                 Command("jeden", callback1),
                 Command("dwa", callback1)
              });
+    command_manager.init(print_function);
 
     const char * data = "jeden sdfg\ndwa 2345\n";
 
@@ -104,9 +110,10 @@ void two_floats(const char* data) {
 }
 
 TEST(COMMAND_MANAGER, two_floats) {
-    CommandManager<1, '\n'> command_manager(&enable_interrupts, &disable_interrupts, {
+    CommandManager<1, '\n', true> command_manager(&enable_interrupts, &disable_interrupts, {
             Command("floats", two_floats)
     });
+    command_manager.init(print_function);
 
     const char * data = "floats 2.456 3.654\n";
 
