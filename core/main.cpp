@@ -58,6 +58,7 @@ Label IR_6("6", "",false, nullptr, 1, 0, 4095);
 Label IR_7("7", "",false, nullptr, 1, 0, 4095);
 Label IR_8("8", "",false, nullptr, 1, 0, 4095);
 
+Label HC("HC", "",false, nullptr, 1, 0, 4095);
 // executed once, after hardware initialization
 void hal::setup() {
     windows.emplace_back(Window("Motor",  1, 1, 10, 5, true));
@@ -76,7 +77,7 @@ void hal::setup() {
     windows.emplace_back(Window("IR",  13, 1, 16, 17, false));
     windows.emplace_back(Window("ENC",  31, 1, 16, 5, false));
     windows.emplace_back(Window("Duty",  31, 7, 16, 5, false));
-    windows.emplace_back(Window("Nothing",  0, 19, 16, 5, true));
+    windows.emplace_back(Window("Nothing",  0, 19, 16, 8, true));
 
     windows[1].add_box(&IR_1);
     windows[1].add_box(&IR_2);
@@ -97,6 +98,7 @@ void hal::setup() {
     MotorsEnable.add_text("ON");
 
     windows[4].add_box(&MotorsEnable);
+    windows[4].add_box(&HC);
 
     zumo().motor_driver.Motor_A.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
     zumo().motor_driver.Motor_B.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
@@ -114,4 +116,5 @@ void hal::loop() {
     window_manager::run();
 
     callbacks_runner(command_manager);
+    HC.set(zumo().hcsr04.get_value());
 }

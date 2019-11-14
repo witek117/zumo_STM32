@@ -10,6 +10,7 @@
 #include "mean.h"
 #include "command_terminal/Command.h"
 #include "command_terminal/command_manager.h"
+#include "HC-SR04.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
@@ -48,6 +49,8 @@ STM32_GPIO MOT_R_B(MOT_R_A_GPIO_Port, MOT_R_B_Pin);
 
 STM32_GPIO SENS_IR_ENABLE(SENS_IR_LED_GPIO_Port, SENS_IR_LED_Pin);
 
+STM32_GPIO TRIG(TRIG_GPIO_Port, TRIG_Pin);
+
 volatile uint16_t sensors[8];
 
 ZUMO& zumo (void) {
@@ -63,7 +66,9 @@ ZUMO& zumo (void) {
 
     static STM32_GPIO LED2(LED2_GPIO_Port, LED2_Pin);
 
-    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2);
+    static HCSR04 hcsr04(TRIG);
+
+    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04);
 
     return _zumo;
 }
@@ -145,6 +150,12 @@ extern "C" void handle_usart3_interrupt() {
     UART3.interrupt();
 }
 
+extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == GPIO_PIN_0) {
+        zumo().hcsr04.edge_detected();
+    }
+}
+
 
 float actual_line_position = 0.0;
 volatile bool refresh_values = false;
@@ -187,6 +198,7 @@ void Main() {
             zumo().LED2.toggle();
             _10Hz_flag = false;
             _10Hz();
+            zumo().hcsr04.start();
         }
     }
 }
@@ -217,7 +229,9 @@ void _10Hz() {
 //Mean<float, 5>position;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    
     if (htim == &htim3) { // 10kHz
+        zumo().hcsr04.ISR();
         zumo().encoderR.encoder10kHzTickISR();
         zumo().encoderL.encoder10kHzTickISR();
 
