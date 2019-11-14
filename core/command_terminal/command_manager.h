@@ -6,9 +6,27 @@
 #include <utility>
 #include "Command.h"
 
+class PrintManager {
+public:
+    virtual void print(char) = 0;
+
+    size_t print(const char *s) {
+        size_t size = 0;
+        char c;
+        while ((c = *s) != '\0') {
+            print(c);
+            s++;
+            size++;
+        }
+        return size;
+    }
+
+    virtual void deinit() = 0;
+};
+
 extern volatile bool print_flag;
 template <int size, char end_char, bool echo>
-class CommandManager {
+class CommandManager : public PrintManager {
 
     constexpr static size_t buff_size = 50;
     CyclicBuffer_data<char, buff_size> buffer_rx;
@@ -21,7 +39,6 @@ class CommandManager {
     std::array<Command, size> commands;
 
     std::function<void(char)> print_handler = nullptr;
-
 public:
     explicit CommandManager(std::function<void(void)> enable_interrupts, std::function<void(void)> disable_interrupts,  std::array<Command, size> commands) :
         enable_interrupts(std::move(enable_interrupts)), disable_interrupts(std::move(disable_interrupts)), commands(commands), print_handler(nullptr) {
@@ -35,11 +52,11 @@ public:
         return false;
     }
 
-    void deinit() {
+    void deinit() override {
         print_handler = nullptr;
     }
 
-    void print(char c) {
+    void print(char c) override {
         buffer_tx.append(c);
     }
 
@@ -47,7 +64,7 @@ public:
         return (print_handler != nullptr);
     }
 
-    void put_char(char c) {
+    bool put_char(char c) {
         if constexpr (echo) {
             print(c);
         }
@@ -56,6 +73,11 @@ public:
         if (c == end_char) {
             commands_in_buffer++;
         }
+
+        if (print_handler) {
+            return true;
+        }
+        return false;
     }
 
     void run() {

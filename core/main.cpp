@@ -2,28 +2,19 @@
 #include "window_terminal/window_manager.hpp"
 #include "command_terminal/command_manager.h"
 #include "ZUMO.h"
+#include "commands_runner.h"
 
-void test_callback(const char* data);
-void get_sensors(const char* data);
-volatile bool get_sensors_flag = false;
 
 std::vector<Window> windows;
 
-CommandManager <2,'\r', false> command_manager(hal::enable_interrupts, hal::disable_interrupts, {
-            Command("test", test_callback),
-            Command("s?", get_sensors)
+CommandManager <5,'\r', false> command_manager(hal::enable_interrupts, hal::disable_interrupts, {
+            Command("s?", get_sensors_callback),    // get sensors values
+            Command("m", set_motors_callback),      // set motors duty cycle
+            Command("test", test_callback),         // test callback
+            Command("l", set_line_enable_callback),      // set motors duty cycle
+            Command("exit", exit_callback)          // exit from command_manager
         });
 
-void test_callback(const char* data){
-    (void)data;
-    print_flag = true;
-}
-
-void get_sensors(const char* data){
-    (void)data;
-    get_sensors_flag = true;
-    zumo().LED1.toggle();
-}
 
 void change_motor_brakeA();
 Text MotorBrakeA("L", true, change_motor_brakeA);
@@ -122,16 +113,5 @@ void hal::loop() {
     command_manager.run();
     window_manager::run();
 
-    if (get_sensors_flag) {
-        command_manager.print('S');
-        volatile unsigned short * data = zumo().line_sensors.get_data_pointer();
-        for (int i =0; i < zumo().line_sensors.size(); i ++) {
-            uint16_t val = *data++;
-            command_manager.print(static_cast<char>(val >> 8u));
-            command_manager.print(static_cast<char>(val));
-        }
-        get_sensors_flag = false;
-    }
-
-
+    callbacks_runner(command_manager);
 }

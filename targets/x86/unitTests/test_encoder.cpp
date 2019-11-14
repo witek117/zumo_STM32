@@ -14,6 +14,7 @@ public:
     MOCK_METHOD(void, reset, ());
     MOCK_METHOD(void, setMode, ());
     MOCK_METHOD(bool, get, ());
+    MOCK_METHOD(void, toggle, ());
 };
 
 TEST(Encoder, counter_forward_reverse) {

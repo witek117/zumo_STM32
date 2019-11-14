@@ -62,6 +62,11 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define SENS_IR_LED_Pin GPIO_PIN_14
 #define SENS_IR_LED_GPIO_Port GPIOC
+#define TRIG_Pin GPIO_PIN_15
+#define TRIG_GPIO_Port GPIOC
+#define ECHO_Pin GPIO_PIN_0
+#define ECHO_GPIO_Port GPIOC
+#define ECHO_EXTI_IRQn EXTI0_IRQn
 #define LED1_Pin GPIO_PIN_5
 #define LED1_GPIO_Port GPIOC
 #define FAULT_Pin GPIO_PIN_15

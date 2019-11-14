@@ -9,7 +9,7 @@ public:
     STM32_GPIO_FAKE () = default ;
     void set() override { }
     void reset() override { }
-    void toggle() { }
+    void toggle() override { }
     bool get() override { return false; }
 };
 
@@ -29,7 +29,7 @@ public:
         HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_RESET);
     }
 
-    void toggle() {
+    void toggle() override {
         HAL_GPIO_TogglePin(GPIOx, GPIO_Pin);
     }
 

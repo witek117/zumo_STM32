@@ -20,7 +20,7 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
-extern CommandManager <2,'\r', false>command_manager;
+extern CommandManager <5,'\r', false>command_manager;
 
 void hal::enable_interrupts() {
     __enable_irq();
@@ -118,7 +118,6 @@ public:
                 if (command_manager.init([this](char ch) {this->send(ch);})) {
                     fun = [](char ch) {command_manager.put_char(ch);};
                     uart_mode = UARTMode::COMMAND;
-//                    zumo().LED1.toggle();
                 }
             }
             return;
@@ -173,6 +172,8 @@ void Main() {
 
     hal::setup();
     zumo().LED2.toggle();
+
+//    zumo().motor_driver.Motor_B.set_duty_cycle(0.7);
 
     while(1) {
         if (print_flag) {

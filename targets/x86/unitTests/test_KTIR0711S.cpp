@@ -10,6 +10,7 @@ public:
     MOCK_METHOD(void, reset, ());
     MOCK_METHOD(void, setMode, ());
     MOCK_METHOD(bool, get, ());
+    MOCK_METHOD(void, toggle, ());
 };
 
 
@@ -47,8 +48,8 @@ TEST(KTIR0711S, sensors_line) {
 
     for(size_t i = 0; i < table_len; i++) {
         EXPECT_EQ(data[i], line.get_single_raw_value(i));
-        EXPECT_EQ((float)data[i] / 1000.0f, line.get_single_normalized_value(i));
-        EXPECT_EQ((float)data[i] / max_value, line.get_single_normalized_value(i, max_value));
+        EXPECT_EQ((1000.0f - (float)data[i]) / 1000.0f, line.get_single_normalized_value(i));
+        EXPECT_EQ((max_value - (float)data[i]) / max_value, line.get_single_normalized_value(i, max_value));
     }
 }
 
@@ -76,7 +77,7 @@ TEST(KTIR0711S, get_all_normalized_data) {
     std::array<float, table_len> returned_data = line.get_all_normalized_data();
 
     for(size_t i = 0; i < table_len ; i++) {
-        EXPECT_EQ(static_cast<float>(data[i]) / 1000, returned_data.at(i));
+        EXPECT_EQ((1000.0f - static_cast<float>(data[i])) / 1000, returned_data.at(i));
     }
 }
 
@@ -216,6 +217,28 @@ TEST(LINE_DETECTOR, follow_line_float_value) {
 //            std::cout << item << " ";
 //        }
 //        std::cout << std::endl;
+    }
+}
+
+TEST(LINE_SENSORS, get_pointer_data) {
+    GPIOMock enable;
+    constexpr static size_t table_len = 8;
+    uint16_t data[table_len] = {4444,5555,6666,7123,8333,9234,2123,3432};
+    uint8_t d1[table_len] = {17, 21, 26, 27, 32, 36, 8, 13};
+    uint8_t d2[table_len] = {92, 179, 10, 211, 141, 18, 75, 104};
+    LineSensors<uint16_t , 1000, table_len> line(data, enable);
+
+    uint16_t* ret_data = line.get_data_pointer();
+
+    for (int i =0; i < table_len; i++) {
+        EXPECT_EQ(data[i], *ret_data++);
+    }
+
+    volatile unsigned short * data1 = line.get_data_pointer();
+    for (int i =0; i < line.size(); i ++) {
+        uint16_t val = *data1++;
+        EXPECT_EQ(d1[i], static_cast<uint8_t >(val >> 8u));
+        EXPECT_EQ(d2[i], static_cast<uint8_t >(val >> 0u));
     }
 }
 
