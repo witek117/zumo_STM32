@@ -10,5 +10,7 @@ void get_sensors_callback(const char*);
 void set_motors_callback(const char*);
 void set_line_enable_callback(const char*);
 void exit_callback(const char*);
+void set_hcsr04_enable_callback(const char*);
+void get_hcsro4_value_callback(const char*);
 
 #endif //ZUMO_COMMANDS_RUNNER_H

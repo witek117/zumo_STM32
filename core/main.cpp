@@ -7,11 +7,13 @@
 
 std::vector<Window> windows;
 
-CommandManager <5,'\r', false> command_manager(hal::enable_interrupts, hal::disable_interrupts, {
+CommandManager <7, '\r', false> command_manager(hal::enable_interrupts, hal::disable_interrupts, {
             Command("s?", get_sensors_callback),    // get sensors values
+            Command("h?", get_hcsro4_value_callback),        // get HC-SR04 last value
             Command("m", set_motors_callback),      // set motors duty cycle
             Command("test", test_callback),         // test callback
             Command("l", set_line_enable_callback),      // set motors duty cycle
+            Command("h", set_hcsr04_enable_callback),      // set motors duty cycle
             Command("exit", exit_callback)          // exit from command_manager
         });
 

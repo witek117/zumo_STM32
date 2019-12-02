@@ -3,14 +3,11 @@
 
 #include "hal.h"
 
-// 150us to 25ms
-// 2cm   to 2m
 class HCSR04 {
     hal::GPIO& trig;
-//    uint16_t  counter_state_1;
-//    uint16_t  counter_state_2;
     uint16_t counter;
     uint16_t counted;
+    bool enable = false;
 
     enum class State {
         OFF,
@@ -22,13 +19,10 @@ class HCSR04 {
 
     State state = State::OFF;
 public:
-    HCSR04(hal::GPIO& trig) : trig(trig), counter(0), counted(0)
-//    counter_state_1(0), counter_state_2(0)
-    {
-
-    }
+    HCSR04(hal::GPIO& trig) : trig(trig), counter(0), counted(0) { }
 
     void ISR() {
+        if (!enable) return;
         if (state == State::STARTED) {
             trig.set();
             state = State::TRIGGER;
@@ -41,6 +35,7 @@ public:
     }
 
     void edge_detected() {
+        if (!enable) return;
         if (state == State::WAIT_FOR_RISING_EDGE) {
             rising_edge_detected();
         } else if (state == State::WAIT_FOR_FALLING_EDGE) {
@@ -64,6 +59,15 @@ public:
 
     uint16_t get_value() {
         return counted;
+    }
+
+    void init() {
+        enable = true;
+    }
+
+    void deinit() {
+        enable = false;
+        counted = 0;
     }
 };
 

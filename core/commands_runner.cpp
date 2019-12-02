@@ -47,6 +47,20 @@ void exit_callback(const char* data) {
     exit_flag = true;
 }
 
+void set_hcsr04_enable_callback(const char* data) {
+    auto [l] = parser::get<int>(data);
+    if (l == 1) {
+        zumo().hcsr04.init();
+    } else {
+        zumo().hcsr04.deinit();
+    }
+}
+
+volatile bool hcsr04_flag = false;
+
+void get_hcsro4_value_callback(const char*) {
+    hcsr04_flag = true;
+}
 
 void callbacks_runner(PrintManager& command_manager) {
     if (get_sensors_flag) {
@@ -71,5 +85,12 @@ void callbacks_runner(PrintManager& command_manager) {
         command_manager.deinit();
     }
 
+    if (hcsr04_flag) {
+        hcsr04_flag = false;
+        command_manager.print('h');
+        auto val = zumo().hcsr04.get_value();
+        command_manager.print(static_cast<char>(val >> 8u));
+        command_manager.print(static_cast<char>(0x00FFu & val));
+    }
 
 }

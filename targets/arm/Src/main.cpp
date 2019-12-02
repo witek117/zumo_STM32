@@ -13,6 +13,8 @@
 #include "HC-SR04.h"
 
 extern ADC_HandleTypeDef hadc1;
+extern ADC_HandleTypeDef hadc2;
+
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -21,7 +23,7 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
-extern CommandManager <5,'\r', false>command_manager;
+extern CommandManager <7,'\r', false>command_manager;
 
 void hal::enable_interrupts() {
     __enable_irq();
@@ -51,7 +53,11 @@ STM32_GPIO SENS_IR_ENABLE(SENS_IR_LED_GPIO_Port, SENS_IR_LED_Pin);
 
 STM32_GPIO TRIG(TRIG_GPIO_Port, TRIG_Pin);
 
-volatile uint16_t sensors[8];
+volatile uint16_t sensors[11];
+//volatile uint16_t ADC2Data[3];
+volatile uint16_t *TEMP = &sensors[8];
+volatile uint16_t *V_CURRENT_SENS = &sensors[9];
+volatile uint16_t *V_BAT = &sensors[10];
 
 ZUMO& zumo (void) {
     static DRV8833 motor_driver(PWM_1_CH1, PWM_1_CH2, PWM_2_CH3, PWM_2_CH4, nSleep, fault);
@@ -162,6 +168,7 @@ volatile bool refresh_values = false;
 volatile bool _10Hz_flag = false;
 void _10Hz();
 
+Mean <uint16_t, 20>current_mean;
 
 extern "C"
 void Main() {
@@ -174,10 +181,7 @@ void Main() {
     __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
     __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 
-//    LED1.set();
-//    LED2.set();
-
-    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 8);
+    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
 
     HAL_TIM_Base_Start_IT(&htim3);
 
@@ -199,6 +203,30 @@ void Main() {
             _10Hz_flag = false;
             _10Hz();
             zumo().hcsr04.start();
+
+            VT::move_to(0, 30);
+            VT::print("TEMP: ");
+            VT::print((int)*TEMP);
+//
+            float temp = ((float)*TEMP)*3.3f / 4096.0f;
+            temp = temp - 0.5f;
+            temp *= 100.0f;
+//            temp = temp / 0.01;
+//
+////            VT::print((int)*TEMP);
+//            VT::print((int)(temp * 100));
+            VT::move_to(0, 31);
+            VT::print("CURRENT: ");
+            current_mean.put_value((uint16_t)*V_CURRENT_SENS);
+            VT::print(current_mean.get_value());
+            VT::move_to(0, 32);
+            VT::print("BAT: ");
+            VT::print((int)*V_BAT);
+
+            VT::move_to(0,33);
+            VT::print((int)(temp * 100.0f));
+
+
         }
     }
 }
