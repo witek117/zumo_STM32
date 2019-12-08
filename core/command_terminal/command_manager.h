@@ -21,6 +21,11 @@ public:
         return size;
     }
 
+    void print(uint16_t val) {
+        print(static_cast<char>(val >> 8u));
+        print(static_cast<char>(0x00FFu & val));
+    }
+
     virtual void deinit() = 0;
 };
 

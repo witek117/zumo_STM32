@@ -17,7 +17,6 @@ volatile bool get_sensors_flag = false;
 void get_sensors_callback(const char* data){
     (void)data;
     get_sensors_flag = true;
-    zumo().LED1.toggle();
 }
 
 volatile bool test_flag = false;
@@ -62,14 +61,18 @@ void get_hcsro4_value_callback(const char*) {
     hcsr04_flag = true;
 }
 
+volatile bool mcp9700_flag = false;
+void get_mcp9700_value_callback(const char*) {
+    mcp9700_flag = true;
+}
+
 void callbacks_runner(PrintManager& command_manager) {
     if (get_sensors_flag) {
         command_manager.print('S');
         volatile unsigned short * data = zumo().line_sensors.get_data_pointer();
         for (int i =0; i < zumo().line_sensors.size(); i ++) {
             uint16_t val = *data++;
-            command_manager.print(static_cast<char>(val >> 8u));
-            command_manager.print(static_cast<char>(0x00FFu & val));
+            command_manager.print((uint16_t)val);
             labels[i]->set(val);
         }
         get_sensors_flag = false;
@@ -89,8 +92,13 @@ void callbacks_runner(PrintManager& command_manager) {
         hcsr04_flag = false;
         command_manager.print('h');
         auto val = zumo().hcsr04.get_value();
-        command_manager.print(static_cast<char>(val >> 8u));
-        command_manager.print(static_cast<char>(0x00FFu & val));
+        command_manager.print((uint16_t)val);
+    }
+
+    if (mcp9700_flag) {
+        mcp9700_flag = false;
+        command_manager.print('t');
+        command_manager.print((uint16_t)zumo().mcp9700.get_temperature_multiplied());
     }
 
 }

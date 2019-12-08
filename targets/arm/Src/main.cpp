@@ -11,6 +11,7 @@
 #include "command_terminal/Command.h"
 #include "command_terminal/command_manager.h"
 #include "HC-SR04.h"
+#include "MCP9700.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
@@ -23,12 +24,11 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
-extern CommandManager <7,'\r', false>command_manager;
+extern CommandManager <8,'\r', false>command_manager;
 
 void hal::enable_interrupts() {
     __enable_irq();
 }
-
 
 void hal::disable_interrupts() {
     __disable_irq();
@@ -74,7 +74,9 @@ ZUMO& zumo (void) {
 
     static HCSR04 hcsr04(TRIG);
 
-    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04);
+    static MCP9700<uint16_t > mcp9700((uint16_t&)(*TEMP), 4095, 3.3f);
+
+    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04, mcp9700);
 
     return _zumo;
 }
@@ -117,6 +119,7 @@ public:
 
     void on_receive(char c) {
         if (uart_mode == UARTMode::NONE) {
+
             if (c == 't') {
                 if (VT::init([this](char ch) {this->send(ch);})) {
                     fun = &window_manager::in_RX_callback;
@@ -126,10 +129,12 @@ public:
                     uart_mode = UARTMode::TERMINAL;
                 }
             } else if (c == 'c') {
+                zumo().LED1.toggle();
                 if (command_manager.init([this](char ch) {this->send(ch);})) {
                     fun = [](char ch) {command_manager.put_char(ch);};
                     uart_mode = UARTMode::COMMAND;
                 }
+
             }
             return;
         } else {
@@ -187,6 +192,7 @@ void Main() {
 
     hal::setup();
     zumo().LED2.toggle();
+    zumo().mcp9700.init();
 
 //    zumo().motor_driver.Motor_B.set_duty_cycle(0.7);
 
@@ -200,21 +206,16 @@ void Main() {
 
         if (_10Hz_flag) {
             zumo().LED2.toggle();
+
+
             _10Hz_flag = false;
             _10Hz();
-            zumo().hcsr04.start();
+            // zumo().hcsr04.start();
 
             VT::move_to(0, 30);
             VT::print("TEMP: ");
-            VT::print((int)*TEMP);
-//
-            float temp = ((float)*TEMP)*3.3f / 4096.0f;
-            temp = temp - 0.5f;
-            temp *= 100.0f;
-//            temp = temp / 0.01;
-//
-////            VT::print((int)*TEMP);
-//            VT::print((int)(temp * 100));
+            VT::print(zumo().mcp9700.get_temperature_multiplied());
+
             VT::move_to(0, 31);
             VT::print("CURRENT: ");
             current_mean.put_value((uint16_t)*V_CURRENT_SENS);
@@ -222,11 +223,6 @@ void Main() {
             VT::move_to(0, 32);
             VT::print("BAT: ");
             VT::print((int)*V_BAT);
-
-            VT::move_to(0,33);
-            VT::print((int)(temp * 100.0f));
-
-
         }
     }
 }
