@@ -7,6 +7,7 @@
 #include "hal.h"
 #include "HC-SR04.h"
 #include "MCP9700.h"
+#include "BME280.h"
 
 struct ZUMO {
     DRV8833& motor_driver;
@@ -17,8 +18,10 @@ struct ZUMO {
     hal::GPIO& LED2;
     HCSR04& hcsr04;
     MCP9700<uint16_t >& mcp9700;
+    BME280& bme280;
 
-    ZUMO(DRV8833& motor_driver, Encoder& encoderL, Encoder& encoderR, LineSensors<volatile uint16_t , 4095, 8> &line_sensors, hal::GPIO& LED1, hal::GPIO& LED2, HCSR04& hcsr04, MCP9700<uint16_t >& mcp9700)
+    ZUMO(DRV8833& motor_driver, Encoder& encoderL, Encoder& encoderR, LineSensors<volatile uint16_t , 4095, 8> &line_sensors,
+         hal::GPIO& LED1, hal::GPIO& LED2, HCSR04& hcsr04, MCP9700<uint16_t >& mcp9700, BME280& bme280)
         :   motor_driver(motor_driver),
             encoderL(encoderL),
             encoderR(encoderR),
@@ -26,7 +29,8 @@ struct ZUMO {
             LED1(LED1),
             LED2(LED2),
             hcsr04(hcsr04),
-            mcp9700(mcp9700){ }
+            mcp9700(mcp9700),
+            bme280(bme280) { }
 };
 
 ZUMO& zumo(void);

@@ -12,6 +12,7 @@
 #include "command_terminal/command_manager.h"
 #include "HC-SR04.h"
 #include "MCP9700.h"
+#include "BME280.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
@@ -23,6 +24,8 @@ extern TIM_HandleTypeDef htim3;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
+
+extern I2C_HandleTypeDef hi2c1;
 
 extern CommandManager <8,'\r', false>command_manager;
 
@@ -53,6 +56,8 @@ STM32_GPIO SENS_IR_ENABLE(SENS_IR_LED_GPIO_Port, SENS_IR_LED_Pin);
 
 STM32_GPIO TRIG(TRIG_GPIO_Port, TRIG_Pin);
 
+STM32_I2C IMU_I2C(hi2c1);
+
 volatile uint16_t sensors[11];
 //volatile uint16_t ADC2Data[3];
 volatile uint16_t *TEMP = &sensors[8];
@@ -76,7 +81,9 @@ ZUMO& zumo (void) {
 
     static MCP9700<uint16_t > mcp9700((uint16_t&)(*TEMP), 4095, 3.3f);
 
-    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04, mcp9700);
+    static BME280 bme280(IMU_I2C, 0b1110110);
+
+    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04, mcp9700, bme280);
 
     return _zumo;
 }
@@ -134,7 +141,6 @@ public:
                     fun = [](char ch) {command_manager.put_char(ch);};
                     uart_mode = UARTMode::COMMAND;
                 }
-
             }
             return;
         } else {
@@ -193,8 +199,8 @@ void Main() {
     hal::setup();
     zumo().LED2.toggle();
     zumo().mcp9700.init();
-
-//    zumo().motor_driver.Motor_B.set_duty_cycle(0.7);
+    zumo().bme280.init();
+    zumo().bme280.set_control_register(BME280::Oversampling::X16, BME280::Oversampling::X16, BME280::Mode::Normal);
 
     while(1) {
         if (print_flag) {
@@ -206,6 +212,15 @@ void Main() {
 
         if (_10Hz_flag) {
             zumo().LED2.toggle();
+            float temp1 = zumo().mcp9700.get_temperature();
+            float temp = zumo().bme280.read_temperature();
+            float hum = zumo().bme280.read_humidity();
+            float press = zumo().bme280.read_pressure();
+
+            (void) temp;
+            (void) temp1;
+            (void) hum;
+            (void) press;
 
 
             _10Hz_flag = false;
