@@ -2,8 +2,8 @@
 #define ZUMO_HC_SR04_H
 
 #include "hal.h"
-
-class HCSR04 {
+#include "commands_interface.h"
+class HCSR04 : CommandsInterface {
     hal::GPIO& trig;
     uint16_t counter;
     uint16_t counted;
@@ -53,21 +53,30 @@ public:
     }
 
     void start() {
-        state = State::STARTED;
-        counter = 0;
+        if (enable) {
+            state = State::STARTED;
+            counter = 0;
+        }
+
     }
 
-    uint16_t get_value() {
+    uint16_t get_last_value() {
         return counted;
     }
 
     void init() {
-        enable = true;
+//        enable = true;
     }
 
-    void deinit() {
-        enable = false;
-        counted = 0;
+    void run_measurements() {
+        start();
+    }
+
+    void set_enable(bool enable_) override {
+        this->enable = enable_;
+        if (!enable_) {
+            counted = 0;
+        }
     }
 };
 

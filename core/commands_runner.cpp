@@ -13,8 +13,13 @@ extern Label IR_8;
 
 std::array<Label*, 8> labels = {&IR_1, &IR_2, &IR_3, &IR_4, &IR_5, &IR_6, &IR_7, &IR_8};
 
+bool static get_enable(const char* data) {
+    auto [l] = parser::get<int>(data);
+    return (1 == l);
+}
+
 volatile bool get_sensors_flag = false;
-void get_sensors_callback(const char* data){
+void get_line_value_callback(const char* data){
     (void)data;
     get_sensors_flag = true;
 }
@@ -32,12 +37,7 @@ void set_motors_callback(const char* data) {
 }
 
 void set_line_enable_callback(const char* data) {
-    auto [l] = parser::get<int>(data);
-    if (l == 1) {
-        zumo().line_sensors.init();
-    } else {
-        zumo().line_sensors.deinit();
-    }
+    zumo().line_sensors.set_enable(get_enable(data));
 }
 
 volatile bool exit_flag = false;
@@ -47,28 +47,39 @@ void exit_callback(const char* data) {
 }
 
 void set_hcsr04_enable_callback(const char* data) {
-    auto [l] = parser::get<int>(data);
-    if (l == 1) {
-        zumo().hcsr04.init();
-    } else {
-        zumo().hcsr04.deinit();
-    }
+    zumo().hcsr04.set_enable(get_enable(data));
 }
 
 volatile bool hcsr04_flag = false;
 
-void get_hcsro4_value_callback(const char*) {
+void get_hcsro4_value_callback(const char* data) {
+    (void) data;
     hcsr04_flag = true;
 }
 
+void set_mcp9700_enable_callback(const char* data) {
+    zumo().mcp9700.set_enable(get_enable(data));
+}
+
 volatile bool mcp9700_flag = false;
-void get_mcp9700_value_callback(const char*) {
+void get_mcp9700_value_callback(const char* data) {
+    (void) data;
     mcp9700_flag = true;
+}
+
+void set_bme280_enable_callback (const char* data) {
+    zumo().bme280.set_enable(get_enable(data));
+}
+
+volatile bool bme280_flag = false;
+void get_bme280_value_callback(const char* data) {
+    (void) data;
+    bme280_flag = true;
 }
 
 void callbacks_runner(PrintManager& command_manager) {
     if (get_sensors_flag) {
-        command_manager.print('S');
+        command_manager.print('s');
         volatile unsigned short * data = zumo().line_sensors.get_data_pointer();
         for (int i =0; i < zumo().line_sensors.size(); i ++) {
             uint16_t val = *data++;
@@ -91,14 +102,21 @@ void callbacks_runner(PrintManager& command_manager) {
     if (hcsr04_flag) {
         hcsr04_flag = false;
         command_manager.print('h');
-        auto val = zumo().hcsr04.get_value();
-        command_manager.print((uint16_t)val);
+        command_manager.print((uint16_t)zumo().hcsr04.get_last_value());
     }
 
     if (mcp9700_flag) {
         mcp9700_flag = false;
         command_manager.print('t');
         command_manager.print((uint16_t)zumo().mcp9700.get_temperature_multiplied());
+    }
+
+    if (bme280_flag) {
+        bme280_flag = false;
+        command_manager.print('b');
+        command_manager.print((uint16_t)zumo().bme280.get_last_temperature_multiplied());
+        command_manager.print((uint16_t)zumo().bme280.get_last_humidity());
+        command_manager.print((uint32_t)zumo().bme280.get_last_pressure());
     }
 
 }

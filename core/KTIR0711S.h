@@ -6,17 +6,17 @@
 #include <gsl/span>
 #include <cmath>
 #include "mean.h"
+#include "commands_interface.h"
 
 template <typename T, int sensors_number>
 class LineSensorsBase {
 public:
     virtual std::array<float, sensors_number> get_all_normalized_data() = 0;
     virtual void init() = 0;
-    virtual void deinit() = 0;
 };
 
 template <typename T, int max_detected_value, int sensors_number>
-class LineSensors : public LineSensorsBase<T, sensors_number> {
+class LineSensors : public LineSensorsBase<T, sensors_number>, CommandsInterface {
 
     T* head_data_pointer;
     std::array<float, sensors_number> sensors_normalized_data;
@@ -60,13 +60,15 @@ public:
         return sensors_normalized_data;
     }
 
-    void init() override {
-        enable.set();
+    void set_enable(bool enable_) override {
+        if (enable_) {
+            enable.set();
+        } else {
+            enable.reset();
+        }
     }
 
-    void deinit() override {
-        enable.reset();
-    }
+    void init() override { }
 };
 
 template <typename T, int sensors_number>

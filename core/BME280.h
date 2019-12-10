@@ -2,8 +2,10 @@
 #define ZUMO_BME280_H
 
 #include "hal.h"
+#include "commands_interface.h"
 
-class BME280{
+class BME280 : CommandsInterface {
+
     hal::I2C& i2c;
     uint8_t address;
 
@@ -68,6 +70,10 @@ class BME280{
     SensorCalibration calibration;
     float temperature_correction = -5.67;
     uint32_t  t_fine;
+    float temperature;
+    float pressure;
+    float humidity;
+    bool enable = false;
 
 public:
     enum class RegisterNames : uint8_t {
@@ -135,6 +141,7 @@ public:
         calibration.dig_H5 = ((int16_t)((readRegister(CalibrationRegister::H5_MSB) << 4) + ((readRegister(CalibrationRegister::H4_LSB) >> 4) & 0x0F)));
         calibration.dig_H6 = ((int8_t)readRegister(CalibrationRegister::H6));
 
+        set_control_register(Oversampling::X16, Oversampling::X16, Mode::Normal);
         return true;
     }
 
@@ -143,28 +150,38 @@ public:
     }
 
     void set_temperature_oversampling(Oversampling oversampling) {
-        uint8_t control = i2c.read(address, uint8_t(RegisterNames::ctrl_meas));
-        control &= ~ uint8_t(0b111u << 5u);
-        control |= uint8_t(oversampling) << 5u;
-        i2c.write(address, uint8_t(RegisterNames::ctrl_meas), control);
+        if (enable) {
+            uint8_t control = i2c.read(address, uint8_t(RegisterNames::ctrl_meas));
+            control &= ~ uint8_t(0b111u << 5u);
+            control |= uint8_t(oversampling) << 5u;
+            i2c.write(address, uint8_t(RegisterNames::ctrl_meas), control);
+        }
     }
 
     void set_pressure_oversampling(Oversampling oversampling) {
-        uint8_t control = i2c.read(address, uint8_t(RegisterNames::ctrl_meas));
-        control &= ~ uint8_t(0b111u << 2u);
-        control |= uint8_t(oversampling) << 2u;
-        i2c.write(address, uint8_t(RegisterNames::ctrl_meas), control);
+        if (enable) {
+            uint8_t control = i2c.read(address, uint8_t(RegisterNames::ctrl_meas));
+            control &= ~ uint8_t(0b111u << 2u);
+            control |= uint8_t(oversampling) << 2u;
+            i2c.write(address, uint8_t(RegisterNames::ctrl_meas), control);
+        }
     }
 
     void set_mode(Mode mode) {
-        uint8_t control = i2c.read(address, uint8_t(RegisterNames::ctrl_meas));
-        control &= ~ uint8_t(0b11u);
-        control |= uint8_t(mode);
-        i2c.write(address, uint8_t(RegisterNames::ctrl_meas), control);
+        if (enable) {
+            uint8_t control = i2c.read(address, uint8_t(RegisterNames::ctrl_meas));
+            control &= ~ uint8_t(0b11u);
+            control |= uint8_t(mode);
+            i2c.write(address, uint8_t(RegisterNames::ctrl_meas), control);
+        }
     }
 
     uint8_t read_control_register() {
-        return i2c.read(address, uint8_t(RegisterNames::ctrl_meas));
+        if (enable) {
+            return i2c.read(address, uint8_t(RegisterNames::ctrl_meas));
+        } else {
+            return 0;
+        }
     }
 
     void set_control_register(Oversampling temperature_oversampling, Oversampling pressure_oversampling, Mode mode) {
@@ -172,65 +189,100 @@ public:
     }
 
     float read_temperature() {
-        uint8_t *data = i2c.read(address, uint8_t(RegisterNames::temp_msb), 3);
-        uint32_t adc_T = ((uint32_t)data[0] << 12) | ((uint32_t)data[1] << 4) | ((data[2] >> 4) & 0x0F);
+        if (enable) {
+            uint8_t *data = i2c.read(address, uint8_t(RegisterNames::temp_msb), 3);
+            uint32_t adc_T = ((uint32_t)data[0] << 12) | ((uint32_t)data[1] << 4) | ((data[2] >> 4) & 0x0F);
 
-        int64_t var1, var2;
+            int64_t var1, var2;
 
-        var1 = ((((adc_T>>3) - ((int32_t)calibration.dig_T1<<1))) * ((int32_t)calibration.dig_T2)) >> 11;
-        var2 = (((((adc_T>>4) - ((int32_t)calibration.dig_T1)) * ((adc_T>>4) - ((int32_t)calibration.dig_T1))) >> 12) *
-                ((int32_t)calibration.dig_T3)) >> 14;
-        t_fine = var1 + var2;
-        float output = (t_fine * 5 + 128) >> 8;
+            var1 = ((((adc_T>>3) - ((int32_t)calibration.dig_T1<<1))) * ((int32_t)calibration.dig_T2)) >> 11;
+            var2 = (((((adc_T>>4) - ((int32_t)calibration.dig_T1)) * ((adc_T>>4) - ((int32_t)calibration.dig_T1))) >> 12) *
+                    ((int32_t)calibration.dig_T3)) >> 14;
+            t_fine = var1 + var2;
+            float output = (t_fine * 5 + 128) >> 8;
 
-        output = output / 100.0f + temperature_correction;
-
-        return output;
+            temperature = output / 100.0f + temperature_correction;
+        } else {
+            temperature = 0.0f;
+        }
+        return temperature;
     }
 
     // Returns humidity in %RH as unsigned 32 bit integer in Q22. 10 format (22 integer and 10 fractional bits).
     // Output value of “47445” represents 47445/1024 = 46. 333 %RH
     float read_humidity() {
-        uint8_t *data = i2c.read(address, uint8_t(RegisterNames::hum_msb), 2);
+        if (enable) {
+            uint8_t *data = i2c.read(address, uint8_t(RegisterNames::hum_msb), 2);
 
-        int32_t adc_H = ((uint32_t)data[0] << 8) | ((uint32_t)data[1]);
+            int32_t adc_H = ((uint32_t)data[0] << 8) | ((uint32_t)data[1]);
 
-        int32_t var1;
-        var1 = (t_fine - ((int32_t)76800));
-        var1 = (((((adc_H << 14) - (((int32_t)calibration.dig_H4) << 20) - (((int32_t)calibration.dig_H5) * var1)) +
-                  ((int32_t)16384)) >> 15) * (((((((var1 * ((int32_t)calibration.dig_H6)) >> 10) * (((var1 * ((int32_t)calibration.dig_H3)) >> 11) + ((int32_t)32768))) >> 10) + ((int32_t)2097152)) *
-                                               ((int32_t)calibration.dig_H2) + 8192) >> 14));
-        var1 = (var1 - (((((var1 >> 15) * (var1 >> 15)) >> 7) * ((int32_t)calibration.dig_H1)) >> 4));
-        var1 = (var1 < 0 ? 0 : var1);
-        var1 = (var1 > 419430400 ? 419430400 : var1);
+            int32_t var1;
+            var1 = (t_fine - ((int32_t)76800));
+            var1 = (((((adc_H << 14) - (((int32_t)calibration.dig_H4) << 20) - (((int32_t)calibration.dig_H5) * var1)) +
+                      ((int32_t)16384)) >> 15) * (((((((var1 * ((int32_t)calibration.dig_H6)) >> 10) * (((var1 * ((int32_t)calibration.dig_H3)) >> 11) + ((int32_t)32768))) >> 10) + ((int32_t)2097152)) *
+                                                   ((int32_t)calibration.dig_H2) + 8192) >> 14));
+            var1 = (var1 - (((((var1 >> 15) * (var1 >> 15)) >> 7) * ((int32_t)calibration.dig_H1)) >> 4));
+            var1 = (var1 < 0 ? 0 : var1);
+            var1 = (var1 > 419430400 ? 419430400 : var1);
 
-        return (float)(var1>>12) / 1024.0;
+            humidity = (float)(var1>>12) / 1024.0;
+
+        } else {
+            humidity = 0.0f;
+        }
+        return humidity;
     }
 
     // Returns pressure in Pa as unsigned 32 bit integer in Q24.8 format (24 integer bits and 8 fractional bits).
     // Output value of “24674867” represents 24674867/256 = 96386.2 Pa = 963.862 hPa
     float read_pressure() {
-        uint8_t *data = i2c.read(address, uint8_t(RegisterNames::press_msb), 3);
+        if (enable) {
+            uint8_t *data = i2c.read(address, uint8_t(RegisterNames::press_msb), 3);
 
-        int32_t adc_P = ((uint32_t)data[0] << 12) | ((uint32_t)data[1] << 4) | ((data[2] >> 4) & 0x0F);
+            int32_t adc_P = ((uint32_t)data[0] << 12) | ((uint32_t)data[1] << 4) | ((data[2] >> 4) & 0x0F);
 
-        int64_t var1, var2, p_acc;
-        var1 = ((int64_t)t_fine) - 128000;
-        var2 = var1 * var1 * (int64_t)calibration.dig_P6;
-        var2 = var2 + ((var1 * (int64_t)calibration.dig_P5)<<17);
-        var2 = var2 + (((int64_t)calibration.dig_P4)<<35);
-        var1 = ((var1 * var1 * (int64_t)calibration.dig_P3)>>8) + ((var1 * (int64_t)calibration.dig_P2)<<12);
-        var1 = (((((int64_t)1)<<47)+var1))*((int64_t)calibration.dig_P1)>>33;
-        if (var1 == 0) {
-            return 0; // avoid exception caused by division by zero
+            int64_t var1, var2, p_acc;
+            var1 = ((int64_t)t_fine) - 128000;
+            var2 = var1 * var1 * (int64_t)calibration.dig_P6;
+            var2 = var2 + ((var1 * (int64_t)calibration.dig_P5)<<17);
+            var2 = var2 + (((int64_t)calibration.dig_P4)<<35);
+            var1 = ((var1 * var1 * (int64_t)calibration.dig_P3)>>8) + ((var1 * (int64_t)calibration.dig_P2)<<12);
+            var1 = (((((int64_t)1)<<47)+var1))*((int64_t)calibration.dig_P1)>>33;
+            if (var1 == 0) {
+                return 0; // avoid exception caused by division by zero
+            }
+            p_acc = 1048576 - adc_P;
+            p_acc = (((p_acc<<31) - var2)*3125)/var1;
+            var1 = (((int64_t)calibration.dig_P9) * (p_acc>>13) * (p_acc>>13)) >> 25;
+            var2 = (((int64_t)calibration.dig_P8) * p_acc) >> 19;
+            p_acc = ((p_acc + var1 + var2) >> 8) + (((int64_t)calibration.dig_P7)<<4);
+            pressure = (float)p_acc / 256.0;
+        } else {
+            pressure = 0.0f;
         }
-        p_acc = 1048576 - adc_P;
-        p_acc = (((p_acc<<31) - var2)*3125)/var1;
-        var1 = (((int64_t)calibration.dig_P9) * (p_acc>>13) * (p_acc>>13)) >> 25;
-        var2 = (((int64_t)calibration.dig_P8) * p_acc) >> 19;
-        p_acc = ((p_acc + var1 + var2) >> 8) + (((int64_t)calibration.dig_P7)<<4);
+        return pressure;
+    }
 
-        return (float)p_acc / 256.0;
+    void run_measurements() {
+        read_temperature();
+        read_humidity();
+        read_pressure();
+    }
+
+    uint16_t get_last_temperature_multiplied() {
+        return uint16_t (temperature * 100.0f);
+    }
+
+    uint16_t get_last_humidity() {
+        return uint16_t (humidity);
+    }
+
+    uint32_t get_last_pressure() {
+        return uint32_t (pressure);
+    }
+
+    void set_enable(bool enable_) override {
+        this->enable = enable_;
     }
 
 };

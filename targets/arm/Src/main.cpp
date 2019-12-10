@@ -27,7 +27,7 @@ extern UART_HandleTypeDef huart3;
 
 extern I2C_HandleTypeDef hi2c1;
 
-extern CommandManager <8,'\r', false>command_manager;
+extern CommandManager <11,'\r', false>command_manager;
 
 void hal::enable_interrupts() {
     __enable_irq();
@@ -200,7 +200,8 @@ void Main() {
     zumo().LED2.toggle();
     zumo().mcp9700.init();
     zumo().bme280.init();
-    zumo().bme280.set_control_register(BME280::Oversampling::X16, BME280::Oversampling::X16, BME280::Mode::Normal);
+
+//    zumo().bme280.set_enable(true);
 
     while(1) {
         if (print_flag) {
@@ -211,21 +212,12 @@ void Main() {
         hal::loop();
 
         if (_10Hz_flag) {
+            zumo().bme280.run_measurements();
+            zumo().hcsr04.run_measurements();
+
             zumo().LED2.toggle();
-            float temp1 = zumo().mcp9700.get_temperature();
-            float temp = zumo().bme280.read_temperature();
-            float hum = zumo().bme280.read_humidity();
-            float press = zumo().bme280.read_pressure();
-
-            (void) temp;
-            (void) temp1;
-            (void) hum;
-            (void) press;
-
-
             _10Hz_flag = false;
             _10Hz();
-            // zumo().hcsr04.start();
 
             VT::move_to(0, 30);
             VT::print("TEMP: ");

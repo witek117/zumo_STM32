@@ -17,10 +17,14 @@ public:
 
     }
 
-    bool parse(const char * data) {
+    bool parse(const char * data, size_t data_len) {
+        if (data_len != name_len) {
+            return false;
+        }
+
         char buffer [name_len + 1];
         memcpy(buffer, data, name_len);
-        buffer[name_len ] = '\0';
+        buffer[name_len] = '\0';
 
         if (strcmp(buffer, name) == 0) {
             callback_handler((char *)data + name_len + 1);

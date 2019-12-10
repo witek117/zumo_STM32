@@ -26,6 +26,13 @@ public:
         print(static_cast<char>(0x00FFu & val));
     }
 
+    void print(uint32_t val) {
+        print(static_cast<char>(val >> 24u));
+        print(static_cast<char>(val >> 16u));
+        print(static_cast<char>(val >> 8u));
+        print(static_cast<char>(0x00FFu & val));
+    }
+
     virtual void deinit() = 0;
 };
 
@@ -44,6 +51,8 @@ class CommandManager : public PrintManager {
     std::array<Command, size> commands;
 
     std::function<void(char)> print_handler = nullptr;
+
+    uint8_t command_title_len = 0;
 public:
     explicit CommandManager(std::function<void(void)> enable_interrupts, std::function<void(void)> disable_interrupts,  std::array<Command, size> commands) :
         enable_interrupts(std::move(enable_interrupts)), disable_interrupts(std::move(disable_interrupts)), commands(commands), print_handler(nullptr) {
@@ -102,23 +111,29 @@ public:
         enable_interrupts();
 
         while (commands_in_fifo_local--) {
+            command_title_len = 0;
             char* cmd_buffer = copy_from_fifo_to_buffer();
             parse(cmd_buffer);
-
         }
     }
 
     void parse(const char * data) {
+        for (uint8_t i = 0; i < 20; i ++) {
+            if (data[i] == ' ' || data[i] == '\0') {
+                command_title_len = i;
+                break;
+            }
+        }
         for (auto command : commands) {
-            command.parse(data);
+            if (command.parse(data, command_title_len)) {
+                return;
+            }
         }
     }
 
     char *copy_from_fifo_to_buffer() {
         static std::array<char, 100> cmd_buffer;
-
         auto it = cmd_buffer.begin();
-
         disable_interrupts();
         while (buffer_rx.getSize() != 0 && it != cmd_buffer.end()) {
             *it = buffer_rx.get();
@@ -131,8 +146,6 @@ public:
         enable_interrupts();
         return cmd_buffer.data();
     }
-
-
 };
 
 

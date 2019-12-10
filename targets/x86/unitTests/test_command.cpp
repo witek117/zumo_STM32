@@ -126,3 +126,46 @@ TEST(COMMAND_MANAGER, two_floats) {
     EXPECT_EQ(ff1, (float)(2.456));
     EXPECT_EQ(ff2, (float)(3.654));
 }
+
+int functionNUmber = 0;
+void question1(const char * data) {
+    functionNUmber = 1;
+}
+
+void question2(const char * data) {
+    functionNUmber = 2;
+}
+
+void question3(const char * data) {
+    functionNUmber = 3;
+}
+
+void question4(const char * data) {
+    functionNUmber = 4;
+}
+
+TEST(COMMAND_MANAGER, question) {
+    CommandManager<4, '\n', true> command_manager(&enable_interrupts, &disable_interrupts, {
+            Command("t?", question1),
+            Command("n?", question2),
+            Command("t", question3),
+            Command("n", question4)
+    });
+    command_manager.init(print_function);
+
+
+    const char * data1 = "t 1\n";
+    for (size_t i =0; i < strlen(data1); i++) {
+        command_manager.put_char(data1[i]);
+    }
+    command_manager.run();
+    EXPECT_EQ(functionNUmber, 3);
+
+    const char * data2 = "t?\n";
+    for (size_t i =0; i < strlen(data2); i++) {
+        command_manager.put_char(data2[i]);
+    }
+    command_manager.run();
+    EXPECT_EQ(functionNUmber, 1);
+}
+
