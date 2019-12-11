@@ -13,6 +13,7 @@
 #include "HC-SR04.h"
 #include "MCP9700.h"
 #include "BME280.h"
+#include "MPU6050.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
@@ -83,7 +84,9 @@ ZUMO& zumo (void) {
 
     static BME280 bme280(IMU_I2C, 0b1110110);
 
-    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04, mcp9700, bme280);
+    static MPU6050 mpu6050 (IMU_I2C, 0x68);
+
+    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04, mcp9700, bme280, mpu6050);
 
     return _zumo;
 }
@@ -201,6 +204,16 @@ void Main() {
     zumo().mcp9700.init();
     zumo().bme280.init();
 
+    zumo().mpu6050.calibrateGyro();
+//    zumo().mpu6050.begin()
+
+    while(!zumo().mpu6050.init(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G))
+    {
+        zumo().LED1.toggle();
+        // Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
+        HAL_Delay(500);
+    }
+
 //    zumo().bme280.set_enable(true);
 
     while(1) {
@@ -212,8 +225,42 @@ void Main() {
         hal::loop();
 
         if (_10Hz_flag) {
-            zumo().bme280.run_measurements();
-            zumo().hcsr04.run_measurements();
+
+//            Vector rawAccel = zumo().mpu6050.readRawAccel();
+            Vector normAccel = zumo().mpu6050.readNormalizeAccel();
+            int pitch = -(atan2(normAccel.XAxis, sqrt(normAccel.YAxis*normAccel.YAxis + normAccel.ZAxis*normAccel.ZAxis))*180.0)/M_PI;
+            int roll = (atan2(normAccel.YAxis, normAccel.ZAxis)*180.0)/M_PI;
+//            VT::move_to(0,33);
+//            VT::print(rawAccel.XAxis);
+//            VT::print(' ');
+//            VT::print(rawAccel.YAxis);
+//            VT::print(' ');
+//            VT::print(rawAccel.ZAxis);
+            VT::move_to(0,33);
+            VT::print(pitch);
+            VT::print(' ');
+            VT::print(roll);
+            VT::print("       ");
+
+            VT::move_to(0,34);
+            VT::print(normAccel.XAxis);
+            VT::print(' ');
+            VT::print(normAccel.YAxis);
+            VT::print(' ');
+            VT::print(normAccel.ZAxis);
+
+//            Vector rawGyro = zumo().mpu6050.readRawGyro();
+            Vector normGyro = zumo().mpu6050.readNormalizeGyro();
+
+            VT::move_to(0,35);
+            VT::print(normGyro.XAxis);
+            VT::print(' ');
+            VT::print(normGyro.YAxis);
+            VT::print(' ');
+            VT::print(normGyro.ZAxis);
+
+//            zumo().bme280.run_measurements();
+//            zumo().hcsr04.run_measurements();
 
             zumo().LED2.toggle();
             _10Hz_flag = false;

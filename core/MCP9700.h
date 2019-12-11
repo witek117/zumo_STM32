@@ -2,6 +2,7 @@
 #define ZUMO_MCP9700_H
 
 #include "commands_interface.h"
+
 template <typename T>
 class MCP9700 : CommandsInterface {
     T& data_reference;

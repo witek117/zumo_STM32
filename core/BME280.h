@@ -10,38 +10,13 @@ class BME280 : CommandsInterface {
     uint8_t address;
 
     enum class CalibrationRegister : uint8_t {
-        T1_LSB = 0x88,
-        T1_MSB = 0x89,
-        T2_LSB = 0x8A,
-        T2_MSB = 0x8B,
-        T3_LSB = 0x8C,
-        T3_MSB = 0x8D,
-        P1_LSB = 0x8E,
-        P1_MSB = 0x8F,
-        P2_LSB = 0x90,
-        P2_MSB = 0x91,
-        P3_LSB = 0x92,
-        P3_MSB = 0x93,
-        P4_LSB = 0x94,
-        P4_MSB = 0x95,
-        P5_LSB = 0x96,
-        P5_MSB = 0x97,
-        P6_LSB = 0x98,
-        P6_MSB = 0x99,
-        P7_LSB = 0x9A,
-        P7_MSB = 0x9B,
-        P8_LSB = 0x9C,
-        P8_MSB = 0x9D,
-        P9_LSB = 0x9E,
-        P9_MSB = 0x9F,
-        H1     = 0xA1,
-        H2_LSB = 0xE1,
-        H2_MSB = 0xE2,
-        H3     = 0xE3,
-        H4_MSB = 0xE4,
-        H4_LSB = 0xE5,
-        H5_MSB = 0xE6,
-        H6     = 0xE7
+        T1_LSB = 0x88, T1_MSB = 0x89, T2_LSB = 0x8A, T2_MSB = 0x8B, T3_LSB = 0x8C, T3_MSB = 0x8D,
+
+        P1_LSB = 0x8E, P1_MSB = 0x8F, P2_LSB = 0x90, P2_MSB = 0x91, P3_LSB = 0x92, P3_MSB = 0x93, P4_LSB = 0x94, P4_MSB = 0x95, P5_LSB = 0x96,
+        P5_MSB = 0x97, P6_LSB = 0x98, P6_MSB = 0x99, P7_LSB = 0x9A, P7_MSB = 0x9B, P8_LSB = 0x9C, P8_MSB = 0x9D, P9_LSB = 0x9E, P9_MSB = 0x9F,
+
+        H1     = 0xA1, H2_LSB = 0xE1, H2_MSB = 0xE2, H3     = 0xE3,
+        H4_MSB = 0xE4, H4_LSB = 0xE5, H5_MSB = 0xE6, H6     = 0xE7
     };
 
     struct SensorCalibration {
@@ -185,7 +160,7 @@ public:
     }
 
     void set_control_register(Oversampling temperature_oversampling, Oversampling pressure_oversampling, Mode mode) {
-        i2c.write(address, uint8_t(RegisterNames::ctrl_meas), uint8_t(temperature_oversampling) << 5u | uint8_t(pressure_oversampling) << 2u | uint8_t(mode));
+        i2c.write(address, uint8_t(RegisterNames::ctrl_meas), uint8_t(uint8_t(temperature_oversampling) << 5u | uint8_t(pressure_oversampling) << 2u | uint8_t(mode)));
     }
 
     float read_temperature() {

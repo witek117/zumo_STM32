@@ -84,6 +84,11 @@ public:
         HAL_I2C_Master_Transmit((I2C_HandleTypeDef*)&hi2c, address, buffer, 2, 10);
     }
 
+    void write(uint8_t address, uint8_t register_address, uint16_t data) override {
+        uint8_t buffer[3] = {uint8_t (register_address), uint8_t(data >> 8), uint8_t(data)};
+        HAL_I2C_Master_Transmit((I2C_HandleTypeDef*)&hi2c, address, buffer, 3, 10);
+    }
+
     uint8_t read(uint8_t address, uint8_t register_address) override {
         HAL_I2C_Master_Transmit((I2C_HandleTypeDef*)&hi2c, address, (uint8_t*)&register_address, 1, 10);
         HAL_I2C_Master_Receive((I2C_HandleTypeDef*)&hi2c, address, data_buffer, 1, 10);
