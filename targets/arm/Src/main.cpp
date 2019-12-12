@@ -204,10 +204,10 @@ void Main() {
     zumo().mcp9700.init();
     zumo().bme280.init();
 
-    zumo().mpu6050.calibrateGyro();
+    zumo().mpu6050.gyroscope.calibrate(5);
 //    zumo().mpu6050.begin()
 
-    while(!zumo().mpu6050.init(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G))
+    while(!zumo().mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2))
     {
         zumo().LED1.toggle();
         // Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
@@ -227,37 +227,48 @@ void Main() {
         if (_10Hz_flag) {
 
 //            Vector rawAccel = zumo().mpu6050.readRawAccel();
-            Vector normAccel = zumo().mpu6050.readNormalizeAccel();
-            int pitch = -(atan2(normAccel.XAxis, sqrt(normAccel.YAxis*normAccel.YAxis + normAccel.ZAxis*normAccel.ZAxis))*180.0)/M_PI;
-            int roll = (atan2(normAccel.YAxis, normAccel.ZAxis)*180.0)/M_PI;
-//            VT::move_to(0,33);
-//            VT::print(rawAccel.XAxis);
-//            VT::print(' ');
-//            VT::print(rawAccel.YAxis);
-//            VT::print(' ');
-//            VT::print(rawAccel.ZAxis);
-            VT::move_to(0,33);
+            auto raw_accel = zumo().mpu6050.accelerometer.get_raw_data();
+            auto normAccel = zumo().mpu6050.accelerometer.get_normalised_data();
+            int pitch = -(atan2(normAccel.x, sqrt(normAccel.y*normAccel.y + normAccel.z*normAccel.z))*180.0)/M_PI;
+            int roll = (atan2(normAccel.y, normAccel.z)*180.0)/M_PI;
+////            VT::move_to(0,33);
+////            VT::print(rawAccel.XAxis);
+////            VT::print(' ');
+////            VT::print(rawAccel.YAxis);
+////            VT::print(' ');
+////            VT::print(rawAccel.ZAxis);
+            VT::move_to(0,35);
             VT::print(pitch);
             VT::print(' ');
             VT::print(roll);
             VT::print("       ");
+//
+            VT::move_to(0,33);
+            VT::print(raw_accel.x);
+            VT::print(' ');
+            VT::print(raw_accel.y);
+            VT::print(' ');
+            VT::print(raw_accel.z);
+            VT::print("        ");
 
             VT::move_to(0,34);
-            VT::print(normAccel.XAxis);
+            VT::print(normAccel.x);
             VT::print(' ');
-            VT::print(normAccel.YAxis);
+            VT::print(normAccel.y);
             VT::print(' ');
-            VT::print(normAccel.ZAxis);
-
-//            Vector rawGyro = zumo().mpu6050.readRawGyro();
-            Vector normGyro = zumo().mpu6050.readNormalizeGyro();
-
-            VT::move_to(0,35);
-            VT::print(normGyro.XAxis);
+            VT::print(normAccel.z);
+            VT::print("        ");
+//
+////            Vector rawGyro = zumo().mpu6050.readRawGyro();
+            auto normGyro = zumo().mpu6050.gyroscope.get_normalised_data();
+//
+            VT::move_to(0,36);
+            VT::print(normGyro.x);
             VT::print(' ');
-            VT::print(normGyro.YAxis);
+            VT::print(normGyro.y);
             VT::print(' ');
-            VT::print(normGyro.ZAxis);
+            VT::print(normGyro.z);
+            VT::print("        ");
 
 //            zumo().bme280.run_measurements();
 //            zumo().hcsr04.run_measurements();
