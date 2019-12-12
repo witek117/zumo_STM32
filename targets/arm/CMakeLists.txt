@@ -59,7 +59,7 @@ set(SOURCES
 
 add_executable(${NAME} ${SOURCES})
 
-set_target_properties(${NAME} PROPERTIES LINK_FLAGS "-T ${PLATFORM_LINKER_SCRIPT} -Wl,--gc-sections -specs=nano.specs -flto -lc -u _printf_float")
+set_target_properties(${NAME} PROPERTIES LINK_FLAGS "-T ${PLATFORM_LINKER_SCRIPT} -Wl,--gc-sections -specs=nano.specs -flto -lc -u _printf_float ${ARMFLOAT}")
 
 target_link_libraries(${NAME}
 	core

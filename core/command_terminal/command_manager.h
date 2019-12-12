@@ -117,9 +117,10 @@ public:
         }
     }
 
-    void parse(const char * data) {
+    void parse(char* data) {
         for (uint8_t i = 0; i < 20; i ++) {
             if (data[i] == ' ' || data[i] == '\0') {
+                data[i] = '\0';
                 command_title_len = i;
                 break;
             }

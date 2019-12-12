@@ -6,6 +6,7 @@
 #include <tuple>
 #include <array>
 #include <cstring>
+
 class Command {
     const char * name;
     size_t  name_len = 0;
@@ -17,16 +18,12 @@ public:
 
     }
 
-    bool parse(const char * data, size_t data_len) {
+    bool parse(char * data, size_t data_len) {
         if (data_len != name_len) {
             return false;
         }
 
-        char buffer [name_len + 1];
-        memcpy(buffer, data, name_len);
-        buffer[name_len] = '\0';
-
-        if (strcmp(buffer, name) == 0) {
+        if (memcmp(data, name, name_len) == 0) {
             callback_handler((char *)data + name_len + 1);
             return true;
         }

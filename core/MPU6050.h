@@ -322,8 +322,13 @@ public:
 
     float get_temperature() {
         int16_t T = read_register_16bit(RegisterNames::TEMP_OUT_H);
-        return float(T) / 340.0f + 36.53f;
+        return float(T) / 340.0f + 21.0f;
     }
+
+    uint16_t get_temperature_multiplied() {
+        return static_cast<uint16_t >(get_temperature() * 100.0f);
+    }
+
 
     void set_deep_sleep(bool state);
 };

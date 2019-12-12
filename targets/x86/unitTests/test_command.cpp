@@ -19,10 +19,10 @@ TEST(COMMAND, create) {
     CommandBaseMock start("start");
     const char* data = "start 12345";
     EXPECT_CALL(start, callback(data + 6));
-    EXPECT_EQ(start.parse(data), true);
-
+    EXPECT_EQ(start.parse(data, 5), true);
+//
     EXPECT_CALL(start, callback(_)).Times(0);
-    EXPECT_EQ(start.parse("data"), false);
+    EXPECT_EQ(start.parse("data", 5), false);
 }
 
 TEST(COMMAND, value_float) {

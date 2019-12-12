@@ -1,9 +1,10 @@
 set (CWARN "-Wall -Wstrict-prototypes -Wextra -Werror")
 set (CXXWARN "-Wall -Wextra -Werror")
 set(CTUNING "-fomit-frame-pointer -ffunction-sections -fdata-sections")
+set (ARMFLOAT "-mfloat-abi=soft")
 
 ReadVariables(${CMAKE_CURRENT_LIST_DIR}/Makefile "CPU")        # get flag -DCPU = -mcpu=cortex-mXX
-set(CMCU "-mcpu=${CPU} -mthumb -mfloat-abi=soft")
+set(CMCU "-mcpu=${CPU} -mthumb ${ARMFLOAT}")
 
 ReadVariables(${CMAKE_CURRENT_LIST_DIR}/Makefile "C_DEFS")        # get flag -DSTM32F****
 

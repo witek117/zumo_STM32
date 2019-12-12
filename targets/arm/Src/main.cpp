@@ -1,22 +1,24 @@
 #include "main.h"
 #include "STM_hal.h"
-#include "window_terminal/window_manager.hpp"
-#include "vector"
-#include "DRV8833.h"
-#include "encoder.h"
-#include "PID.h"
-#include "KTIR0711S.h"
 #include "ZUMO.h"
-#include "mean.h"
+#include "uart_crossing.h"
+// terminals
 #include "command_terminal/Command.h"
 #include "command_terminal/command_manager.h"
+#include "window_terminal/window_manager.hpp"
+// algorithms
+#include "mean.h"
+#include "PID.h"
+// devices
 #include "HC-SR04.h"
 #include "MCP9700.h"
 #include "BME280.h"
 #include "MPU6050.h"
+#include "KTIR0711S.h"
+#include "DRV8833.h"
+#include "encoder.h"
 
 extern ADC_HandleTypeDef hadc1;
-extern ADC_HandleTypeDef hadc2;
 
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
@@ -27,8 +29,6 @@ extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
 extern I2C_HandleTypeDef hi2c1;
-
-extern CommandManager <11,'\r', false>command_manager;
 
 void hal::enable_interrupts() {
     __enable_irq();
@@ -60,7 +60,6 @@ STM32_GPIO TRIG(TRIG_GPIO_Port, TRIG_Pin);
 STM32_I2C IMU_I2C(hi2c1);
 
 volatile uint16_t sensors[11];
-//volatile uint16_t ADC2Data[3];
 volatile uint16_t *TEMP = &sensors[8];
 volatile uint16_t *V_CURRENT_SENS = &sensors[9];
 volatile uint16_t *V_BAT = &sensors[10];
@@ -92,82 +91,21 @@ ZUMO& zumo (void) {
 }
 
 volatile bool print_flag = false;
-class STM32_UART {
-public:
-    enum class UARTMode {
-        TERMINAL,
-        COMMAND,
-        NONE
-    };
-    UARTMode uart_mode;
-private:
-    UART_HandleTypeDef &huart;
-    std::function<void(char)> fun;
-public:
-    STM32_UART(UART_HandleTypeDef &huart): uart_mode(UARTMode::NONE), huart(huart), fun(nullptr) {}
-
-    void send(char ch) {
-
-        HAL_UART_Transmit(&huart, reinterpret_cast<uint8_t *>(&ch), 1, 10);
-    }
-
-    void interrupt() {
-        uint32_t isrflags   = READ_REG(huart.Instance->SR);
-        uint32_t cr1its     = READ_REG(huart.Instance->CR1);
-        uint32_t errorflags = 0x00U;
-
-        /* If no error occurs */
-        errorflags = (isrflags & (uint32_t)(USART_SR_PE | USART_SR_FE | USART_SR_ORE | USART_SR_NE));
-        if (errorflags == RESET) {
-            /* UART in mode Receiver -------------------------------------------------*/
-            if (((isrflags & USART_SR_RXNE) != RESET) && ((cr1its & USART_CR1_RXNEIE) != RESET)) {
-                on_receive(static_cast<char >(huart.Instance->DR));
-                return;
-            }
-        }
-    }
-
-    void on_receive(char c) {
-        if (uart_mode == UARTMode::NONE) {
-
-            if (c == 't') {
-                if (VT::init([this](char ch) {this->send(ch);})) {
-                    fun = &window_manager::in_RX_callback;
-                    VT::refresh();
-                    window_manager::refresh_value(true);
-                    window_manager::refresh_all();
-                    uart_mode = UARTMode::TERMINAL;
-                }
-            } else if (c == 'c') {
-                zumo().LED1.toggle();
-                if (command_manager.init([this](char ch) {this->send(ch);})) {
-                    fun = [](char ch) {command_manager.put_char(ch);};
-                    uart_mode = UARTMode::COMMAND;
-                }
-            }
-            return;
-        } else {
-            if (fun) {
-                fun(c);
-            }
-        }
-    }
-};
 
 STM32_UART UART1(huart1);
 STM32_UART UART2(huart2);
 STM32_UART UART3(huart3);
 
-extern "C" void handle_usart1_interrupt() {
-    UART1.interrupt();
+extern "C" int handle_usart1_interrupt() {
+    return UART1.interrupt();
 }
 
-extern "C" void handle_usart2_interrupt() {
-    UART2.interrupt();
+extern "C" int handle_usart2_interrupt() {
+    return UART2.interrupt();
 }
 
-extern "C" void handle_usart3_interrupt() {
-    UART3.interrupt();
+extern "C" int handle_usart3_interrupt() {
+    return UART3.interrupt();
 }
 
 extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
@@ -176,8 +114,6 @@ extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     }
 }
 
-
-float actual_line_position = 0.0;
 volatile bool refresh_values = false;
 volatile bool _10Hz_flag = false;
 void _10Hz();
@@ -203,18 +139,8 @@ void Main() {
     zumo().LED2.toggle();
     zumo().mcp9700.init();
     zumo().bme280.init();
-
+    zumo().mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2);
     zumo().mpu6050.gyroscope.calibrate(5);
-//    zumo().mpu6050.begin()
-
-    while(!zumo().mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2))
-    {
-        zumo().LED1.toggle();
-        // Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
-        HAL_Delay(500);
-    }
-
-//    zumo().bme280.set_enable(true);
 
     while(1) {
         if (print_flag) {
@@ -225,53 +151,53 @@ void Main() {
         hal::loop();
 
         if (_10Hz_flag) {
-
-//            Vector rawAccel = zumo().mpu6050.readRawAccel();
-            auto raw_accel = zumo().mpu6050.accelerometer.get_raw_data();
-            auto normAccel = zumo().mpu6050.accelerometer.get_normalised_data();
-            int pitch = -(atan2(normAccel.x, sqrt(normAccel.y*normAccel.y + normAccel.z*normAccel.z))*180.0)/M_PI;
-            int roll = (atan2(normAccel.y, normAccel.z)*180.0)/M_PI;
-////            VT::move_to(0,33);
-////            VT::print(rawAccel.XAxis);
-////            VT::print(' ');
-////            VT::print(rawAccel.YAxis);
-////            VT::print(' ');
-////            VT::print(rawAccel.ZAxis);
-            VT::move_to(0,35);
-            VT::print(pitch);
-            VT::print(' ');
-            VT::print(roll);
-            VT::print("       ");
 //
-            VT::move_to(0,33);
-            VT::print(raw_accel.x);
-            VT::print(' ');
-            VT::print(raw_accel.y);
-            VT::print(' ');
-            VT::print(raw_accel.z);
-            VT::print("        ");
-
-            VT::move_to(0,34);
-            VT::print(normAccel.x);
-            VT::print(' ');
-            VT::print(normAccel.y);
-            VT::print(' ');
-            VT::print(normAccel.z);
-            VT::print("        ");
+////            Vector rawAccel = zumo().mpu6050.readRawAccel();
+//            auto raw_accel = zumo().mpu6050.accelerometer.get_raw_data();
+//            auto normAccel = zumo().mpu6050.accelerometer.get_normalised_data();
+//            int pitch = -(atan2(normAccel.x, sqrt(normAccel.y*normAccel.y + normAccel.z*normAccel.z))*180.0)/M_PI;
+//            int roll = (atan2(normAccel.y, normAccel.z)*180.0)/M_PI;
+//////            VT::move_to(0,33);
+//////            VT::print(rawAccel.XAxis);
+//////            VT::print(' ');
+//////            VT::print(rawAccel.YAxis);
+//////            VT::print(' ');
+//////            VT::print(rawAccel.ZAxis);
+//            VT::move_to(0,35);
+//            VT::print(pitch);
+//            VT::print(' ');
+//            VT::print(roll);
+//            VT::print("       ");
+////
+//            VT::move_to(0,33);
+//            VT::print(raw_accel.x);
+//            VT::print(' ');
+//            VT::print(raw_accel.y);
+//            VT::print(' ');
+//            VT::print(raw_accel.z);
+//            VT::print("        ");
 //
-////            Vector rawGyro = zumo().mpu6050.readRawGyro();
-            auto normGyro = zumo().mpu6050.gyroscope.get_normalised_data();
-//
-            VT::move_to(0,36);
-            VT::print(normGyro.x);
-            VT::print(' ');
-            VT::print(normGyro.y);
-            VT::print(' ');
-            VT::print(normGyro.z);
-            VT::print("        ");
+//            VT::move_to(0,34);
+//            VT::print(normAccel.x);
+//            VT::print(' ');
+//            VT::print(normAccel.y);
+//            VT::print(' ');
+//            VT::print(normAccel.z);
+//            VT::print("        ");
+////
+//////            Vector rawGyro = zumo().mpu6050.readRawGyro();
+//            auto normGyro = zumo().mpu6050.gyroscope.get_normalised_data();
+////
+//            VT::move_to(0,36);
+//            VT::print(normGyro.x);
+//            VT::print(' ');
+//            VT::print(normGyro.y);
+//            VT::print(' ');
+//            VT::print(normGyro.z);
+//            VT::print("        ");
 
-//            zumo().bme280.run_measurements();
-//            zumo().hcsr04.run_measurements();
+            zumo().bme280.run_measurements();
+            zumo().hcsr04.run_measurements();
 
             zumo().LED2.toggle();
             _10Hz_flag = false;
@@ -279,7 +205,7 @@ void Main() {
 
             VT::move_to(0, 30);
             VT::print("TEMP: ");
-            VT::print(zumo().mcp9700.get_temperature_multiplied());
+            VT::print(zumo().mpu6050.get_temperature());
 
             VT::move_to(0, 31);
             VT::print("CURRENT: ");
