@@ -177,9 +177,11 @@ public:
             float output = (t_fine * 5 + 128) >> 8;
 
             temperature = output / 100.0f + temperature_correction;
-        } else {
-            temperature = 0.0f;
         }
+        return temperature;
+    }
+
+    float get_last_temperature() {
         return temperature;
     }
 
@@ -232,8 +234,6 @@ public:
             var2 = (((int64_t)calibration.dig_P8) * p_acc) >> 19;
             p_acc = ((p_acc + var1 + var2) >> 8) + (((int64_t)calibration.dig_P7)<<4);
             pressure = (float)p_acc / 256.0;
-        } else {
-            pressure = 0.0f;
         }
         return pressure;
     }

@@ -5,6 +5,7 @@
 
 template <typename T>
 class MCP9700 : CommandsInterface {
+    float temperature = 0.0f;
     T& data_reference;
     T ADC_max_value;
     float ADC_supply_value;
@@ -24,17 +25,22 @@ public:
             return 0.0;
         }
 
-        float temperature = static_cast<float>(get_value());
+        float temp = static_cast<float>(get_value());
 
-        temperature *= ADC_supply_value;
-        temperature /= ADC_max_value;
-        temperature -= 0.5f;
+        temp *= ADC_supply_value;
+        temp /= ADC_max_value;
+        temp -= 0.5f;
 
-        return temperature * 100.0f;
+        temperature = temp * 100.0f;
+        return temperature;
+    }
+
+    float get_last_temperature() {
+        return temperature;
     }
 
     uint16_t get_temperature_multiplied() {
-        float temperature = get_temperature();
+        get_temperature();
         return uint16_t(temperature * 100.0f);
     }
 

@@ -7,7 +7,7 @@
 #include "main.h"
 #include "stm32f1xx_hal_conf.h"
 
-extern CommandManager <11,'\r', false>command_manager;
+extern CommandManager <15,'\r', false>command_manager;
 
 class STM32_UART {
 public:
@@ -29,9 +29,9 @@ public:
     }
 
     int interrupt() {
-        uint32_t isrflags   = READ_REG(huart.Instance->SR);
-        uint32_t cr1its     = READ_REG(huart.Instance->CR1);
-        uint8_t data = huart.Instance->DR;
+        uint32_t isrflags   = huart.Instance->SR;
+        uint32_t cr1its     = huart.Instance->CR1;
+        uint8_t data        = huart.Instance->DR;
         uint32_t errorflags = 0x00U;
 
         /* If no error occurs */
@@ -51,13 +51,6 @@ public:
         if (isrflags & USART_SR_RXNE) {
             huart.Instance->SR &= ~ USART_SR_RXNE;
         }
-
-//        if (isrflags & USART_SR_ORE) {
-//            volatile uint8_t data = huart.Instance->DR;
-//            (void) data;
-//            huart.Instance->SR &= ~ USART_SR_ORE;
-//        }
-
         return 1;
     }
 

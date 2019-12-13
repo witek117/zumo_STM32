@@ -27,6 +27,12 @@ void get_mcp9700_value_callback(const char*);
 void set_bme280_enable_callback(const char*);
 void get_bme280_value_callback(const char*);
 
+// MPU6050
+void get_mpu_accelerometer_value_callback(const char*);
+void get_mpu_gyroscope_value_callback(const char*);
+void set_mpu_accelerometer_enable_callback(const char*);
+void set_mpu_gyroscope_enable_callback(const char*);
+
 // exit, turn off all
 void exit_callback(const char*);
 #endif //ZUMO_COMMANDS_RUNNER_H

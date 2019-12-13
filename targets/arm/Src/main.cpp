@@ -18,6 +18,8 @@
 #include "DRV8833.h"
 #include "encoder.h"
 
+#include "WS2812B.h"
+
 extern ADC_HandleTypeDef hadc1;
 
 extern TIM_HandleTypeDef htim1;
@@ -116,9 +118,20 @@ extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
 volatile bool refresh_values = false;
 volatile bool _10Hz_flag = false;
-void _10Hz();
 
 Mean <uint16_t, 20>current_mean;
+
+
+
+
+//GPIOC->BSRR
+//
+//    (GPIO_TypeDef *)(WS2812B_GPIO_Port)->BSRR = pin;
+//    set_pin(WS2812B_GPIO_Port, WS2812B_Pin);
+//    reset_pin(WS2812B_GPIO_Port, );
+//}
+
+WS2812B<36> WS_LEDS(hal::enable_interrupts, hal::disable_interrupts);
 
 extern "C"
 void Main() {
@@ -136,13 +149,23 @@ void Main() {
     HAL_TIM_Base_Start_IT(&htim3);
 
     hal::setup();
-    zumo().LED2.toggle();
-    zumo().mcp9700.init();
-    zumo().bme280.init();
-    zumo().mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2);
-    zumo().mpu6050.gyroscope.calibrate(5);
+
+    for (uint8_t i = 0; i < 12; i++) {
+        WS_LEDS.set_color(i, 250,0,0);
+    }
+    for (uint8_t i = 12; i < 24; i++) {
+        WS_LEDS.set_color(i, 0,250,0);
+    }
+    for (uint8_t i = 24; i < 36; i++) {
+        WS_LEDS.set_color(i, 0,0,250);
+
+    }
+
+    WS_LEDS.send();
 
     while(1) {
+
+
         if (print_flag) {
             print_flag = false;
 //            zumo().LED1.toggle();
@@ -151,61 +174,17 @@ void Main() {
         hal::loop();
 
         if (_10Hz_flag) {
-//
-////            Vector rawAccel = zumo().mpu6050.readRawAccel();
-//            auto raw_accel = zumo().mpu6050.accelerometer.get_raw_data();
-//            auto normAccel = zumo().mpu6050.accelerometer.get_normalised_data();
-//            int pitch = -(atan2(normAccel.x, sqrt(normAccel.y*normAccel.y + normAccel.z*normAccel.z))*180.0)/M_PI;
-//            int roll = (atan2(normAccel.y, normAccel.z)*180.0)/M_PI;
-//////            VT::move_to(0,33);
-//////            VT::print(rawAccel.XAxis);
-//////            VT::print(' ');
-//////            VT::print(rawAccel.YAxis);
-//////            VT::print(' ');
-//////            VT::print(rawAccel.ZAxis);
-//            VT::move_to(0,35);
-//            VT::print(pitch);
-//            VT::print(' ');
-//            VT::print(roll);
-//            VT::print("       ");
-////
-//            VT::move_to(0,33);
-//            VT::print(raw_accel.x);
-//            VT::print(' ');
-//            VT::print(raw_accel.y);
-//            VT::print(' ');
-//            VT::print(raw_accel.z);
-//            VT::print("        ");
-//
-//            VT::move_to(0,34);
-//            VT::print(normAccel.x);
-//            VT::print(' ');
-//            VT::print(normAccel.y);
-//            VT::print(' ');
-//            VT::print(normAccel.z);
-//            VT::print("        ");
-////
-//////            Vector rawGyro = zumo().mpu6050.readRawGyro();
-//            auto normGyro = zumo().mpu6050.gyroscope.get_normalised_data();
-////
-//            VT::move_to(0,36);
-//            VT::print(normGyro.x);
-//            VT::print(' ');
-//            VT::print(normGyro.y);
-//            VT::print(' ');
-//            VT::print(normGyro.z);
-//            VT::print("        ");
-
+            zumo().mcp9700.get_temperature();
             zumo().bme280.run_measurements();
             zumo().hcsr04.run_measurements();
+            zumo().mpu6050.run_measurements();
 
             zumo().LED2.toggle();
             _10Hz_flag = false;
-            _10Hz();
 
             VT::move_to(0, 30);
             VT::print("TEMP: ");
-            VT::print(zumo().mpu6050.get_temperature());
+            VT::print(zumo().mcp9700.get_last_temperature());
 
             VT::move_to(0, 31);
             VT::print("CURRENT: ");
@@ -228,23 +207,7 @@ void My_SysTick_Handler() {
     }
 }
 
-void _10Hz() {
-//    int R_data = -zumo().encoderR.encoderGetCountAndReset();
-//    int L_data = zumo().encoderL.encoderGetCountAndReset();
-//    Encoder_R.set(R_data);
-//    Encoder_L.set(L_data);
-
-//    float ret_R = pid_R.tick(static_cast<float>(R_data) / 400.0);
-//    float ret_L = pid_L.tick(static_cast<float>(L_data) / 400.0);
-
-//    Duty_R.set((int)(ret_R * 100.0));
-//    Duty_L.set((int)(ret_L * 100.0));
-}
-
-//Mean<float, 5>position;
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    
     if (htim == &htim3) { // 10kHz
         zumo().hcsr04.ISR();
         zumo().encoderR.encoder10kHzTickISR();
@@ -255,13 +218,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
         if (++divider_100Hz == 100 ) {
             divider_100Hz = 0;
-
-//            if (driver_enable) {
-//                zumo().motor_driver.set_differential(0.3, zumo().line_detector.get_line_position()*0.25 );
-//            } else {
-//                zumo().motor_driver.Motor_A.set_duty_cycle(0);
-//                zumo().motor_driver.Motor_B.set_duty_cycle(0);
-//            }
         }
 
         if (++divider_10Hz == 1000) { // 10Hz

@@ -8,6 +8,7 @@
 
 class PrintManager {
 public:
+    char buff[10];
     virtual void print(char) = 0;
 
     size_t print(const char *s) {
@@ -21,16 +22,24 @@ public:
         return size;
     }
 
-    void print(uint16_t val) {
-        print(static_cast<char>(val >> 8u));
-        print(static_cast<char>(0x00FFu & val));
+    void print(uint16_t value) {
+        sprintf(buff, "%d", value);
+        print(buff);
     }
 
-    void print(uint32_t val) {
-        print(static_cast<char>(val >> 24u));
-        print(static_cast<char>(val >> 16u));
-        print(static_cast<char>(val >> 8u));
-        print(static_cast<char>(0x00FFu & val));
+    void print(uint32_t value) {
+        sprintf(buff, "%lu", value);
+        print(buff);
+    }
+
+    void print(int16_t value) {
+        sprintf(buff, "%d", value);
+        print(buff);
+    }
+
+    void print(float value) {
+        sprintf(buff, "%.2f", value);
+        print(buff);
     }
 
     virtual void deinit() = 0;

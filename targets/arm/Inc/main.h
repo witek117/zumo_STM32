@@ -67,6 +67,8 @@ void Error_Handler(void);
 #define ECHO_Pin GPIO_PIN_0
 #define ECHO_GPIO_Port GPIOC
 #define ECHO_EXTI_IRQn EXTI0_IRQn
+#define WS2812B_Pin GPIO_PIN_4
+#define WS2812B_GPIO_Port GPIOC
 #define LED1_Pin GPIO_PIN_5
 #define LED1_GPIO_Port GPIOC
 #define FAULT_Pin GPIO_PIN_15

@@ -7,16 +7,20 @@
 
 std::vector<Window> windows;
 
-CommandManager <11, '\r', false> command_manager(hal::enable_interrupts, hal::disable_interrupts, {
+CommandManager <15, '\r', false> command_manager(hal::enable_interrupts, hal::disable_interrupts, {
             Command("s?", get_line_value_callback),         // get sensors values
             Command("h?", get_hcsro4_value_callback),       // get HC-SR04 last value
             Command("t?", get_mcp9700_value_callback),      // get last temperature value
             Command("b?", get_bme280_value_callback),       // get last temperature value
+            Command("ma?", get_mpu_accelerometer_value_callback),       // get last temperature value
+            Command("mg?", get_mpu_gyroscope_value_callback),           // get last temperature value
             Command("m", set_motors_callback),              // set motors duty cycle
             Command("s", set_line_enable_callback),
             Command("h", set_hcsr04_enable_callback),
             Command("t", set_mcp9700_enable_callback),
             Command("b", set_bme280_enable_callback),
+            Command("ma", set_mpu_accelerometer_enable_callback),       // get last temperature value
+            Command("mg", set_mpu_gyroscope_enable_callback),           // get last temperature value
             Command("exit", exit_callback),                 // exit from command_manager
             Command("test", test_callback)                  // test callback
         });
@@ -112,6 +116,12 @@ void hal::setup() {
     zumo().motor_driver.Motor_B.set_duty_cycle(0.7);
     zumo().motor_driver.Motor_A.brake();
     zumo().motor_driver.Motor_B.brake();
+
+    zumo().LED2.toggle();
+    zumo().mcp9700.init();
+    zumo().bme280.init();
+    zumo().mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2);
+    zumo().mpu6050.gyroscope.calibrate(5);
 
     window_manager::init(&windows);
 }

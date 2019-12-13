@@ -77,6 +77,27 @@ void get_bme280_value_callback(const char* data) {
     bme280_flag = true;
 }
 
+
+volatile bool mpu_accelerometer_flag = false;
+void get_mpu_accelerometer_value_callback(const char* data) {
+    (void) data;
+    mpu_accelerometer_flag = true;
+}
+
+volatile bool mpu_gyroscope_flag = false;
+void get_mpu_gyroscope_value_callback(const char* data) {
+    (void) data;
+    mpu_gyroscope_flag = true;
+}
+
+void set_mpu_accelerometer_enable_callback(const char* data) {
+    zumo().mpu6050.accelerometer.set_enable(get_enable(data));
+}
+
+void set_mpu_gyroscope_enable_callback(const char* data) {
+    zumo().mpu6050.gyroscope.set_enable(get_enable(data));
+}
+
 void callbacks_runner(PrintManager& command_manager) {
     if (get_sensors_flag) {
         command_manager.print('s');
@@ -101,22 +122,48 @@ void callbacks_runner(PrintManager& command_manager) {
 
     if (hcsr04_flag) {
         hcsr04_flag = false;
-        command_manager.print('h');
-        command_manager.print((uint16_t)zumo().hcsr04.get_last_value());
+        command_manager.print("h ");
+        command_manager.print(zumo().hcsr04.get_last_value());
     }
 
     if (mcp9700_flag) {
         mcp9700_flag = false;
-        command_manager.print('t');
-        command_manager.print((uint16_t)zumo().mcp9700.get_temperature_multiplied());
+        command_manager.print("t ");
+        command_manager.print(zumo().mcp9700.get_last_temperature());
     }
 
     if (bme280_flag) {
         bme280_flag = false;
-        command_manager.print('b');
-        command_manager.print((uint16_t)zumo().bme280.get_last_temperature_multiplied());
-        command_manager.print((uint16_t)zumo().bme280.get_last_humidity());
-        command_manager.print((uint32_t)zumo().bme280.get_last_pressure());
+        command_manager.print("b ");
+        command_manager.print(zumo().bme280.get_last_temperature());
+        command_manager.print(' ');
+        command_manager.print(zumo().bme280.get_last_humidity());
+        command_manager.print(' ');
+        command_manager.print(zumo().bme280.get_last_pressure());
+        command_manager.print('\r');
     }
 
+    if (mpu_accelerometer_flag) {
+        mpu_accelerometer_flag = false;
+        command_manager.print("ma ");
+        auto raw_data = zumo().mpu6050.accelerometer.get_last_normalised_data();
+        command_manager.print(raw_data.x);
+        command_manager.print(' ');
+        command_manager.print(raw_data.y);
+        command_manager.print(' ');
+        command_manager.print(raw_data.z);
+        command_manager.print('\r');
+    }
+
+    if (mpu_gyroscope_flag) {
+        mpu_gyroscope_flag = false;
+        command_manager.print("mg ");
+        auto raw_data = zumo().mpu6050.gyroscope.get_last_normalised_data();
+        command_manager.print(raw_data.x);
+        command_manager.print(' ');
+        command_manager.print(raw_data.y);
+        command_manager.print(' ');
+        command_manager.print(raw_data.z);
+        command_manager.print('\r');
+    }
 }
