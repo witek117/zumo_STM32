@@ -98,6 +98,14 @@ void set_mpu_gyroscope_enable_callback(const char* data) {
     zumo().mpu6050.gyroscope.set_enable(get_enable(data));
 }
 
+volatile bool ws2812b_flag = false;
+void set_ws2812B_value_callback(const char* data) {
+    (void) data;
+    auto [index, r, g, b] = parser::get<int, int, int, int>(data);
+    zumo().ws2812b.set_color(index, r, g, b);
+    ws2812b_flag = true;
+}
+
 void callbacks_runner(PrintManager& command_manager) {
     if (get_sensors_flag) {
         command_manager.print('s');
@@ -165,5 +173,10 @@ void callbacks_runner(PrintManager& command_manager) {
         command_manager.print(' ');
         command_manager.print(raw_data.z);
         command_manager.print('\r');
+    }
+
+    if (ws2812b_flag) {
+        ws2812b_flag = false;
+        zumo().ws2812b.send();
     }
 }

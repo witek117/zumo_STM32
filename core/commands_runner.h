@@ -33,6 +33,9 @@ void get_mpu_gyroscope_value_callback(const char*);
 void set_mpu_accelerometer_enable_callback(const char*);
 void set_mpu_gyroscope_enable_callback(const char*);
 
+// WS2815B
+void set_ws2812B_value_callback(const char*);
+
 // exit, turn off all
 void exit_callback(const char*);
 #endif //ZUMO_COMMANDS_RUNNER_H

@@ -7,7 +7,7 @@
 #include "main.h"
 #include "stm32f1xx_hal_conf.h"
 
-extern CommandManager <15,'\r', false>command_manager;
+extern CommandManager <16,'\r', false>command_manager;
 
 class STM32_UART {
 public:

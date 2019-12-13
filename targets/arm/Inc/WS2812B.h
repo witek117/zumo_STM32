@@ -1,5 +1,5 @@
-#ifndef ZUMO_WS2812B_H
-#define ZUMO_WS2812B_H
+#ifndef ZUMO_STM_WS2812B_H
+#define ZUMO_STM_WS2812B_H
 
 #include "main.h"
 #include <functional>
@@ -31,18 +31,19 @@ void ws2812b_send(uint32_t data) {
 }
 
 template <int size>
-class WS2812B {
+class STM_WS2812B : public WS2812B<size> {
     uint32_t data_buffer[size];
     std::function<void(void)> enable_interrupts;
     std::function<void(void)> disable_interrupts;
 public:
-    WS2812B (std::function<void(void)> enable_interrupts, std::function<void(void)> disable_interrupts ) :
-    data_buffer{0}, enable_interrupts(std::move(enable_interrupts)), disable_interrupts(std::move(disable_interrupts)) {
-
-    }
+    STM_WS2812B (std::function<void(void)> enable_interrupts, std::function<void(void)> disable_interrupts ) :
+    data_buffer{0}, enable_interrupts(std::move(enable_interrupts)), disable_interrupts(std::move(disable_interrupts))
+    { }
 
     void set_color(int index, uint8_t red, uint8_t green, uint8_t blue) {
-        data_buffer[index] = uint32_t(red << 16u | green << 8u | blue);
+        if (index <= size) {
+            data_buffer[index] = uint32_t(red << 16u | green << 8u | blue);
+        }
     }
 
     void send() {
@@ -58,4 +59,4 @@ public:
 };
 
 
-#endif //ZUMO_WS2812B_H
+#endif //ZUMO_STM_WS2812B_H

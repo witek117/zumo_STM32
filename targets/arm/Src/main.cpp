@@ -87,7 +87,9 @@ ZUMO& zumo (void) {
 
     static MPU6050 mpu6050 (IMU_I2C, 0x68);
 
-    static ZUMO _zumo (motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04, mcp9700, bme280, mpu6050);
+    static STM_WS2812B<2> ws2812b(hal::enable_interrupts, hal::disable_interrupts);
+
+    static ZUMO _zumo(motor_driver, encoderL, encoderR, line_sensors, LED1, LED2, hcsr04, mcp9700, bme280, mpu6050, ws2812b);
 
     return _zumo;
 }
@@ -131,7 +133,7 @@ Mean <uint16_t, 20>current_mean;
 //    reset_pin(WS2812B_GPIO_Port, );
 //}
 
-WS2812B<36> WS_LEDS(hal::enable_interrupts, hal::disable_interrupts);
+
 
 extern "C"
 void Main() {
@@ -150,18 +152,18 @@ void Main() {
 
     hal::setup();
 
-    for (uint8_t i = 0; i < 12; i++) {
-        WS_LEDS.set_color(i, 250,0,0);
-    }
-    for (uint8_t i = 12; i < 24; i++) {
-        WS_LEDS.set_color(i, 0,250,0);
-    }
-    for (uint8_t i = 24; i < 36; i++) {
-        WS_LEDS.set_color(i, 0,0,250);
-
-    }
-
-    WS_LEDS.send();
+//    for (uint8_t i = 0; i < 12; i++) {
+//        WS_LEDS.set_color(i, 250,0,0);
+//    }
+//    for (uint8_t i = 12; i < 24; i++) {
+//        WS_LEDS.set_color(i, 0,250,0);
+//    }
+//    for (uint8_t i = 24; i < 36; i++) {
+//        WS_LEDS.set_color(i, 0,0,250);
+//
+//    }
+//
+//    WS_LEDS.send();
 
     while(1) {
 
