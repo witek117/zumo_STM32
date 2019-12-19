@@ -5,7 +5,7 @@
 // terminals
 #include "command_terminal/Command.h"
 #include "command_terminal/command_manager.h"
-#include "window_terminal/window_manager.hpp"
+#include "external/window_terminal/window_manager.hpp"
 // algorithms
 #include "mean.h"
 #include "PID.h"

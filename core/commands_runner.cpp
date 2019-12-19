@@ -1,6 +1,6 @@
 #include "commands_runner.h"
 #include "ZUMO.h"
-#include "window_terminal/label.hpp"
+#include "external/window_terminal/label.hpp"
 
 extern Label IR_1;
 extern Label IR_2;

@@ -1,9 +1,9 @@
 #ifndef ZUMO_UART_CROSSING_H
 #define ZUMO_UART_CROSSING_H
 
-#include <command_terminal/command_manager.h>
-#include <window_terminal/VT100.hpp>
-#include <window_terminal/window_manager.hpp>
+#include "command_terminal/command_manager.h"
+#include "external/window_terminal/VT100.hpp"
+#include "external/window_terminal/window_manager.hpp"
 #include "main.h"
 #include "stm32f1xx_hal_conf.h"
 

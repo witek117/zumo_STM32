@@ -544,7 +544,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
+  huart1.Init.BaudRate = 230400;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -577,7 +577,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 230400;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -610,7 +610,7 @@ static void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
+  huart3.Init.BaudRate = 230400;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
@@ -668,13 +668,22 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, SENS_IR_LED_Pin|TRIG_Pin|WS2812B_Pin|LED1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, SENS_IR_LED_Pin|TRIG_Pin|WS2812B_Pin|LED1_Pin 
+                          |PG_3V3_ESP_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : SENS_IR_LED_Pin LED1_Pin */
-  GPIO_InitStruct.Pin = SENS_IR_LED_Pin|LED1_Pin;
+  /*Configure GPIO pins : PG_3V3_Pin DIP_SW_Pin PG_5V_Pin INT_CHARGER_Pin 
+                           INT_BHI_Pin */
+  GPIO_InitStruct.Pin = PG_3V3_Pin|DIP_SW_Pin|PG_5V_Pin|INT_CHARGER_Pin 
+                          |INT_BHI_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : SENS_IR_LED_Pin LED1_Pin PG_3V3_ESP_Pin */
+  GPIO_InitStruct.Pin = SENS_IR_LED_Pin|LED1_Pin|PG_3V3_ESP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -700,11 +709,23 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(WS2812B_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : FAULT_Pin */
-  GPIO_InitStruct.Pin = FAULT_Pin;
+  /*Configure GPIO pins : V_5V_Pin SHDN_MOTOR_TPS_Pin INT_MPU6050_Pin */
+  GPIO_InitStruct.Pin = V_5V_Pin|SHDN_MOTOR_TPS_Pin|INT_MPU6050_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : FAULT_Pin */
+  GPIO_InitStruct.Pin = FAULT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(FAULT_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : EN_PER_ESP_Pin PG_6V_Pin SW1_Pin */
+  GPIO_InitStruct.Pin = EN_PER_ESP_Pin|PG_6V_Pin|SW1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LED2_Pin */
   GPIO_InitStruct.Pin = LED2_Pin;
@@ -712,6 +733,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : INT_MPU_9250_Pin */
+  GPIO_InitStruct.Pin = INT_MPU_9250_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(INT_MPU_9250_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : MOT_L_A_Pin MOT_L_B_Pin MOT_R_A_Pin MOT_R_B_Pin */
   GPIO_InitStruct.Pin = MOT_L_A_Pin|MOT_L_B_Pin|MOT_R_A_Pin|MOT_R_B_Pin;

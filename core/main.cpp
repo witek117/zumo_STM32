@@ -1,5 +1,5 @@
 #include "hal.h"
-#include "window_terminal/window_manager.hpp"
+#include "external/window_terminal/window_manager.hpp"
 #include "command_terminal/command_manager.h"
 #include "ZUMO.h"
 #include "commands_runner.h"
