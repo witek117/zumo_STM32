@@ -2,7 +2,7 @@ set(NAME command_terminal)
 
 add_library(${NAME} STATIC
     Command.h
-    command.cpp
+        argumets_parser.cpp
     command_manager.h
     cyclicBuffer.hpp
 )

@@ -8,7 +8,7 @@
 
 class PrintManager {
 public:
-    char buff[10];
+    char buff[10] = {0};
     virtual void print(char) = 0;
 
     size_t print(const char *s) {
@@ -67,7 +67,7 @@ public:
         enable_interrupts(std::move(enable_interrupts)), disable_interrupts(std::move(disable_interrupts)), commands(commands), print_handler(nullptr) {
     }
 
-    bool init(std::function<void(char)> print_handler_) {
+    bool init(const std::function<void(char)>& print_handler_) {
         if (print_handler == nullptr) {
             print_handler = print_handler_;
             return true;
