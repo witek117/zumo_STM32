@@ -18,15 +18,15 @@
 - Install **MinGW** with **gcc**, **g++** and make program [https://www.youtube.com/watch?v=sXW2VLrQ3Bs](https://www.youtube.com/watch?v=sXW2VLrQ3Bs)
 - Install **gcc-arm-none-eabi** from [https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 - for programming with **J-Link**:
--- [https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack](https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack)
--- J-Link Software and Documentation Pack
--- Click for downloads
--- J-Link Software and Documentation pack for Windows
--- download latest version
+  - [https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack](https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack)
+  - J-Link Software and Documentation Pack
+  - Click for downloads
+  - J-Link Software and Documentation pack for Windows
+  - download latest version
 - for programming with **ST-Link**:
---[https://www.st.com/en/development-tools/stsw-link009.html](https://www.st.com/en/development-tools/stsw-link009.html)
+  - [https://www.st.com/en/development-tools/stsw-link009.html](https://www.st.com/en/development-tools/stsw-link009.html)
 - add to **PATH**:
---CMake
---MinGW/bin, 
---GNU Tools Arm Embedded/X 20XX-qX-major/bin 
---JLink
+  - CMake
+  - MinGW/bin, 
+  - GNU Tools Arm Embedded/X 20XX-qX-major/bin 
+  - JLink
