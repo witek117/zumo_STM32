@@ -1,6 +1,4 @@
-#ifndef ZUMO_DRV8833_H
-#define ZUMO_DRV8833_H
-
+#pragma once
 #include "hal.h"
 
 class DRV8833 {
@@ -120,6 +118,3 @@ public:
         Motor_B.set_duty_cycle(duty_cycle + difference );
     }
 };
-
-
-#endif //ZUMO_DRV8833_H

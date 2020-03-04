@@ -1,5 +1,4 @@
-#ifndef ZUMO_MPU6050_H
-#define ZUMO_MPU6050_H
+#pragma once
 
 #include <gsl/span>
 #include "hal.h"
@@ -359,5 +358,3 @@ public:
         gyroscope.get_normalised_data();
     }
 };
-
-#endif //ZUMO_MPU6050_H

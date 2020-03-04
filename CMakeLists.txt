@@ -23,8 +23,8 @@ SET(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG -flto")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -DLOG_LEVEL=LOG_LEVEL_ALL")
 SET(CMAKE_C_FLAGS_DEBUG  "-O0 -g")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D'__FILENAME__=\"$(subst $(realpath ${CMAKE_SOURCE_DIR})/,,$(abspath $<))\"'")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D'__FILENAME__=\"$(subst $(realpath ${CMAKE_SOURCE_DIR})/,,$(abspath $<))\"'")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 include(${PLATFORM_PATH}/settings.cmake)
 
