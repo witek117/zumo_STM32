@@ -30,3 +30,4 @@
   - MinGW/bin, 
   - GNU Tools Arm Embedded/X 20XX-qX-major/bin 
   - JLink
+- Install STM32CubeMX [https://www.st.com/en/development-tools/stm32cubemx.html](https://www.st.com/en/development-tools/stm32cubemx.html)
