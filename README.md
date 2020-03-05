@@ -42,6 +42,6 @@
 - find first CMakeLists.txt file in zumo_STM32 directory
 - **Open as Project**
 - File -> Settings -> Build, Execution, Deployment -> CMake -> Build type
-- - Release (recomended)
-- - Debug
+  - Release (recomended)
+  - Debug
 
