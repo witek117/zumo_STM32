@@ -31,3 +31,17 @@
   - GNU Tools Arm Embedded/X 20XX-qX-major/bin 
   - JLink
 - Install **STM32CubeMX** [https://www.st.com/en/development-tools/stm32cubemx.html](https://www.st.com/en/development-tools/stm32cubemx.html)
+
+## Linux
+- Install git, CMake, gcc-arm-none-eabi, J-Link, ST_Link, STM32CubeMX
+
+# Run
+## CLion
+- download and install CLion [https://www.jetbrains.com/clion/download/#section=windows](https://www.jetbrains.com/clion/download/#section=windows)
+- File -> Open
+- find first CMakeLists.txt file in zumo_STM32 directory
+- **Open as Project**
+- File -> Settings -> Build, Execution, Deployment -> CMake -> Build type
+- - Release (recomended)
+- - Debug
+
