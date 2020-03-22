@@ -77,7 +77,7 @@ void print(UNICODE uni);
  * @return
  */	
 void print(int num);
-void print(float num);
+
 /**
  * @brief This function must be used before print with unicode
  *

@@ -55,12 +55,6 @@ void print(int num) {
     print(buff);
 }
 
-void print(float num) {
-    char buff[11];
-    sprintf(buff, "%.2f", num);
-    print(buff);
-}
-
 void print(UNICODE uni) { print(static_cast<char>(uni)); }
 
 void begin_unicode() { print("\x1b(0"); }

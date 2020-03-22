@@ -5,7 +5,7 @@
 #include "external/window_terminal/VT100.hpp"
 #include "external/window_terminal/window_manager.hpp"
 #include "main.h"
-#include "stm32f1xx_hal_conf.h"
+#include "stm32f3xx_hal_conf.h"
 
 extern CommandManager <16,'\r', false>command_manager;
 
@@ -29,27 +29,30 @@ public:
     }
 
     int interrupt() {
-        uint32_t isrflags   = huart.Instance->SR;
-        uint32_t cr1its     = huart.Instance->CR1;
-        uint8_t data        = huart.Instance->DR;
-        uint32_t errorflags = 0x00U;
+        uint32_t isrflags   = READ_REG(huart.Instance->ISR);
+        uint32_t cr1its     = READ_REG(huart.Instance->CR1);
+
+        uint8_t data        = huart.Instance->RDR;
 
         /* If no error occurs */
-        errorflags = (isrflags & (uint32_t)(USART_SR_PE | USART_SR_FE | USART_SR_ORE | USART_SR_NE));
-        if (errorflags == RESET) {
-            /* UART in mode Receiver -------------------------------------------------*/
-            if (((isrflags & USART_SR_RXNE) != RESET) && ((cr1its & USART_CR1_RXNEIE) != RESET)) {
+        uint32_t errorflags = (isrflags & (uint32_t)(USART_ISR_PE | USART_ISR_FE | USART_ISR_ORE | USART_ISR_NE | USART_ISR_RTOF));
+        if (errorflags == 0U)
+        {
+            /* UART in mode Receiver ---------------------------------------------------*/
+            if (((isrflags & USART_ISR_RXNE) != 0U)
+                && ((cr1its & USART_CR1_RXNEIE) != 0U))
+            {
                 on_receive(static_cast<char >(data));
                 return 1;
             }
         }
 
-        if (isrflags & USART_SR_IDLE) {
-            huart.Instance->SR &= ~ USART_SR_IDLE;
+        if (isrflags & USART_ISR_IDLE) {
+            huart.Instance->ISR &= ~ USART_ISR_IDLE;
         }
 
-        if (isrflags & USART_SR_RXNE) {
-            huart.Instance->SR &= ~ USART_SR_RXNE;
+        if (isrflags & USART_ISR_RXNE) {
+            huart.Instance->ISR &= ~ USART_ISR_RXNE;
         }
         return 1;
     }

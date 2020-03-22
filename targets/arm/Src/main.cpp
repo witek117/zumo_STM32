@@ -24,7 +24,7 @@ extern ADC_HandleTypeDef hadc1;
 
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
-extern TIM_HandleTypeDef htim3;
+
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
@@ -40,11 +40,11 @@ void hal::disable_interrupts() {
     __disable_irq();
 }
 
-STM32_PWM<1000> PWM_1_CH1(TIM1->CCR1);
-STM32_PWM<1000> PWM_1_CH2(TIM1->CCR2);
+STM32_PWM<1000> PWM_1_CH2N(TIM1->CCR2);
+STM32_PWM<1000> PWM_1_CH3N(TIM2->CCR3);
 
-STM32_PWM<1000> PWM_2_CH3(TIM2->CCR3);
-STM32_PWM<1000> PWM_2_CH4(TIM2->CCR4);
+STM32_PWM<1000> PWM_1_CH1N(TIM1->CCR1);
+STM32_PWM<1000> PWM_15_CH1(TIM15->CCR1);
 
 STM32_GPIO fault(FAULT_GPIO_Port, FAULT_Pin);
 STM32_GPIO_FAKE nSleep;
@@ -53,7 +53,7 @@ STM32_GPIO MOT_L_A(MOT_L_A_GPIO_Port, MOT_L_A_Pin);
 STM32_GPIO MOT_L_B(MOT_L_A_GPIO_Port, MOT_L_B_Pin);
 
 STM32_GPIO MOT_R_A(MOT_R_A_GPIO_Port, MOT_R_A_Pin);
-STM32_GPIO MOT_R_B(MOT_R_A_GPIO_Port, MOT_R_B_Pin);
+STM32_GPIO MOT_R_B(MOT_R_B_GPIO_Port, MOT_R_B_Pin);
 
 STM32_GPIO SENS_IR_ENABLE(SENS_IR_LED_GPIO_Port, SENS_IR_LED_Pin);
 
@@ -66,8 +66,8 @@ volatile uint16_t *TEMP = &sensors[8];
 volatile uint16_t *V_CURRENT_SENS = &sensors[9];
 volatile uint16_t *V_BAT = &sensors[10];
 
-ZUMO& zumo (void) {
-    static DRV8833 motor_driver(PWM_1_CH1, PWM_1_CH2, PWM_2_CH3, PWM_2_CH4, nSleep, fault);
+ZUMO& zumo () {
+    static DRV8833 motor_driver(PWM_1_CH2N, PWM_1_CH3N, PWM_1_CH1N, PWM_15_CH1, nSleep, fault);
 
     static Encoder encoderL(MOT_L_A, MOT_L_B, 1);
 
@@ -124,23 +124,12 @@ volatile bool _10Hz_flag = false;
 Mean <uint16_t, 20>current_mean;
 
 
-
-
-//GPIOC->BSRR
-//
-//    (GPIO_TypeDef *)(WS2812B_GPIO_Port)->BSRR = pin;
-//    set_pin(WS2812B_GPIO_Port, WS2812B_Pin);
-//    reset_pin(WS2812B_GPIO_Port, );
-//}
-
-
-
 extern "C"
 void Main() {
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+//    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+//    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+//    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+//    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 
     __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
     __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
@@ -148,22 +137,9 @@ void Main() {
 
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
 
-    HAL_TIM_Base_Start_IT(&htim3);
+    HAL_TIM_Base_Start_IT(&htim2);
 
     hal::setup();
-
-//    for (uint8_t i = 0; i < 12; i++) {
-//        WS_LEDS.set_color(i, 250,0,0);
-//    }
-//    for (uint8_t i = 12; i < 24; i++) {
-//        WS_LEDS.set_color(i, 0,250,0);
-//    }
-//    for (uint8_t i = 24; i < 36; i++) {
-//        WS_LEDS.set_color(i, 0,0,250);
-//
-//    }
-//
-//    WS_LEDS.send();
 
     while(1) {
 
@@ -176,17 +152,17 @@ void Main() {
         hal::loop();
 
         if (_10Hz_flag) {
-            zumo().mcp9700.get_temperature();
-            zumo().bme280.run_measurements();
-            zumo().hcsr04.run_measurements();
-            zumo().mpu6050.run_measurements();
+//            zumo().mcp9700.get_temperature();
+//            zumo().bme280.run_measurements();
+//            zumo().hcsr04.run_measurements();
+//            zumo().mpu6050.run_measurements();
 
-            zumo().LED2.toggle();
+             zumo().LED2.toggle();
             _10Hz_flag = false;
 
             VT::move_to(0, 30);
             VT::print("TEMP: ");
-            VT::print(zumo().mcp9700.get_last_temperature());
+//            VT::print(zumo().mcp9700.get_last_temperature());
 
             VT::move_to(0, 31);
             VT::print("CURRENT: ");
@@ -210,7 +186,7 @@ void My_SysTick_Handler() {
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if (htim == &htim3) { // 10kHz
+    if (htim == &htim2) { // 10kHz
         zumo().hcsr04.ISR();
         zumo().encoderR.encoder10kHzTickISR();
         zumo().encoderL.encoder10kHzTickISR();

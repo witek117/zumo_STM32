@@ -53,7 +53,7 @@ public:
         return ret_value;
     }
 
-    std::array<float, sensors_number> get_all_normalized_data() {
+    std::array<float, sensors_number> get_all_normalized_data() override {
         for (int i = 0; i < sensors_number; i++) {
             sensors_normalized_data[i] = get_single_normalized_value(i);
         }

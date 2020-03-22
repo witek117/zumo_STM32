@@ -118,7 +118,11 @@ class Box {
      * 
      * @return isEditable
      */
-    bool get_editable() {return isEditable; } 
+    bool get_editable() {return isEditable; }
+
+    void set_editable(bool editable) {
+        this->isEditable = editable;
+    }
 
     /**
      * @brief This function returns bool statement describes if it is currently active box

@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f1xx_hal.h"
+#include "stm32f3xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -64,43 +64,44 @@ void Error_Handler(void);
 #define PG_3V3_GPIO_Port GPIOC
 #define SENS_IR_LED_Pin GPIO_PIN_14
 #define SENS_IR_LED_GPIO_Port GPIOC
-#define TRIG_Pin GPIO_PIN_15
-#define TRIG_GPIO_Port GPIOC
-#define ECHO_Pin GPIO_PIN_0
-#define ECHO_GPIO_Port GPIOC
-#define ECHO_EXTI_IRQn EXTI0_IRQn
-#define SENS8_Pin GPIO_PIN_1
+#define EN_PWR_ESP_Pin GPIO_PIN_15
+#define EN_PWR_ESP_GPIO_Port GPIOC
+#define SENS8_Pin GPIO_PIN_0
 #define SENS8_GPIO_Port GPIOC
-#define SENS7_Pin GPIO_PIN_2
+#define SENS7_Pin GPIO_PIN_1
 #define SENS7_GPIO_Port GPIOC
-#define SENS6_Pin GPIO_PIN_3
+#define SENS6_Pin GPIO_PIN_2
 #define SENS6_GPIO_Port GPIOC
-#define SENS5_Pin GPIO_PIN_0
-#define SENS5_GPIO_Port GPIOA
-#define SENS5A1_Pin GPIO_PIN_1
-#define SENS5A1_GPIO_Port GPIOA
-#define SENS3_Pin GPIO_PIN_4
+#define SENS5_Pin GPIO_PIN_3
+#define SENS5_GPIO_Port GPIOC
+#define SENS4_Pin GPIO_PIN_0
+#define SENS4_GPIO_Port GPIOA
+#define SENS3_Pin GPIO_PIN_1
 #define SENS3_GPIO_Port GPIOA
-#define SENS2_Pin GPIO_PIN_5
+#define SENS2_Pin GPIO_PIN_2
 #define SENS2_GPIO_Port GPIOA
-#define SENS1_Pin GPIO_PIN_6
+#define SENS1_Pin GPIO_PIN_3
 #define SENS1_GPIO_Port GPIOA
-#define TEMP_Pin GPIO_PIN_7
+#define TEMP_Pin GPIO_PIN_4
 #define TEMP_GPIO_Port GPIOA
-#define WS2812B_Pin GPIO_PIN_4
-#define WS2812B_GPIO_Port GPIOC
-#define LED1_Pin GPIO_PIN_5
-#define LED1_GPIO_Port GPIOC
-#define V_CURRENT_SENS_Pin GPIO_PIN_0
-#define V_CURRENT_SENS_GPIO_Port GPIOB
-#define V_BAT_Pin GPIO_PIN_1
-#define V_BAT_GPIO_Port GPIOB
-#define V_5V_Pin GPIO_PIN_2
-#define V_5V_GPIO_Port GPIOB
-#define AIN1_Pin GPIO_PIN_10
+#define WS2812B_Pin GPIO_PIN_5
+#define WS2812B_GPIO_Port GPIOA
+#define V_CURRENT_SENS_Pin GPIO_PIN_6
+#define V_CURRENT_SENS_GPIO_Port GPIOA
+#define V_BAT_Pin GPIO_PIN_7
+#define V_BAT_GPIO_Port GPIOA
+#define INT_MPU_6050_Pin GPIO_PIN_4
+#define INT_MPU_6050_GPIO_Port GPIOC
+#define AIN1_Pin GPIO_PIN_0
 #define AIN1_GPIO_Port GPIOB
-#define AIN2_Pin GPIO_PIN_11
+#define AIN2_Pin GPIO_PIN_1
 #define AIN2_GPIO_Port GPIOB
+#define MOT_L_A_Pin GPIO_PIN_2
+#define MOT_L_A_GPIO_Port GPIOB
+#define TRIG_Pin GPIO_PIN_10
+#define TRIG_GPIO_Port GPIOB
+#define ECHO_Pin GPIO_PIN_11
+#define ECHO_GPIO_Port GPIOB
 #define SHDN_MOTOR_TPS_Pin GPIO_PIN_12
 #define SHDN_MOTOR_TPS_GPIO_Port GPIOB
 #define BIN1_Pin GPIO_PIN_13
@@ -117,10 +118,10 @@ void Error_Handler(void);
 #define INT_CHARGER_GPIO_Port GPIOC
 #define PG_3V3_ESP_Pin GPIO_PIN_9
 #define PG_3V3_ESP_GPIO_Port GPIOC
-#define EN_PER_ESP_Pin GPIO_PIN_8
-#define EN_PER_ESP_GPIO_Port GPIOA
-#define LED2_Pin GPIO_PIN_11
+#define LED2_Pin GPIO_PIN_8
 #define LED2_GPIO_Port GPIOA
+#define LED1_Pin GPIO_PIN_11
+#define LED1_GPIO_Port GPIOA
 #define PG_6V_Pin GPIO_PIN_12
 #define PG_6V_GPIO_Port GPIOA
 #define SW1_Pin GPIO_PIN_15
@@ -129,10 +130,6 @@ void Error_Handler(void);
 #define INT_BHI_GPIO_Port GPIOC
 #define INT_MPU_9250_Pin GPIO_PIN_2
 #define INT_MPU_9250_GPIO_Port GPIOD
-#define INT_MPU6050_Pin GPIO_PIN_3
-#define INT_MPU6050_GPIO_Port GPIOB
-#define MOT_L_A_Pin GPIO_PIN_4
-#define MOT_L_A_GPIO_Port GPIOB
 #define MOT_L_B_Pin GPIO_PIN_5
 #define MOT_L_B_GPIO_Port GPIOB
 #define MOT_R_A_Pin GPIO_PIN_6
