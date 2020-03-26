@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include "../ZUMO_hal/PWM.hpp"
-#include "../ZUMO_hal/GPIO.hpp"
+#include <ZUMO_hal/HALina_PWM.hpp>
+#include <ZUMO_hal/HALina_GPIO.hpp>
 
 class DRV8833 {
 public:
@@ -83,8 +83,8 @@ public:
     };
 
 private:
-    GPIO &Sleep;
-    GPIO &FAULT;
+    HALina_GPIO &Sleep;
+    HALina_GPIO &FAULT;
 public:
     MotorChannel Motor_A;
     MotorChannel Motor_B;
@@ -99,7 +99,7 @@ public:
         WORKING
     };
 
-    DRV8833(PWM &AIN1, PWM &AIN2, PWM &BIN1, PWM &BIN2, GPIO &Sleep, GPIO &FAULT): Sleep(Sleep), FAULT(FAULT), Motor_A(AIN1, AIN2), Motor_B(BIN1, BIN2) {
+    DRV8833(PWM &AIN1, PWM &AIN2, PWM &BIN1, PWM &BIN2, HALina_GPIO &Sleep, HALina_GPIO &FAULT): Sleep(Sleep), FAULT(FAULT), Motor_A(AIN1, AIN2), Motor_B(BIN1, BIN2) {
         set_enable(EnableMode::DISABLE);
     }
 

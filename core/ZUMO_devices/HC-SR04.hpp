@@ -1,10 +1,10 @@
 #ifndef ZUMO_HC_SR04_H
 #define ZUMO_HC_SR04_H
 
-#include "../core/commands_interface.h"
+#include "commands_interface.h"
 
 class HCSR04 : CommandsInterface {
-    GPIO& trig;
+    HALina_GPIO& trig;
     uint16_t counter;
     uint16_t counted;
     bool enable = false;
@@ -19,7 +19,7 @@ class HCSR04 : CommandsInterface {
 
     State state = State::OFF;
 public:
-    HCSR04(GPIO& trig) : trig(trig), counter(0), counted(0) { }
+    HCSR04(HALina_GPIO& trig) : trig(trig), counter(0), counted(0) { }
 
     void ISR() {
         if (!enable) return;

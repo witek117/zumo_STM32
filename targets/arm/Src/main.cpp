@@ -1,11 +1,13 @@
+#include <hal.h>
+#include <ZUMO.hpp>
 #include "main.h"
 #include "STM_hal.h"
 
-#include "WS2812B.h"
+#include "STM_WS2812B.hpp"
 
-#include "core/hal.h"
-#include "ZUMO_devices/ZUMO.h"
-#include "STM32F301/UART.hpp"
+//#include "cores/hal.h"
+//#include "ZUMO_devices/ZUMO.hpp"
+#include "UART.hpp"
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
@@ -91,6 +93,7 @@ Mean <uint16_t, 20>current_mean;
 extern "C"
 void Main() {
     zumo().init();
+    zumo().motor_driver.Motor_B.set_duty_cycle(0.5);
     NXP_Uart uart1 = {USART1, 230400};
     NXP_Uart uart2 = {USART2, 230400};
     NXP_Uart uart3 = {USART3, 230400};
@@ -119,10 +122,10 @@ void Main() {
         hal::loop();
 
         if (_10Hz_flag) {
-//            zumo().mcp9700.get_temperature();
-//            zumo().bme280.run_measurements();
-//            zumo().hcsr04.run_measurements();
-//            zumo().mpu6050.run_measurements();
+            zumo().mcp9700.get_temperature();
+            zumo().bme280.run_measurements();
+            zumo().hcsr04.run_measurements();
+            zumo().mpu6050.run_measurements();
 
              zumo().LED2.toggle();
             _10Hz_flag = false;

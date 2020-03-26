@@ -1,14 +1,13 @@
 #include "gtest/gtest.h"
-#include "ZUMO_devices/encoder.h"
-#include "core/hal.h"
 #include <gmock/gmock.h>
-#include <iostream>
 #include <vector>
+#include <HALina_GPIO.hpp>
+#include <encoder.hpp>
 
 using ::testing::DefaultValue;
 using ::testing::Return;
 
-class GPIOMock : public GPIO {
+class GPIOMock : public HALina_GPIO {
 public:
     MOCK_METHOD(void, set, ());
     MOCK_METHOD(void, reset, ());

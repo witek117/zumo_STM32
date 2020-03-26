@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include "ZUMO_devices/DRV8833.h"
-
+#include "DRV8833.hpp"
 
 
 TEST(DRV8833, modes) {

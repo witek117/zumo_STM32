@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "core/mean.h"
+#include "cores/mean.h"
 #include <iostream>
 #include <array>
 #include <gmock/gmock-matchers.h>

@@ -661,7 +661,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, TRIG_Pin|SHDN_MOTOR_TPS_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PG_3V3_Pin EN_PWR_ESP_Pin INT_MPU_6050_Pin DIP_SW_Pin 
+  /*Configure GPIO pins : PG_3V3_Pin EN_PWR_ESP_Pin INT_MPU_6050_Pin DIP_SW_Pin
                            PG_5V_Pin INT_CHARGER_Pin PG_3V3_ESP_Pin INT_BHI_Pin */
   GPIO_InitStruct.Pin = PG_3V3_Pin|EN_PWR_ESP_Pin|INT_MPU_6050_Pin|DIP_SW_Pin 
                           |PG_5V_Pin|INT_CHARGER_Pin|PG_3V3_ESP_Pin|INT_BHI_Pin;
@@ -683,7 +683,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MOT_L_A_Pin ECHO_Pin FAULT_Pin MOT_L_B_Pin 
+  /*Configure GPIO pins : MOT_L_A_Pin ECHO_Pin FAULT_Pin MOT_L_B_Pin
                            MOT_R_A_Pin MOT_R_B_Pin */
   GPIO_InitStruct.Pin = MOT_L_A_Pin|ECHO_Pin|FAULT_Pin|MOT_L_B_Pin 
                           |MOT_R_A_Pin|MOT_R_B_Pin;

@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-class I2C {
+class HALina_I2C {
 public:
     virtual void write(uint8_t address, uint8_t register_address, uint8_t data) = 0;
     virtual void write(uint8_t address, uint8_t register_address, uint16_t data) = 0;

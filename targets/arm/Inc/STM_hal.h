@@ -1,12 +1,14 @@
 #ifndef ZUMO_STM_HAL_H
 #define ZUMO_STM_HAL_H
 
+#include <HALina_GPIO.hpp>
+#include <HALina_I2C.hpp>
 #include "main.h"
-#include "../../../core/ZUMO_hal/GPIO.hpp"
-#include "../../../core/ZUMO_hal/PWM.hpp"
-#include "../../../core/ZUMO_hal/I2C.hpp"
+//#include "ZUMO_hal/HALina_GPIO.hpp"
+#include "../../../core/ZUMO_hal/HALina_PWM.hpp"
+//#include "ZUMO_hal/HALina_I2C.hpp"
 
-class STM32_GPIO_FAKE : public GPIO {
+class STM32_GPIO_FAKE : public HALina_GPIO {
 public:
     STM32_GPIO_FAKE () = default ;
     void set() override { }
@@ -15,7 +17,7 @@ public:
     bool get() override { return false; }
 };
 
-class STM32_GPIO : public GPIO {
+class STM32_GPIO : public HALina_GPIO {
     GPIO_TypeDef *GPIOx;
     uint16_t GPIO_Pin;
 public:
@@ -99,7 +101,7 @@ public:
     }
 };
 
-class STM32_I2C : public I2C {
+class STM32_I2C : public HALina_I2C {
     I2C_HandleTypeDef& hi2c;
     uint8_t data_buffer [10] = {0};
 public:

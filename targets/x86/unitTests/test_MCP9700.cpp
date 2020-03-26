@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "ZUMO_devices/MCP9700.h"
+#include "MCP9700.hpp"
 
 #include <iostream>
 

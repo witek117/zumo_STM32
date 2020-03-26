@@ -1,7 +1,7 @@
 #ifndef ZUMO_MCP9700_H
 #define ZUMO_MCP9700_H
 
-#include "../core/commands_interface.h"
+#include "commands_interface.h"
 template <typename T>
 class MCP9700 : CommandsInterface {
     float temperature = 0.0f;

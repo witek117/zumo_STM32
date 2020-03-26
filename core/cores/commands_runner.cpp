@@ -1,5 +1,5 @@
 
-#include "../ZUMO_devices/ZUMO.h"
+#include "../ZUMO_devices/ZUMO.hpp"
 #include "../command_terminal/Command.h"
 #include "../command_terminal/command_manager.h"
 

@@ -1,9 +1,9 @@
-#include "gtest/gtest.h"
 #include <vector>
-#include <gmock/gmock-spec-builders.h>
-#include "command_terminal/Command.h"
 #include <gmock/gmock.h>
-#include "command_terminal/command_manager.h"
+#include "gtest/gtest.h"
+#include <gmock/gmock-spec-builders.h>
+#include <Command.h>
+#include <command_manager.h>
 
 using ::testing::StrictMock;
 using ::testing::_;
@@ -20,9 +20,8 @@ TEST(COMMAND, create) {
     const char* data = "start 12345";
     EXPECT_CALL(start, callback(data + 6));
     EXPECT_EQ(start.parse((char*)data, 5), true);
-//
     EXPECT_CALL(start, callback(_)).Times(0);
-    EXPECT_EQ(start.parse("data", 5), false);
+    EXPECT_EQ(start.parse((char*)"data", 5), false);
 }
 
 TEST(COMMAND, value_float) {
@@ -129,18 +128,22 @@ TEST(COMMAND_MANAGER, two_floats) {
 
 int functionNUmber = 0;
 void question1(const char * data) {
+    (void) data;
     functionNUmber = 1;
 }
 
 void question2(const char * data) {
+    (void) data;
     functionNUmber = 2;
 }
 
 void question3(const char * data) {
+    (void) data;
     functionNUmber = 3;
 }
 
 void question4(const char * data) {
+    (void) data;
     functionNUmber = 4;
 }
 

@@ -1,23 +1,23 @@
 #ifndef ZUMO_ZUMO_H
 #define ZUMO_ZUMO_H
 
-#include "DRV8833.h"
-#include "encoder.h"
-#include "KTIR0711S.h"
+#include "DRV8833.hpp"
+#include "encoder.hpp"
+#include "KTIR0711S.hpp"
 //#include "../core/hal.h"
-#include "HC-SR04.h"
-#include "MCP9700.h"
-#include "BME280.h"
-#include "MPU6050.h"
-#include "WS2812B.h"
+#include "HC-SR04.hpp"
+#include "MCP9700.hpp"
+#include "BME280.hpp"
+#include "MPU6050.hpp"
+#include "WS2812B.hpp"
 
 struct ZUMO {
     DRV8833& motor_driver;
     Encoder& encoderL;
     Encoder& encoderR;
     LineSensors<volatile uint16_t , 4095, 8> &line_sensors;
-    GPIO& LED1;
-    GPIO& LED2;
+    HALina_GPIO& LED1;
+    HALina_GPIO& LED2;
     HCSR04& hcsr04;
     MCP9700<uint16_t >& mcp9700;
     BME280& bme280;
@@ -25,7 +25,7 @@ struct ZUMO {
     WS2812B<2>& ws2812b;
 
     ZUMO(DRV8833& motor_driver, Encoder& encoderL, Encoder& encoderR, LineSensors<volatile uint16_t , 4095, 8> &line_sensors,
-         GPIO& LED1, GPIO& LED2, HCSR04& hcsr04, MCP9700<uint16_t >& mcp9700, BME280& bme280, MPU6050& mpu6050, WS2812B<2>& ws2812b)
+         HALina_GPIO& LED1, HALina_GPIO& LED2, HCSR04& hcsr04, MCP9700<uint16_t >& mcp9700, BME280& bme280, MPU6050& mpu6050, WS2812B<2>& ws2812b)
         :   motor_driver(motor_driver),
             encoderL(encoderL),
             encoderR(encoderR),
@@ -41,14 +41,12 @@ struct ZUMO {
 
     void init() {
         motor_driver.init();
-
         motor_driver.Motor_A.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
         motor_driver.Motor_B.set_mode(DRV8833::MotorChannel::Mode::REVERSE_FAST_DECAY);
         motor_driver.Motor_A.set_duty_cycle(0.7);
         motor_driver.Motor_B.set_duty_cycle(0.7);
         motor_driver.Motor_A.brake();
         motor_driver.Motor_B.brake();
-
         LED2.toggle();
         mcp9700.init();
         bme280.init();

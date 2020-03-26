@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "MPU6050.h"
+#include "MPU6050.hpp"
 
 bool MPU6050::init(GyroscopeData::Scale scale, AccelerometerData::Range range) {
     if (read_register_8bit(RegisterNames::WHO_AM_I) != 0x68) {

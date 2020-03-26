@@ -1,10 +1,11 @@
 #include <gtest/gtest.h>
 #include <tuple>
-#include "ZUMO_devices/KTIR0711S.h"
+#include "KTIR0711S.hpp"
 #include <gmock/gmock.h>
-#include "core/hal.h"
+#include "HALina_GPIO.hpp"
+#include "hal.h"
 
-class GPIOMock : public GPIO {
+class GPIOMock : public HALina_GPIO {
 public:
     MOCK_METHOD(void, set, ());
     MOCK_METHOD(void, reset, ());
@@ -230,8 +231,8 @@ TEST(LINE_SENSORS, get_pointer_data) {
 
     uint16_t* ret_data = line.get_data_pointer();
 
-    for (int i =0; i < table_len; i++) {
-        EXPECT_EQ(data[i], *ret_data++);
+    for (unsigned short i : data) {
+        EXPECT_EQ(i, *ret_data++);
     }
 
     volatile unsigned short * data1 = line.get_data_pointer();

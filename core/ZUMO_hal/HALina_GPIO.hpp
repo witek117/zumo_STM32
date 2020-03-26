@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-class GPIO {
+class HALina_GPIO {
 public:
     enum class Mode : uint8_t {
         INPUT,

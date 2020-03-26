@@ -8,16 +8,14 @@ file(GLOB SOURCES
 )
 
 add_executable(${NAME} ${SOURCES} )
-message(STATUS " flags:${CMAKE_CXX_FLAGS} ")
 target_link_libraries(${NAME}
-
+		ZUMO_hal
+		ZUMO_devices
 		core
 		command_terminal
-		ZUMO_devices
-		ZUMO_hal
-	gtest
-	gmock
-	gtest_main
+		gtest
+		gmock
+		gtest_main
 )
 
-target_format_sources(${NAME} "${SOURCES}")
+target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../../core)

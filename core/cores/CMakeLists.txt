@@ -13,7 +13,7 @@ add_library(${NAME}
 	${SOURCES})
 
 target_link_libraries(${NAME}
-	msftgsl
+		msftgsl
 )
 
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

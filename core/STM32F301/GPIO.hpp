@@ -2,8 +2,9 @@
 
 #include <stm32f301x8.h>
 #include <cstdint>
+#include "ZUMO_hal/HALina_GPIO.hpp"
 
-class STM_GPIO {
+class STM_GPIO : HALina_GPIO {
 public:
     enum class Mode : uint32_t {
         INPUT                       =(0x00000000U),   /*!< Input Floating Mode                   */
