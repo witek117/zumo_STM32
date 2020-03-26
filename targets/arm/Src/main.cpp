@@ -1,34 +1,16 @@
 #include "main.h"
 #include "STM_hal.h"
-#include "ZUMO.h"
-#include "uart_crossing.h"
-// terminals
-#include "command_terminal/Command.h"
-#include "command_terminal/command_manager.h"
-#include "external/window_terminal/window_manager.hpp"
-// algorithms
-#include "mean.h"
-#include "PID.h"
-// devices
-#include "HC-SR04.h"
-#include "MCP9700.h"
-#include "BME280.h"
-#include "MPU6050.h"
-#include "KTIR0711S.h"
-#include "DRV8833.h"
-#include "encoder.h"
 
 #include "WS2812B.h"
 
-extern ADC_HandleTypeDef hadc1;
+#include "core/hal.h"
+#include "ZUMO_devices/ZUMO.h"
+#include "STM32F301/UART.hpp"
 
+extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
-
-
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart2;
-extern UART_HandleTypeDef huart3;
+extern TIM_HandleTypeDef htim15;
 
 extern I2C_HandleTypeDef hi2c1;
 
@@ -40,11 +22,10 @@ void hal::disable_interrupts() {
     __disable_irq();
 }
 
-STM32_PWM<1000> PWM_1_CH2N(TIM1->CCR2);
-STM32_PWM<1000> PWM_1_CH3N(TIM2->CCR3);
-
-STM32_PWM<1000> PWM_1_CH1N(TIM1->CCR1);
-STM32_PWM<1000> PWM_15_CH1(TIM15->CCR1);
+STM32_PWM<1000> PWM_1_CH2N(&htim1, TIM_CHANNEL_2, HAL_TIMEx_PWMN_Start);
+STM32_PWM<1000> PWM_1_CH3N(&htim1, TIM_CHANNEL_3, HAL_TIMEx_PWMN_Start);
+STM32_PWM<1000> PWM_1_CH1N(&htim1, TIM_CHANNEL_1, HAL_TIMEx_PWMN_Start);
+STM32_PWM<1000> PWM_15_CH1(&htim15, TIM_CHANNEL_1, HAL_TIM_PWM_Start);
 
 STM32_GPIO fault(FAULT_GPIO_Port, FAULT_Pin);
 STM32_GPIO_FAKE nSleep;
@@ -96,22 +77,6 @@ ZUMO& zumo () {
 
 volatile bool print_flag = false;
 
-STM32_UART UART1(huart1);
-STM32_UART UART2(huart2);
-STM32_UART UART3(huart3);
-
-extern "C" int handle_usart1_interrupt() {
-    return UART1.interrupt();
-}
-
-extern "C" int handle_usart2_interrupt() {
-    return UART2.interrupt();
-}
-
-extern "C" int handle_usart3_interrupt() {
-    return UART3.interrupt();
-}
-
 extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == GPIO_PIN_0) {
         zumo().hcsr04.edge_detected();
@@ -123,25 +88,27 @@ volatile bool _10Hz_flag = false;
 
 Mean <uint16_t, 20>current_mean;
 
-
 extern "C"
 void Main() {
-//    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-//    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-//    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
-//    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
-
-    __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
-    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
-    __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
+    zumo().init();
+    NXP_Uart uart1 = {USART1, 230400};
+    NXP_Uart uart2 = {USART2, 230400};
+    NXP_Uart uart3 = {USART3, 230400};
+//    UART_crossing crossing;
+//    crossing.addUart(&uart1);
+//    crossing.addUart(&uart2);
+//    crossing.addUart(&uart3);
+//    crossing.init();
+    uart1.init();
+    uart2.init();
+    uart3.init();
+//    uart1.write("siema", 5);
 
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
 
     HAL_TIM_Base_Start_IT(&htim2);
 
-    hal::setup();
-
-    while(1) {
+    while(true) {
 
 
         if (print_flag) {
@@ -160,17 +127,17 @@ void Main() {
              zumo().LED2.toggle();
             _10Hz_flag = false;
 
-            VT::move_to(0, 30);
-            VT::print("TEMP: ");
+//            VT::move_to(0, 30);
+//            VT::print("TEMP: ");
 //            VT::print(zumo().mcp9700.get_last_temperature());
 
-            VT::move_to(0, 31);
-            VT::print("CURRENT: ");
+//            VT::move_to(0, 31);
+//            VT::print("CURRENT: ");
             current_mean.put_value((uint16_t)*V_CURRENT_SENS);
-            VT::print(current_mean.get_value());
-            VT::move_to(0, 32);
-            VT::print("BAT: ");
-            VT::print((int)*V_BAT);
+//            VT::print(current_mean.get_value());
+//            VT::move_to(0, 32);
+//            VT::print("BAT: ");
+//            VT::print((int)*V_BAT);
         }
     }
 }

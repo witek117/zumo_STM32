@@ -4,6 +4,7 @@
 #include "main.h"
 #include <functional>
 #include <utility>
+#include "../../../core/ZUMO_devices/WS2812B.h"
 
 #define WS_Pin WS2812B_Pin
 #define WS_Port GPIOC

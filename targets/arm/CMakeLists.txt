@@ -59,22 +59,32 @@ set(SOURCES
 
 add_executable(${NAME} ${SOURCES})
 
-set_target_properties(${NAME} PROPERTIES LINK_FLAGS "-T ${PLATFORM_LINKER_SCRIPT} -Wl,--gc-sections -specs=nano.specs -flto -lc -u _printf_float ${ARMFLOAT}")
+set_target_properties(${NAME} PROPERTIES LINK_FLAGS "-T ${PLATFORM_LINKER_SCRIPT} -Xlinker -print-memory-usage -Wl,--gc-sections -specs=nano.specs -flto -lc -u _printf_float ${ARMFLOAT}")
 
 target_link_libraries(${NAME}
-	core
-	Drivers
+		core
+		command_terminal
+		STM32F301
+		ZUMO_devices
+		ZUMO_hal
 )
 
-target_generate_hex(${NAME})
+target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../core)
 
-target_memory_report(${NAME})
-target_asm_listing(${NAME})
+add_custom_command(TARGET ${NAME}
+		POST_BUILD
+		COMMAND ${CMAKE_OBJCOPY} -v -O ihex "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${NAME}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${NAME}.hex"
+		COMMAND ${CMAKE_OBJCOPY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${NAME}.elf)
 
-target_format_sources(${NAME} "${SOURCES_PROJECT}")
+#target_generate_hex(${NAME})
+
+#target_memory_report(${NAME})
+#target_asm_listing(${NAME})
+
+#target_format_sources(${NAME} "${SOURCES_PROJECT}")
 
 target_jlink_flash(${NAME} 0x8000000)
 
 target_stlink_flash(${NAME})
 
-target_generate_elf(${NAME})
+#target_generate_elf(${NAME})

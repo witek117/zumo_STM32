@@ -1,4 +1,4 @@
-#include "LineDebounce.h"
+#include "core/LineDebounce.h"
 #include "gtest/gtest.h"
 
 using libs::debouncer::LineDebounce;

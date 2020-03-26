@@ -40,5 +40,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_PATH}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH}/bin)
 
 add_subdirectory(core)
+#add_subdirectory(STM_Hal)
 
 add_subdirectory(${PLATFORM_PATH})

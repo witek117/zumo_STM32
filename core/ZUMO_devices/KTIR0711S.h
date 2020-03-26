@@ -1,12 +1,12 @@
 #ifndef ZUMO_KTIR0711S_H
 #define ZUMO_KTIR0711S_H
 
-#include <hal.h>
 #include <array>
-#include <gsl/span>
+//#include <gsl/span>
 #include <cmath>
-#include "mean.h"
-#include "commands_interface.h"
+#include <../ZUMO_hal/GPIO.hpp>
+#include "../core/mean.h"
+#include "../core/commands_interface.h"
 
 template <typename T, int sensors_number>
 class LineSensorsBase {
@@ -20,9 +20,9 @@ class LineSensors : public LineSensorsBase<T, sensors_number>, CommandsInterface
 
     T* head_data_pointer;
     std::array<float, sensors_number> sensors_normalized_data;
-    hal::GPIO& enable;
+    GPIO& enable;
 public:
-    LineSensors(T* head_data_pointer, hal::GPIO& enable) :
+    LineSensors(T* head_data_pointer, GPIO& enable) :
             head_data_pointer(head_data_pointer), enable(enable) {}
 
 

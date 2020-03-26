@@ -45,29 +45,23 @@ public:
     virtual void deinit() = 0;
 };
 
-extern volatile bool print_flag;
 template <int size, char end_char, bool echo>
 class CommandManager : public PrintManager {
-
     constexpr static size_t buff_size = 50;
     CyclicBuffer_data<char, buff_size> buffer_rx;
     CyclicBuffer_data<char, buff_size> buffer_tx;
     uint8_t commands_in_buffer = 0;
-
-    std::function<void(void)> enable_interrupts = nullptr;
-    std::function<void(void)> disable_interrupts = nullptr;
-
+    void(*enable_interrupts)() = nullptr;
+    void(*disable_interrupts)() = nullptr;
     std::array<Command, size> commands;
-
-    std::function<void(char)> print_handler = nullptr;
-
+    void(*print_handler)(char) = nullptr;
     uint8_t command_title_len = 0;
 public:
-    explicit CommandManager(std::function<void(void)> enable_interrupts, std::function<void(void)> disable_interrupts,  std::array<Command, size> commands) :
-        enable_interrupts(std::move(enable_interrupts)), disable_interrupts(std::move(disable_interrupts)), commands(commands), print_handler(nullptr) {
+    explicit CommandManager(void(*enable_interrupts)(), void(*disable_interrupts)(),  std::array<Command, size> commands) :
+        enable_interrupts(enable_interrupts), disable_interrupts(disable_interrupts), commands(commands), print_handler(nullptr) {
     }
 
-    bool init(const std::function<void(char)>& print_handler_) {
+    bool init(void(*print_handler_)(char)) {
         if (print_handler == nullptr) {
             print_handler = print_handler_;
             return true;
@@ -97,10 +91,7 @@ public:
             commands_in_buffer++;
         }
 
-        if (print_handler) {
-            return true;
-        }
-        return false;
+        return print_handler != nullptr;
     }
 
     void run() {

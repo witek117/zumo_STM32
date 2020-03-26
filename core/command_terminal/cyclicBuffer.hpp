@@ -38,7 +38,7 @@ template <class T> class CyclicBuffer {
   public:
     constexpr CyclicBuffer(T *const data, size_t size) noexcept : dataTab(data), size(size), writePos(0), readPos(0), count(0) {}
     inline bool append(T data) noexcept __attribute__((always_inline)) {
-        if (isFull() == false) {
+        if (!isFull()) {
             append_unsafe(data);
             return true;
         }
@@ -50,7 +50,7 @@ template <class T> class CyclicBuffer {
         dataTab[writePos] = data;
     }
     inline size_t write(const T *data, size_t size) noexcept {
-        if (isFull() == false) {
+        if (!isFull()) {
             if (size > getFreeSpace())
                 size = getFreeSpace();
             // calculate space of first part
@@ -164,10 +164,10 @@ template <class T> class CyclicBuffer {
         return dataToCopy;
     }
 
-    inline bool isEmpty(void) const noexcept __attribute__((always_inline)) { return count == 0; }
-    inline bool isNotEmpty(void) const noexcept __attribute__((always_inline)) { return count != 0; }
-    inline bool isFull(void) const noexcept __attribute__((always_inline)) { return count == size; }
-    inline void flush(void) noexcept __attribute__((always_inline)) {
+    inline bool isEmpty() const noexcept __attribute__((always_inline)) { return count == 0; }
+    inline bool isNotEmpty() const noexcept __attribute__((always_inline)) { return count != 0; }
+    inline bool isFull() const noexcept __attribute__((always_inline)) { return count == size; }
+    inline void flush() noexcept __attribute__((always_inline)) {
         writePos = 0;
         readPos = 0;
         count = 0;

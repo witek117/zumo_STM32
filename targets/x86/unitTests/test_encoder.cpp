@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "encoder.h"
-#include "hal.h"
+#include "ZUMO_devices/encoder.h"
+#include "core/hal.h"
 #include <gmock/gmock.h>
 #include <iostream>
 #include <vector>
@@ -8,7 +8,7 @@
 using ::testing::DefaultValue;
 using ::testing::Return;
 
-class GPIOMock : public hal::GPIO {
+class GPIOMock : public GPIO {
 public:
     MOCK_METHOD(void, set, ());
     MOCK_METHOD(void, reset, ());

@@ -1,13 +1,14 @@
 #ifndef ZUMO_ENCODER_H
 #define ZUMO_ENCODER_H
 
-#include "LineDebounce.h"
-#include <hal.h>
+#include "../ZUMO_hal/GPIO.hpp"
+#include "../core/LineDebounce.h"
+#include "../core/hal.h"
 
 class Encoder {
 protected:
-    hal::GPIO &Pin_P;
-    hal::GPIO &Pin_N;
+    GPIO &Pin_P;
+    GPIO &Pin_N;
 
     int encoder_prescaler = 1;
     constexpr static int encoder_debounce_stable = 1;
@@ -19,7 +20,7 @@ protected:
     };
 
 public:
-    Encoder(hal::GPIO &P, hal::GPIO &N, int encoder_prescaler = 1) : Pin_P(P), Pin_N(N), encoder_prescaler(encoder_prescaler) {
+    Encoder(GPIO &P, GPIO &N, int encoder_prescaler = 1) : Pin_P(P), Pin_N(N), encoder_prescaler(encoder_prescaler) {
 
     }
 
@@ -69,7 +70,7 @@ public:
 };
 
 class Encoder_with_button : public Encoder {
-    hal::GPIO &Button;
+    GPIO &Button;
 
     constexpr static int button_debounce_stable = 20;
     void (*pressed_handler)() = nullptr;
@@ -77,7 +78,7 @@ class Encoder_with_button : public Encoder {
 
 public:
 
-    Encoder_with_button(hal::GPIO &P, hal::GPIO &N, int encoder_prescaler, hal::GPIO &Button, void (*pressed_handler)(), void (*released_handler)()):
+    Encoder_with_button(GPIO &P, GPIO &N, int encoder_prescaler, GPIO &Button, void (*pressed_handler)(), void (*released_handler)()):
         Encoder(P, N, encoder_prescaler),
         Button(Button),
         pressed_handler(pressed_handler),

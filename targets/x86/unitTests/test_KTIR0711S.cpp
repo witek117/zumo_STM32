@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include <tuple>
-#include "KTIR0711S.h"
+#include "ZUMO_devices/KTIR0711S.h"
 #include <gmock/gmock.h>
-#include "hal.h"
+#include "core/hal.h"
 
-class GPIOMock : public hal::GPIO {
+class GPIOMock : public GPIO {
 public:
     MOCK_METHOD(void, set, ());
     MOCK_METHOD(void, reset, ());

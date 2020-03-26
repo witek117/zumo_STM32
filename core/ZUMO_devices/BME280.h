@@ -1,12 +1,13 @@
 #ifndef ZUMO_BME280_H
 #define ZUMO_BME280_H
 
-#include "hal.h"
-#include "commands_interface.h"
+#include "../core/hal.h"
+#include "../ZUMO_hal/I2C.hpp"
+#include "../core/commands_interface.h"
 
 class BME280 : CommandsInterface {
 
-    hal::I2C& i2c;
+    I2C& i2c;
     uint8_t address;
 
     enum class CalibrationRegister : uint8_t {
@@ -83,7 +84,7 @@ public:
         Normal = 11
     };
 
-    BME280(hal::I2C& i2c, uint8_t address) : i2c(i2c), address(address << 1u) {
+    BME280(I2C& i2c, uint8_t address) : i2c(i2c), address(address << 1u) {
 
     }
 

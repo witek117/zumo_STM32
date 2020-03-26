@@ -1,17 +1,7 @@
-#include "commands_runner.h"
-#include "ZUMO.h"
-#include "external/window_terminal/label.hpp"
 
-extern Label IR_1;
-extern Label IR_2;
-extern Label IR_3;
-extern Label IR_4;
-extern Label IR_5;
-extern Label IR_6;
-extern Label IR_7;
-extern Label IR_8;
-
-std::array<Label*, 8> labels = {&IR_1, &IR_2, &IR_3, &IR_4, &IR_5, &IR_6, &IR_7, &IR_8};
+#include "../ZUMO_devices/ZUMO.h"
+#include "../command_terminal/Command.h"
+#include "../command_terminal/command_manager.h"
 
 bool static get_enable(const char* data) {
     auto [l] = parser::get<int>(data);
@@ -113,7 +103,7 @@ void callbacks_runner(PrintManager& command_manager) {
         for (int i =0; i < zumo().line_sensors.size(); i ++) {
             uint16_t val = *data++;
             command_manager.print((uint16_t)val);
-            labels[i]->set(val);
+//            labels[i]->set(val);
         }
         get_sensors_flag = false;
     }

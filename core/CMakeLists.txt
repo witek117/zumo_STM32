@@ -1,24 +1,11 @@
-set(NAME core)
+set(NAME .)
 
-file(GLOB_RECURSE SOURCES
-	"*.h"
-	"*.c"
-	"*.cpp"
-	"*.hpp"
-)
-
-message("SOURCES: ${SOURCES}")
-
-add_library(${NAME}
-	${SOURCES})
-
-target_link_libraries(${NAME}
-	msftgsl
-)
-
-target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-target_format_sources(${NAME} "${SOURCES}")
-
+if (${TARGET} STREQUAL "arm")
+    set(MCU_DRIVERS_DIRECTORY STM32F301)
+    add_subdirectory(STM32F301)
+endif()
+add_subdirectory(ZUMO_devices)
+add_subdirectory(ZUMO_hal)
 add_subdirectory(external)
 add_subdirectory(command_terminal)
+add_subdirectory(core)

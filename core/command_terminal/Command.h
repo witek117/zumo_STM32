@@ -6,6 +6,7 @@
 #include <tuple>
 #include <array>
 #include <cstring>
+#include <string_view>
 
 class Command {
     const char * name;
@@ -14,9 +15,7 @@ public:
     std::function<void(const char*)> callback_handler;
 
 public:
-    Command(const char* name, std::function<void(const char*)> callback_handler ) : name(name), name_len(strlen(name)), callback_handler(std::move(callback_handler)) {
-
-    }
+    Command(const char* name, std::function<void(const char*)> callback_handler ) : name(name), name_len(strlen(name)), callback_handler(std::move(callback_handler)) { }
 
     bool parse(char * data, size_t data_len) {
         if (data_len != name_len) {
@@ -32,7 +31,7 @@ public:
 };
 
 namespace parser {
-    template<class T> T parse(std::string_view const s);
+    template<class T> T parse(std::string_view s);
 
     template<class T0, class... T>  std::tuple<T0, T...>  get(std::string_view const s) {
         const auto spacePos = s.find_first_of(' ', 0);
@@ -68,9 +67,5 @@ namespace parser {
         return return_data;
     }
 }
-
-
-
-
 
 #endif //ZUMO_COMMAND_H

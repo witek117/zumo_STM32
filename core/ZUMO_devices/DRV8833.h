@@ -1,5 +1,8 @@
 #pragma once
-#include "hal.h"
+
+#include <cstdint>
+#include "../ZUMO_hal/PWM.hpp"
+#include "../ZUMO_hal/GPIO.hpp"
 
 class DRV8833 {
 public:
@@ -17,8 +20,8 @@ public:
             REVERSE_SLOW_DECAY
         };
     private:
-        hal::PWM &IN1;
-        hal::PWM &IN2;
+        PWM &IN1;
+        PWM &IN2;
 
         float last_IN1_duty_cycle = 0;
         float last_IN2_duty_cycle = 0;
@@ -26,8 +29,11 @@ public:
         Mode mode = Mode::FORWARD_FAST_DECAY;
         RunningMode runningMode = RunningMode::RUNNING;
     public:
-        MotorChannel(hal::PWM &IN1, hal::PWM &IN2): IN1(IN1), IN2(IN2) {
+        MotorChannel(PWM &IN1, PWM &IN2): IN1(IN1), IN2(IN2) { }
 
+        void init() {
+            IN1.init();
+            IN2.init();
         }
 
         void brake() {
@@ -77,8 +83,8 @@ public:
     };
 
 private:
-    hal::GPIO &Sleep;
-    hal::GPIO &FAULT;
+    GPIO &Sleep;
+    GPIO &FAULT;
 public:
     MotorChannel Motor_A;
     MotorChannel Motor_B;
@@ -93,8 +99,13 @@ public:
         WORKING
     };
 
-    DRV8833(hal::PWM &AIN1, hal::PWM &AIN2, hal::PWM &BIN1, hal::PWM &BIN2, hal::GPIO &Sleep, hal::GPIO &FAULT): Sleep(Sleep), FAULT(FAULT), Motor_A(AIN1, AIN2), Motor_B(BIN1, BIN2) {
+    DRV8833(PWM &AIN1, PWM &AIN2, PWM &BIN1, PWM &BIN2, GPIO &Sleep, GPIO &FAULT): Sleep(Sleep), FAULT(FAULT), Motor_A(AIN1, AIN2), Motor_B(BIN1, BIN2) {
         set_enable(EnableMode::DISABLE);
+    }
+
+    void init() {
+        Motor_A.init();
+        Motor_B.init();
     }
 
     Status get_status() {

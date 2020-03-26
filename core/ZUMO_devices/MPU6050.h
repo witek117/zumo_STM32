@@ -1,8 +1,8 @@
 #pragma once
 
-#include <gsl/span>
-#include "hal.h"
-#include "commands_interface.h"
+#include <cstdint>
+#include "../ZUMO_hal/I2C.hpp"
+#include "../core/commands_interface.h"
 
 struct Vector {
     float XAxis;
@@ -39,7 +39,7 @@ public:
         WHO_AM_I          = (0x75)  // Who Am I
     };
 
-    hal::I2C& i2c;
+    I2C& i2c;
     uint8_t address;
     bool enable = false;
 
@@ -311,7 +311,7 @@ public:
         INTERNAL_8MHZ   = 0b000
     };
 
-    MPU6050(hal::I2C& i2c, uint8_t address) :
+    MPU6050(I2C& i2c, uint8_t address) :
         i2c(i2c), address(address << 1u),
         gyroscope(*this),
         accelerometer(*this) { }
