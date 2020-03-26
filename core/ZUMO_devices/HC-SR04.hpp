@@ -1,5 +1,4 @@
-#ifndef ZUMO_HC_SR04_H
-#define ZUMO_HC_SR04_H
+#pragma once
 
 #include "commands_interface.h"
 
@@ -79,7 +78,3 @@ public:
         }
     }
 };
-
-
-
-#endif //ZUMO_HC_SR04_H

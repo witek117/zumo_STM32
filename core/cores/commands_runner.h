@@ -1,7 +1,6 @@
-#ifndef ZUMO_COMMANDS_RUNNER_H
-#define ZUMO_COMMANDS_RUNNER_H
+#pragma once
 
-#include "../command_terminal/command_manager.h"
+#include "command_terminal/command_manager.h"
 
 void callbacks_runner(PrintManager& command_manager);
 
@@ -38,4 +37,3 @@ void set_ws2812B_value_callback(const char*);
 
 // exit, turn off all
 void exit_callback(const char*);
-#endif //ZUMO_COMMANDS_RUNNER_H

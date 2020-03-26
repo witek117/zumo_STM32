@@ -10,7 +10,7 @@
 
 #define GPIO_NUMBER           (16U)
 
-void STM_GPIO::initAlternate() {
+void GPIO::initAlternate() {
     //uint32_t position = pin;
     uint32_t temp;
 
@@ -54,7 +54,7 @@ void STM_GPIO::initAlternate() {
 }
 
 
-void STM_GPIO::initEXTI() {
+void GPIO::initEXTI() {
     //uint32_t position = pin;
     uint32_t iocurrent = position;
     uint32_t temp;

@@ -4,7 +4,7 @@
 #include <cstdint>
 #include "ZUMO_hal/HALina_GPIO.hpp"
 
-class STM_GPIO : HALina_GPIO {
+class GPIO : HALina_GPIO {
 public:
     enum class Mode : uint32_t {
         INPUT                       =(0x00000000U),   /*!< Input Floating Mode                   */
@@ -37,7 +37,7 @@ private:
     uint8_t position;
 
 public:
-    STM_GPIO(GPIO_TypeDef* base, uint32_t position, Mode mode, uint8_t alternate, Speed speed, uint32_t pull):
+    GPIO(GPIO_TypeDef* base, uint32_t position, Mode mode, uint8_t alternate, Speed speed, uint32_t pull):
             base(base),
             pin(1u << position),
             mode(mode),

@@ -1,7 +1,6 @@
-
-#include "../ZUMO_devices/ZUMO.hpp"
-#include "../command_terminal/Command.h"
-#include "../command_terminal/command_manager.h"
+#include "ZUMO_devices/ZUMO.hpp"
+#include "command_terminal/Command.h"
+#include "command_terminal/command_manager.h"
 
 bool static get_enable(const char* data) {
     auto [l] = parser::get<int>(data);

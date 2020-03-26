@@ -1,5 +1,4 @@
-#ifndef ZUMO_BME280_H
-#define ZUMO_BME280_H
+#pragma once
 
 #include "commands_interface.h"
 #include "ZUMO_hal/HALina_I2C.hpp"
@@ -260,7 +259,3 @@ public:
     }
 
 };
-
-
-
-#endif //ZUMO_BME280_H

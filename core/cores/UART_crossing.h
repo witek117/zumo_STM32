@@ -1,10 +1,10 @@
 #pragma once
 
 #include "main.hpp"
-#include "../STM32F301/UART.hpp"
+#include "STM32F301/UART.hpp"
 
 //Comman_manager_template* command_manager;
-NXP_Uart* uarts[3];
+Uart* uarts[3];
 
 void uart1_handler(uint8_t c) {
     if (c == 'c') {
@@ -15,7 +15,7 @@ void uart1_handler(uint8_t c) {
 class UART_crossing {
     uint8_t uart_counter = 0;
 public:
-    void addUart(NXP_Uart* uart) {
+    void addUart(Uart* uart) {
         if (uart_counter >= 3) {
             return;
         }

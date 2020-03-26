@@ -94,9 +94,9 @@ extern "C"
 void Main() {
     zumo().init();
     zumo().motor_driver.Motor_B.set_duty_cycle(0.5);
-    NXP_Uart uart1 = {USART1, 230400};
-    NXP_Uart uart2 = {USART2, 230400};
-    NXP_Uart uart3 = {USART3, 230400};
+    Uart uart1 = {USART1, 230400};
+    Uart uart2 = {USART2, 230400};
+    Uart uart3 = {USART3, 230400};
 //    UART_crossing crossing;
 //    crossing.addUart(&uart1);
 //    crossing.addUart(&uart2);

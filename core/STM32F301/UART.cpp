@@ -5,9 +5,9 @@
 #define UART_BRR_MIN    0x10U        /* UART BRR minimum authorized value */
 #define UART_BRR_MAX    0x0000FFFFU  /* UART BRR maximum authorized value */
 
-NXP_Uart* nxpUartHandlers[3];
+Uart* nxpUartHandlers[3];
 
-NXP_Uart::NXP_Uart(USART_TypeDef* uart, uint32_t baudrate) :
+Uart::Uart(USART_TypeDef* uart, uint32_t baudrate) :
         uart(uart), baudrate(baudrate), redirectHandler(nullptr) {
     if(USART1 == uart){
         nxpUartHandlers[0] = this;
@@ -20,7 +20,7 @@ NXP_Uart::NXP_Uart(USART_TypeDef* uart, uint32_t baudrate) :
     RingBuffer_Init(&txRingBuffer, txBuffer, txBufferSize);
 }
 
-void NXP_Uart::init(){
+void Uart::init(){
     // disable
     uart->CR1 &= ~ USART_CR1_UE;
     if(uart == USART1) {
@@ -70,7 +70,7 @@ void NXP_Uart::init(){
     }
 }
 
-void NXP_Uart::write(void const* data, uint16_t length){
+void Uart::write(void const* data, uint16_t length){
     // enter critical section
 //    __disable_irq();
     // put data to ring buffer
@@ -86,7 +86,7 @@ void NXP_Uart::write(void const* data, uint16_t length){
 
 }
 
-void NXP_Uart::write(uint8_t data) {
+void Uart::write(uint8_t data) {
     // enter critical section
 //    __disable_irq();
     // put data to ring buffer
@@ -99,13 +99,13 @@ void NXP_Uart::write(uint8_t data) {
 //    }
 }
 
-uint8_t NXP_Uart::read() {
+uint8_t Uart::read() {
     static uint8_t c;
     RingBuffer_GetChar(&rxRingBuffer, &c);
     return c;
 }
 
-void NXP_Uart::read(uint8_t* buffer, uint16_t length){
+void Uart::read(uint8_t* buffer, uint16_t length){
     if(buffer != nullptr){
         if(length <= RingBuffer_GetLen(&rxRingBuffer)){
             for(auto i=0; i<length; i++){
@@ -115,29 +115,29 @@ void NXP_Uart::read(uint8_t* buffer, uint16_t length){
     }
 }
 
-bool NXP_Uart::isBufferEmpty(){
+bool Uart::isBufferEmpty(){
     return RingBuffer_IsEmpty(&rxRingBuffer);
 }
 
-uint16_t NXP_Uart::getBufferLevel(){
+uint16_t Uart::getBufferLevel(){
     return RingBuffer_GetLen(&rxRingBuffer);
 }
 
-void NXP_Uart::flushRxBuffer(){
+void Uart::flushRxBuffer(){
     RingBuffer_Clear(&rxRingBuffer);
 }
 
-void NXP_Uart::enableInterrupt(InterruptType interrupt){
+void Uart::enableInterrupt(InterruptType interrupt){
     (void) interrupt;
     uart->CR1 |= static_cast<uint8_t >(interrupt);
 }
 
-void NXP_Uart::disableInterrupt(InterruptType interrupt){
+void Uart::disableInterrupt(InterruptType interrupt){
     (void) interrupt;
     uart->CR1 &= ~(static_cast<uint8_t >(interrupt));
 }
 
-void UART_IRQ(NXP_Uart* nxpUartHandler) {
+void UART_IRQ(Uart* nxpUartHandler) {
     (void) nxpUartHandler;
     if(nxpUartHandler->uart->ISR & USART_ISR_TC){
         nxpUartHandler->uart->ICR |= USART_ICR_TCCF;
@@ -145,7 +145,7 @@ void UART_IRQ(NXP_Uart* nxpUartHandler) {
         if (RingBuffer_GetChar(&(nxpUartHandler->txRingBuffer), &c)) {
             nxpUartHandler->uart->TDR = c;
         } else {
-            nxpUartHandler->disableInterrupt(NXP_Uart::InterruptType::TX_EMPTY);
+            nxpUartHandler->disableInterrupt(Uart::InterruptType::TX_EMPTY);
         }
     }
     if (nxpUartHandler->uart->ISR & USART_ISR_RXNE) {

@@ -1,11 +1,10 @@
-#ifndef ZUMO_KTIR0711S_H
-#define ZUMO_KTIR0711S_H
+#pragma once
 
 #include <array>
 #include <cmath>
 #include "ZUMO_hal/HALina_GPIO.hpp"
 #include "mean.h"
-#include "commands_interface.h"
+#include "cores/commands_interface.h"
 
 template <typename T, int sensors_number>
 class LineSensorsBase {
@@ -211,6 +210,3 @@ public:
 
 
 };
-
-
-#endif //ZUMO_KTIR0711S_H

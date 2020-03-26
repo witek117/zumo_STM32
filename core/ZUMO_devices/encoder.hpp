@@ -1,5 +1,4 @@
-#ifndef ZUMO_ENCODER_H
-#define ZUMO_ENCODER_H
+#pragma once
 
 #include "ZUMO_hal/HALina_GPIO.hpp"
 #include "cores/LineDebounce.h"
@@ -108,6 +107,3 @@ public:
         }
     }
 };
-
-
-#endif //ZUMO_ENCODER_H

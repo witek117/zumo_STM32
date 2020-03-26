@@ -1,5 +1,4 @@
-#ifndef ZUMO_PID_H
-#define ZUMO_PID_H
+#pragma once
 
 #include <cmath>
 #include <algorithm>
@@ -51,5 +50,3 @@ public:
         this->prevError = 0;
     }
 };
-
-#endif //ZUMO_PID_H

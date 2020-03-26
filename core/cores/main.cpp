@@ -1,5 +1,5 @@
 #include "hal.h"
-#include "../command_terminal/command_manager.h"
+#include "command_terminal/command_manager.h"
 #include "commands_runner.h"
 #include "main.hpp"
 

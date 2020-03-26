@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <ZUMO_hal/HALina_PWM.hpp>
-#include <ZUMO_hal/HALina_GPIO.hpp>
+#include "ZUMO_hal/HALina_PWM.hpp"
+#include "ZUMO_hal/HALina_GPIO.hpp"
 
 class DRV8833 {
 public:

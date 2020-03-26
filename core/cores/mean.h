@@ -1,5 +1,4 @@
-#ifndef ZUMO_MEAN_H
-#define ZUMO_MEAN_H
+#pragma once
 
 #include <array>
 
@@ -45,5 +44,3 @@ public:
         return value;
     }
 };
-
-#endif //ZUMO_MEAN_H

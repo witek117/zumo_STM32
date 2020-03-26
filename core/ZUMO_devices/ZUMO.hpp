@@ -1,10 +1,8 @@
-#ifndef ZUMO_ZUMO_H
-#define ZUMO_ZUMO_H
+#pragma once
 
 #include "DRV8833.hpp"
 #include "encoder.hpp"
 #include "KTIR0711S.hpp"
-//#include "../core/hal.h"
 #include "HC-SR04.hpp"
 #include "MCP9700.hpp"
 #include "BME280.hpp"
@@ -57,4 +55,3 @@ struct ZUMO {
 
 ZUMO& zumo(void);
 
-#endif //ZUMO_ZUMO_H

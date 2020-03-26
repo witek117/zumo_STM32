@@ -1,5 +1,5 @@
 //
-// Created by Kamil on 03.01.2020.
+// Created by Kamil Kasperczyk on 03.01.2020.
 //
 
 #ifndef RING_BUFFER_H

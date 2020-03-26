@@ -1,5 +1,4 @@
-#ifndef ZUMO_COMMAND_H
-#define ZUMO_COMMAND_H
+#pragma once
 
 #include <functional>
 #include <utility>
@@ -67,5 +66,3 @@ namespace parser {
         return return_data;
     }
 }
-
-#endif //ZUMO_COMMAND_H

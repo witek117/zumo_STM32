@@ -4,7 +4,7 @@
 #include "cstdint"
 #include "ring_buffer.h"
 
-class NXP_Uart  {
+class Uart  {
 public:
     USART_TypeDef* uart;
     RingBuffer rxRingBuffer{};
@@ -34,7 +34,7 @@ public:
 
     void disableInterrupt(InterruptType interrupt);
 
-    NXP_Uart(USART_TypeDef* uart, uint32_t baudrate);
+    Uart(USART_TypeDef* uart, uint32_t baudrate);
 
     void init();
 

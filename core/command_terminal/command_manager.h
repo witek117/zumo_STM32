@@ -1,5 +1,4 @@
-#ifndef ZUMO_COMMAND_MANAGER_H
-#define ZUMO_COMMAND_MANAGER_H
+#pragma once
 
 #include "cyclicBuffer.hpp"
 #include <functional>
@@ -149,5 +148,3 @@ public:
     }
 };
 
-
-#endif //ZUMO_COMMAND_MANAGER_H
