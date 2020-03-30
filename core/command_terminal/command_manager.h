@@ -6,9 +6,11 @@
 #include "Command.h"
 
 class PrintManager {
+    inline static PrintManager* staticManager = nullptr;
+protected:
+    void(*printByte)(uint8_t) = nullptr;
 public:
     char buff[10] = {0};
-    virtual void print(char) = 0;
 
     size_t print(const char *s) {
         size_t size = 0;
@@ -41,67 +43,60 @@ public:
         print(buff);
     }
 
-    virtual void deinit() = 0;
+    void print (char c) {
+        if (printByte) {
+            printByte(c);
+        }
+    }
+    void init();
+
+    virtual void put_char(char c) = 0;
+
+    static void printManagerPutChar(uint8_t c);
+
+    static void setPrintFunction(void(*printHandler)(uint8_t));
+
+    void deinit() {
+        printByte = nullptr;
+    }
+
+    bool is_enabled() {
+        return (printByte != nullptr);
+    }
 };
 
 template <int size, char end_char, bool echo>
 class CommandManager : public PrintManager {
     constexpr static size_t buff_size = 50;
     CyclicBuffer_data<char, buff_size> buffer_rx;
-    CyclicBuffer_data<char, buff_size> buffer_tx;
     uint8_t commands_in_buffer = 0;
     void(*enable_interrupts)() = nullptr;
     void(*disable_interrupts)() = nullptr;
     std::array<Command, size> commands;
-    void(*print_handler)(char) = nullptr;
     uint8_t command_title_len = 0;
 public:
     explicit CommandManager(void(*enable_interrupts)(), void(*disable_interrupts)(),  std::array<Command, size> commands) :
-        enable_interrupts(enable_interrupts), disable_interrupts(disable_interrupts), commands(commands), print_handler(nullptr) {
+        enable_interrupts(enable_interrupts), disable_interrupts(disable_interrupts), commands(commands) {
     }
 
-    bool init(void(*print_handler_)(char)) {
-        if (print_handler == nullptr) {
-            print_handler = print_handler_;
-            return true;
-        }
-        return false;
+    void init() {
+        PrintManager::init();
     }
 
-    void deinit() override {
-        print_handler = nullptr;
-    }
-
-    void print(char c) override {
-        buffer_tx.append(c);
-    }
-
-    bool is_enabled() {
-        return (print_handler != nullptr);
-    }
-
-    bool put_char(char c) {
+    void put_char(char c) override {
         if constexpr (echo) {
-            print(c);
+            printByte(c);
         }
 
         buffer_rx.append(c);
         if (c == end_char) {
             commands_in_buffer++;
         }
-
-        return print_handler != nullptr;
     }
 
     void run() {
         if (!is_enabled()) {
             return;
-        }
-
-        if (!buffer_tx.isEmpty()) {
-            if (print_handler) {
-                print_handler(buffer_tx.get());
-            }
         }
 
         disable_interrupts();

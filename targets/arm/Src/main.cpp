@@ -1,13 +1,12 @@
-#include <hal.h>
-#include <ZUMO.hpp>
+#include "hal.h"
+#include "ZUMO.hpp"
+#include "cores/UART_crossing.h"
 #include "main.h"
 #include "STM_hal.h"
 
 #include "STM_WS2812B.hpp"
-
-//#include "cores/hal.h"
-//#include "ZUMO_devices/ZUMO.hpp"
 #include "UART.hpp"
+
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
@@ -97,11 +96,11 @@ void Main() {
     Uart uart1 = {USART1, 230400};
     Uart uart2 = {USART2, 230400};
     Uart uart3 = {USART3, 230400};
-//    UART_crossing crossing;
-//    crossing.addUart(&uart1);
-//    crossing.addUart(&uart2);
-//    crossing.addUart(&uart3);
-//    crossing.init();
+    UART_crossing crossing;
+    crossing.addUart(&uart1);
+    crossing.addUart(&uart2);
+    crossing.addUart(&uart3);
+    crossing.init();
     uart1.init();
     uart2.init();
     uart3.init();
