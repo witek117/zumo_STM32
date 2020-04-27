@@ -92,7 +92,6 @@ Mean <uint16_t, 20>current_mean;
 extern "C"
 void Main() {
     zumo().init();
-    zumo().motor_driver.Motor_B.set_duty_cycle(0.5);
     Uart uart1 = {USART1, 230400};
     Uart uart2 = {USART2, 230400};
     Uart uart3 = {USART3, 230400};
