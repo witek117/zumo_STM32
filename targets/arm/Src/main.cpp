@@ -103,7 +103,9 @@ void Main() {
     uart1.init();
     uart2.init();
     uart3.init();
-//    uart1.write("siema", 5);
+    uart1.write("siema", 5);
+    uart2.write("siema", 5);
+    uart3.write("siema", 5);
 
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
 
@@ -125,20 +127,9 @@ void Main() {
             zumo().hcsr04.run_measurements();
             zumo().mpu6050.run_measurements();
 
-             zumo().LED2.toggle();
+//             zumo().LED2.toggle();
             _10Hz_flag = false;
-
-//            VT::move_to(0, 30);
-//            VT::print("TEMP: ");
-//            VT::print(zumo().mcp9700.get_last_temperature());
-
-//            VT::move_to(0, 31);
-//            VT::print("CURRENT: ");
             current_mean.put_value((uint16_t)*V_CURRENT_SENS);
-//            VT::print(current_mean.get_value());
-//            VT::move_to(0, 32);
-//            VT::print("BAT: ");
-//            VT::print((int)*V_BAT);
         }
     }
 }

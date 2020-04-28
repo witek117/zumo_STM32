@@ -1,5 +1,6 @@
 #include "UART.hpp"
 #include <stm32f3xx.h>
+#include <ZUMO_devices/ZUMO.hpp>
 #include "stm32f3xx_hal_rcc.h"
 
 #define UART_BRR_MIN    0x10U        /* UART BRR minimum authorized value */
@@ -68,6 +69,7 @@ void Uart::init(){
         NVIC_ClearPendingIRQ(USART3_IRQn);
         NVIC_EnableIRQ(USART3_IRQn);
     }
+    enableInterrupt(InterruptType::RX_FULL);
 }
 
 void Uart::write(void const* data, uint16_t length){
@@ -159,14 +161,17 @@ void UART_IRQ(Uart* nxpUartHandler) {
 
 extern "C" {
 void USART1_IRQHandler() {
+    zumo().LED1.toggle();
     UART_IRQ(nxpUartHandlers[0]);
 }
 
 void USART2_IRQHandler() {
+//    zumo().LED1.toggle();
     UART_IRQ(nxpUartHandlers[1]);
 }
 
 void USART3_IRQHandler() {
+//    zumo().LED1.toggle();
     UART_IRQ(nxpUartHandlers[2]);
 }
 }

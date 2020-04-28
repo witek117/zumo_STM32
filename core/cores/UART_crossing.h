@@ -3,7 +3,7 @@
 #include "main.hpp"
 #include "STM32F301/UART.hpp"
 #include "command_terminal/command_manager.h"
-
+#include "ZUMO.hpp"
 Uart* uarts[3];
 
 void uart0_write(uint8_t c) {
@@ -20,6 +20,7 @@ void uart2_write(uint8_t c) {
 
 void checkRedirection(Uart * uart, char c) {
     if (c == 'c') {
+        zumo().LED1.toggle();
         uart->setRedirectHandler(PrintManager::printManagerPutChar);
         if (uarts[0] == uart) {
             PrintManager::setPrintFunction(uart0_write);
@@ -28,7 +29,6 @@ void checkRedirection(Uart * uart, char c) {
         } else if (uarts[2] == uart) {
             PrintManager::setPrintFunction(uart2_write);
         }
-
     }
 }
 

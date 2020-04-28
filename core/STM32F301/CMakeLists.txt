@@ -10,6 +10,7 @@ file(GLOB_RECURSE SOURCES
 add_library(${NAME} ${SOURCES})
 
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../cores)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../targets/arm/Drivers/CMSIS/Device/ST/STM32F3xx/Include)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../targets/arm/Drivers/CMSIS/Include)
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc)
