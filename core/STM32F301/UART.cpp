@@ -161,17 +161,14 @@ void UART_IRQ(Uart* nxpUartHandler) {
 
 extern "C" {
 void USART1_IRQHandler() {
-    zumo().LED1.toggle();
     UART_IRQ(nxpUartHandlers[0]);
 }
 
 void USART2_IRQHandler() {
-//    zumo().LED1.toggle();
     UART_IRQ(nxpUartHandlers[1]);
 }
 
 void USART3_IRQHandler() {
-//    zumo().LED1.toggle();
     UART_IRQ(nxpUartHandlers[2]);
 }
 }

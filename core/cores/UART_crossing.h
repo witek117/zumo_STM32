@@ -19,16 +19,18 @@ void uart2_write(uint8_t c) {
 }
 
 void checkRedirection(Uart * uart, char c) {
+    (void) uart;
     if (c == 'c') {
-        zumo().LED1.toggle();
+        // TODO
+//        zumo().LED1.toggle();
         uart->setRedirectHandler(PrintManager::printManagerPutChar);
-        if (uarts[0] == uart) {
-            PrintManager::setPrintFunction(uart0_write);
-        } else if (uarts[1] == uart) {
-            PrintManager::setPrintFunction(uart1_write);
-        } else if (uarts[2] == uart) {
-            PrintManager::setPrintFunction(uart2_write);
-        }
+//        if (uarts[0] == uart) {
+//            PrintManager::setPrintFunction(uart0_write);
+//        } else if (uarts[1] == uart) {
+//            PrintManager::setPrintFunction(uart1_write);
+//        } else if (uarts[2] == uart) {
+//            PrintManager::setPrintFunction(uart2_write);
+//        }
     }
 }
 

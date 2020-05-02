@@ -48,7 +48,7 @@ public:
             printByte(c);
         }
     }
-    void init();
+    void initt();
 
     virtual void put_char(char c) = 0;
 
@@ -67,6 +67,7 @@ public:
 
 template <int size, char end_char, bool echo>
 class CommandManager : public PrintManager {
+
     constexpr static size_t buff_size = 50;
     CyclicBuffer_data<char, buff_size> buffer_rx;
     uint8_t commands_in_buffer = 0;
@@ -80,7 +81,7 @@ public:
     }
 
     void init() {
-        PrintManager::init();
+        initt();
     }
 
     void put_char(char c) override {
@@ -94,9 +95,9 @@ public:
         }
     }
 
-    void run() {
+    bool run() {
         if (!is_enabled()) {
-            return;
+            return false;
         }
 
         disable_interrupts();
@@ -109,6 +110,7 @@ public:
             char* cmd_buffer = copy_from_fifo_to_buffer();
             parse(cmd_buffer);
         }
+        return true;
     }
 
     void parse(char* data) {
