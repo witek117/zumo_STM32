@@ -3,8 +3,17 @@
 
 // ZUMO LEDS
 STM32_GPIO ZUMO::LED1 = {LED1_GPIO_Port, LED1_Pin};
-
 STM32_GPIO ZUMO::LED2 = {LED2_GPIO_Port, LED2_Pin};
+
+// ZUMO WS2812
+STM_WS2812B<2> ZUMO::ws2812b = {WS2812B_GPIO_Port, WS2812B_Pin, ZUMO::enableInterrupts, ZUMO::disableInterrupts};
+
+void ZUMO::set_value_value_callback(const char* data) {
+    auto [index, r, g, b] = parser::get<int, int, int, int>(data);
+    ws2812b.set_color(index, r, g, b);
+    ws2812b.send();
+    ws2812b.send(); // TODO fix double sending
+}
 
 // ZUMO MOTORS
 extern TIM_HandleTypeDef htim1;
@@ -33,6 +42,7 @@ Encoder ZUMO::encoderR = {MOT_R_A, MOT_R_B, 1};
 Uart ZUMO::uart1 = {USART1, 230400};
 
 ZUMO::CommandManagerTempalte ZUMO::command_manager(enableInterrupts, disableInterrupts, {
+        Command("ws", ZUMO::set_value_value_callback),
         Command("test", ZUMO::test_callback)
     });
 
@@ -50,7 +60,9 @@ void ZUMO::init() {
     uart1.init();
     command_manager.init();
     PrintManager::setPrintFunction(printUart1);
-    command_manager.printer.print("siema");
     uart1.setRedirectHandler(ReadManager::putChar);
+    ws2812b.init();
 
+    // Hello
+    command_manager.printer.print("Hello world");
 }

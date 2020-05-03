@@ -5,6 +5,7 @@
 #include "DRV8833.hpp"
 #include "encoder.hpp"
 #include "UART.hpp"
+#include "STM_WS2812B.hpp"
 #include "command_terminal/command_manager.h"
 
 class ZUMO {
@@ -12,6 +13,10 @@ public:
     // LEDS
     static STM32_GPIO LED1; //(LED1_GPIO_Port, LED1_Pin);
     static STM32_GPIO LED2; //(LED2_GPIO_Port, LED2_Pin);
+
+    // WS2812
+    static STM_WS2812B<2> ws2812b;
+    static void set_value_value_callback(const char*);
 
     // MOTORS
     static STM32_PWM<1000> PWM_1;
@@ -37,7 +42,7 @@ public:
     static Uart uart1;
 
     // COMMAND MANAGER
-    using CommandManagerTempalte = CommandManager <1>;
+    using CommandManagerTempalte = CommandManager <2>;
     static CommandManagerTempalte command_manager;
     static void test_callback(const char*);
 
@@ -69,7 +74,7 @@ public:
         static uint32_t k = 0;
         k++;
         if (k > 100000) {
-            k = 0;
+            k =  0;
             LED1.toggle();
         }
     }
