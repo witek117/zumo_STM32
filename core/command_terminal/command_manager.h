@@ -5,10 +5,10 @@
 #include <utility>
 #include "Command.h"
 
+constexpr char endChar = '\n';
+
 class PrintManager {
-    inline static PrintManager* staticManager = nullptr;
-protected:
-    void(*printByte)(uint8_t) = nullptr;
+    void (*printByte)(uint8_t) = nullptr;
 public:
     char buff[10] = {0};
 
@@ -43,34 +43,40 @@ public:
         print(buff);
     }
 
-    void print (char c) {
+    void print(char c) {
         if (printByte) {
             printByte(c);
         }
     }
-    void initt();
 
-    virtual void put_char(char c) = 0;
-
-    static void printManagerPutChar(uint8_t c);
+    void init();
 
     static void setPrintFunction(void(*printHandler)(uint8_t));
-
-    void deinit() {
-        printByte = nullptr;
-    }
-
-    bool is_enabled() {
-        return (printByte != nullptr);
-    }
 };
 
-template <int size, char end_char, bool echo>
-class CommandManager : public PrintManager {
-
+class ReadManager {
+public:
     constexpr static size_t buff_size = 50;
     CyclicBuffer_data<char, buff_size> buffer_rx;
     uint8_t commands_in_buffer = 0;
+
+    void putToBuffer(char c) {
+        buffer_rx.append(c);
+        if (c == endChar) {
+            commands_in_buffer++;
+        }
+    }
+    void init();
+    static bool isEnabled();
+    static void putChar(uint8_t);
+};
+
+template <int size>
+class CommandManager {
+    ReadManager read;
+public:
+    PrintManager printer;
+private:
     void(*enable_interrupts)() = nullptr;
     void(*disable_interrupts)() = nullptr;
     std::array<Command, size> commands;
@@ -81,28 +87,18 @@ public:
     }
 
     void init() {
-        initt();
-    }
-
-    void put_char(char c) override {
-        if constexpr (echo) {
-            printByte(c);
-        }
-
-        buffer_rx.append(c);
-        if (c == end_char) {
-            commands_in_buffer++;
-        }
+        read.init();
+        printer.init();
     }
 
     bool run() {
-        if (!is_enabled()) {
+        if (!read.isEnabled()) {
             return false;
         }
 
         disable_interrupts();
-        uint8_t commands_in_fifo_local = commands_in_buffer;
-        commands_in_buffer = 0;
+        uint8_t commands_in_fifo_local = read.commands_in_buffer;
+        read.commands_in_buffer = 0;
         enable_interrupts();
 
         while (commands_in_fifo_local--) {
@@ -125,6 +121,7 @@ public:
             if (command.parse(data, command_title_len)) {
                 return;
             }
+            printer.print("undefined\n");
         }
     }
 
@@ -132,9 +129,9 @@ public:
         static std::array<char, 100> cmd_buffer;
         auto it = cmd_buffer.begin();
         disable_interrupts();
-        while (buffer_rx.getSize() != 0 && it != cmd_buffer.end()) {
-            *it = buffer_rx.get();
-            if(*it == end_char) {
+        while (read.buffer_rx.getSize() != 0 && it != cmd_buffer.end()) {
+            *it = read.buffer_rx.get();
+            if(*it == endChar) {
                 *it = '\0';
                 break;
             }

@@ -99,7 +99,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
   
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC1 GPIO Configuration
+    /**ADC1 GPIO Configuration    
     PC0     ------> ADC1_IN6
     PC1     ------> ADC1_IN7
     PC2     ------> ADC1_IN8
@@ -163,7 +163,7 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
     /* Peripheral clock disable */
     __HAL_RCC_ADC1_CLK_DISABLE();
   
-    /**ADC1 GPIO Configuration
+    /**ADC1 GPIO Configuration    
     PC0     ------> ADC1_IN6
     PC1     ------> ADC1_IN7
     PC2     ------> ADC1_IN8
@@ -206,7 +206,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c)
   /* USER CODE END I2C1_MspInit 0 */
   
     __HAL_RCC_GPIOB_CLK_ENABLE();
-    /**I2C1 GPIO Configuration
+    /**I2C1 GPIO Configuration    
     PB8     ------> I2C1_SCL
     PB9     ------> I2C1_SDA 
     */
@@ -242,7 +242,7 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
     /* Peripheral clock disable */
     __HAL_RCC_I2C1_CLK_DISABLE();
   
-    /**I2C1 GPIO Configuration
+    /**I2C1 GPIO Configuration    
     PB8     ------> I2C1_SCL
     PB9     ------> I2C1_SDA 
     */
@@ -311,7 +311,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
 
   /* USER CODE END TIM1_MspPostInit 0 */
     __HAL_RCC_GPIOB_CLK_ENABLE();
-    /**TIM1 GPIO Configuration
+    /**TIM1 GPIO Configuration    
     PB0     ------> TIM1_CH2N
     PB1     ------> TIM1_CH3N
     PB13     ------> TIM1_CH1N 
@@ -334,7 +334,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
   /* USER CODE END TIM15_MspPostInit 0 */
   
     __HAL_RCC_GPIOB_CLK_ENABLE();
-    /**TIM15 GPIO Configuration
+    /**TIM15 GPIO Configuration    
     PB14     ------> TIM15_CH1 
     */
     GPIO_InitStruct.Pin = BIN2_Pin;

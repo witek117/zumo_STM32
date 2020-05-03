@@ -124,7 +124,7 @@ void Main() {
 //        if (command_manager.run()){
 //            zumo().LED1.toggle();
 //        }
-        callbacks_runner(command_manager);
+//        callbacks_runner(command_manager);
 
 
         if (_10Hz_flag) {

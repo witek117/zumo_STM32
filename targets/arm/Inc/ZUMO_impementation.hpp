@@ -8,6 +8,10 @@
 #include "command_terminal/command_manager.h"
 
 class ZUMO {
+public:
+    // LEDS
+    static STM32_GPIO LED1; //(LED1_GPIO_Port, LED1_Pin);
+    static STM32_GPIO LED2; //(LED2_GPIO_Port, LED2_Pin);
 
     // MOTORS
     static STM32_PWM<1000> PWM_1;
@@ -33,7 +37,8 @@ class ZUMO {
     static Uart uart1;
 
     // COMMAND MANAGER
-    static CommandManager <1, '\n', true> command_manager;
+    using CommandManagerTempalte = CommandManager <1>;
+    static CommandManagerTempalte command_manager;
     static void test_callback(const char*);
 
     static void enableInterrupts() {
@@ -44,15 +49,9 @@ class ZUMO {
         __disable_irq();
     }
 
-
-public:
     ZUMO() = default;
 
-    void init() {
-        motor_driver.init();
-        uart1.init();
-        uart1.write("siema", 5);
-    }
+    void init();
 
     static void ISR_10kHz() {
         encoderL.encoder10kHzTickISR();
@@ -66,6 +65,13 @@ public:
 
     static void loop() {
         command_manager.run();
+
+        static uint32_t k = 0;
+        k++;
+        if (k > 100000) {
+            k = 0;
+            LED1.toggle();
+        }
     }
 
 

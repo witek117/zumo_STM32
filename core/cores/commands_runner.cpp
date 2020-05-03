@@ -116,7 +116,7 @@ void callbacks_runner(PrintManager& command_manager) {
 
     if (exit_flag) {
         exit_flag = false;
-        command_manager.deinit();
+//        command_manager.deinit();
     }
 
     if (hcsr04_flag) {

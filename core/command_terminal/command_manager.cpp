@@ -1,16 +1,22 @@
 #include "command_manager.h"
 
-void PrintManager::initt() {
-    staticManager = this;
-    staticManager->print('c');
+ReadManager* readManager = nullptr;
+PrintManager* printManager = nullptr;
+void ReadManager::init() {
+    readManager = this;
+}
+void ReadManager::putChar(uint8_t c) {
+    readManager->putToBuffer(c);
 }
 
-void PrintManager::printManagerPutChar(uint8_t c) {
-    (void) c;
-//    staticManager->put_char(c);
+bool ReadManager::isEnabled() {
+    return readManager != nullptr;
+}
 
+void PrintManager::init() {
+    printManager = this;
 }
 
 void PrintManager::setPrintFunction(void(*printHandler)(uint8_t)) {
-    staticManager->printByte = printHandler;
+    printManager->printByte = printHandler;
 }

@@ -2,4 +2,4 @@
 
 #include "command_terminal/command_manager.h"
 
-using Comman_manager_template = CommandManager <16, '\n', true>;
+//using Comman_manager_template = CommandManager <16, '\n', true>;

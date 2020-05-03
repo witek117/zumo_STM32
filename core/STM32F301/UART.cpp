@@ -6,16 +6,16 @@
 #define UART_BRR_MIN    0x10U        /* UART BRR minimum authorized value */
 #define UART_BRR_MAX    0x0000FFFFU  /* UART BRR maximum authorized value */
 
-Uart* nxpUartHandlers[3];
+Uart* uartHandlers[3];
 
 Uart::Uart(USART_TypeDef* uart, uint32_t baudrate) :
         uart(uart), baudrate(baudrate), redirectHandler(nullptr) {
     if(USART1 == uart){
-        nxpUartHandlers[0] = this;
+        uartHandlers[0] = this;
     } else if(USART2 == uart){
-        nxpUartHandlers[1] = this;
+        uartHandlers[1] = this;
     } else if(USART3 == uart){
-        nxpUartHandlers[2] = this;
+        uartHandlers[2] = this;
     }
     RingBuffer_Init(&rxRingBuffer, rxBuffer, rxBufferSize);
     RingBuffer_Init(&txRingBuffer, txBuffer, txBufferSize);
@@ -139,36 +139,64 @@ void Uart::disableInterrupt(InterruptType interrupt){
     uart->CR1 &= ~(static_cast<uint8_t >(interrupt));
 }
 
-void UART_IRQ(Uart* nxpUartHandler) {
-    (void) nxpUartHandler;
-    if(nxpUartHandler->uart->ISR & USART_ISR_TC){
-        nxpUartHandler->uart->ICR |= USART_ICR_TCCF;
+void UART_IRQ(Uart* uartHandler) {
+    uint32_t isrflags   = READ_REG(uartHandler->uart->ISR);
+    uint32_t cr1its     = READ_REG(uartHandler->uart->CR1);
+
+    if(isrflags & USART_ISR_TXE) {
         uint8_t c;
-        if (RingBuffer_GetChar(&(nxpUartHandler->txRingBuffer), &c)) {
-            nxpUartHandler->uart->TDR = c;
+        if (RingBuffer_GetChar(&(uartHandler->txRingBuffer), &c)) {
+            uartHandler->uart->TDR = c;
         } else {
-            nxpUartHandler->disableInterrupt(Uart::InterruptType::TX_EMPTY);
+            uartHandler->uart->RQR |= USART_RQR_TXFRQ;
+            uartHandler->disableInterrupt(Uart::InterruptType::TX_EMPTY);
+            uartHandler->disableInterrupt(Uart::InterruptType::TX_COMPLETE);
         }
     }
-    if (nxpUartHandler->uart->ISR & USART_ISR_RXNE) {
-        if (nxpUartHandler->redirectHandler) {
-            nxpUartHandler->redirectHandler(nxpUartHandler->uart->RDR);
-        } else {
-            RingBuffer_PutChar(&(nxpUartHandler->rxRingBuffer), nxpUartHandler->uart->RDR);
+
+    if (isrflags & USART_ISR_RXNE) {
+        uint8_t data        = uartHandler->uart->RDR;
+
+        /* If no error occurs */
+        uint32_t errorflags = (isrflags & (uint32_t)(USART_ISR_PE | USART_ISR_FE | USART_ISR_ORE | USART_ISR_NE | USART_ISR_RTOF));
+        if (errorflags == 0U)
+        {
+            /* UART in mode Receiver ---------------------------------------------------*/
+            if (((isrflags & USART_ISR_RXNE) != 0U)
+                && ((cr1its & USART_CR1_RXNEIE) != 0U))
+            {
+                if (uartHandler->redirectHandler) {
+                    uartHandler->redirectHandler(data);
+                } else {
+                    RingBuffer_PutChar(&(uartHandler->rxRingBuffer), data);
+                }
+            }
         }
+    }
+
+    if (isrflags & USART_ISR_IDLE) {
+        uartHandler->uart->ICR |=  USART_ICR_IDLECF;
+    }
+
+    if (isrflags & USART_ISR_TC) {
+        uartHandler->uart->ICR |= USART_ICR_TCCF;
+    }
+
+    if (isrflags & USART_ISR_TXE) {
+        uartHandler->uart->RQR |= USART_RQR_TXFRQ;
     }
 }
 
 extern "C" {
 void USART1_IRQHandler() {
-    UART_IRQ(nxpUartHandlers[0]);
+    UART_IRQ(uartHandlers[0]);
 }
 
 void USART2_IRQHandler() {
-    UART_IRQ(nxpUartHandlers[1]);
+    UART_IRQ(uartHandlers[1]);
 }
 
 void USART3_IRQHandler() {
-    UART_IRQ(nxpUartHandlers[2]);
+    UART_IRQ(uartHandlers[2]);
 }
 }
