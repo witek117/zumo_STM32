@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include <cstdlib>
+#include <cmath>
 #include "cores/commands_interface.h"
 #include "ZUMO_hal/HALina_I2C.hpp"
 

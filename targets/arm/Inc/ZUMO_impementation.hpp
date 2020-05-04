@@ -1,14 +1,18 @@
 # pragma once
 
+#include "MPU6050.hpp"
 #include "main.h"
 #include "STM_hal.h"
 #include "DRV8833.hpp"
 #include "encoder.hpp"
 #include "UART.hpp"
 #include "STM_WS2812B.hpp"
+#include "BME280.hpp"
 #include "command_terminal/command_manager.h"
 
 class ZUMO {
+    // I2C
+    static STM32_I2C IMU_I2C;
 public:
     // LEDS
     static STM32_GPIO LED1; //(LED1_GPIO_Port, LED1_Pin);
@@ -17,6 +21,18 @@ public:
     // WS2812
     static STM_WS2812B<2> ws2812b;
     static void set_value_value_callback(const char*);
+
+    // BME280
+    static BME280 bme280; //(IMU_I2C, 0b1110110);
+    static void set_bme280_enable_callback(const char*);
+    static void get_bme280_value_callback(const char*);
+
+    // MPU6050
+    static MPU6050 mpu6050;// (IMU_I2C, 0x68);
+    static void get_mpu_gyroscope_value_callback(const char*);
+    static void get_mpu_accelerometer_value_callback(const char*);
+    static void set_mpu_accelerometer_enable_callback(const char*);
+    static void set_mpu_gyroscope_enable_callback(const char*);
 
     // MOTORS
     static STM32_PWM<1000> PWM_1;
@@ -42,7 +58,7 @@ public:
     static Uart uart1;
 
     // COMMAND MANAGER
-    using CommandManagerTempalte = CommandManager <2>;
+    using CommandManagerTempalte = CommandManager <8>;
     static CommandManagerTempalte command_manager;
     static void test_callback(const char*);
 
@@ -70,6 +86,8 @@ public:
 
     static void loop() {
         command_manager.run();
+        bme280.run_measurements();
+        mpu6050.run_measurements();
 
         static uint32_t k = 0;
         k++;

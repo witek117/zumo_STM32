@@ -4,10 +4,10 @@
 
 
 // TODO ZYMO
-bool static get_enable(const char* data) {
-    auto [l] = parser::get<int>(data);
-    return (1 == l);
-}
+//bool static get_enable(const char* data) {
+//    auto [l] = parser::get<int>(data);
+//    return (1 == l);
+//}
 
 volatile bool get_sensors_flag = false;
 void get_line_value_callback(const char* data){

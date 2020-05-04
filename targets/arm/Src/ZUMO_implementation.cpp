@@ -1,6 +1,15 @@
 #include "ZUMO_impementation.hpp"
 #include "STM_hal.h"
 
+bool static get_enable(const char* data) {
+    auto [l] = parser::get<int>(data);
+    return (1 == l);
+}
+
+// ZUMO I2C
+extern I2C_HandleTypeDef hi2c1;
+STM32_I2C ZUMO::IMU_I2C(hi2c1);
+
 // ZUMO LEDS
 STM32_GPIO ZUMO::LED1 = {LED1_GPIO_Port, LED1_Pin};
 STM32_GPIO ZUMO::LED2 = {LED2_GPIO_Port, LED2_Pin};
@@ -15,6 +24,57 @@ void ZUMO::set_value_value_callback(const char* data) {
     ws2812b.send(); // TODO fix double sending
 }
 
+// ZUMO BME280
+BME280 ZUMO::bme280 = {IMU_I2C, 0b1110110};
+void ZUMO::set_bme280_enable_callback (const char* data) {
+    LED2.toggle();
+    bme280.set_enable(get_enable(data));
+}
+
+void ZUMO::get_bme280_value_callback(const char* data) {
+    (void) data;
+    command_manager.printer.print("b ");
+    command_manager.printer.print(bme280.get_last_temperature());
+    command_manager.printer.print(' ');
+    command_manager.printer.print(bme280.get_last_humidity());
+    command_manager.printer.print(' ');
+    command_manager.printer.print(bme280.get_last_pressure());
+    command_manager.printer.print('\n');
+}
+
+// ZUMO MPU6050
+MPU6050 ZUMO::mpu6050 = {IMU_I2C, 0x68};
+void ZUMO::get_mpu_accelerometer_value_callback(const char* data) {
+    (void) data;
+    command_manager.printer.print("ma ");
+    auto raw_data = mpu6050.accelerometer.get_last_normalised_data();
+    command_manager.printer.print(raw_data.x);
+    command_manager.printer.print(' ');
+    command_manager.printer.print(raw_data.y);
+    command_manager.printer.print(' ');
+    command_manager.printer.print(raw_data.z);
+    command_manager.printer.print('\n');
+}
+
+void ZUMO::get_mpu_gyroscope_value_callback(const char* data) {
+    (void) data;
+    command_manager.printer.print("mg ");
+    auto raw_data = mpu6050.gyroscope.get_last_normalised_data();
+    command_manager.printer.print(raw_data.x);
+    command_manager.printer.print(' ');
+    command_manager.printer.print(raw_data.y);
+    command_manager.printer.print(' ');
+    command_manager.printer.print(raw_data.z);
+    command_manager.printer.print('\n');
+}
+
+void ZUMO::set_mpu_accelerometer_enable_callback(const char* data) {
+    mpu6050.accelerometer.set_enable(get_enable(data));
+}
+
+void ZUMO::set_mpu_gyroscope_enable_callback(const char* data)  {
+    mpu6050.gyroscope.set_enable(get_enable(data));
+}
 // ZUMO MOTORS
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim15;
@@ -42,6 +102,12 @@ Encoder ZUMO::encoderR = {MOT_R_A, MOT_R_B, 1};
 Uart ZUMO::uart1 = {USART1, 230400};
 
 ZUMO::CommandManagerTempalte ZUMO::command_manager(enableInterrupts, disableInterrupts, {
+        Command("ma?", ZUMO::get_mpu_accelerometer_value_callback),
+        Command("mg?", ZUMO::get_mpu_gyroscope_value_callback),
+        Command("b?", ZUMO::get_bme280_value_callback),
+        Command("ma", set_mpu_accelerometer_enable_callback),
+        Command("mg", set_mpu_gyroscope_enable_callback),
+        Command("b", ZUMO::set_bme280_enable_callback),
         Command("ws", ZUMO::set_value_value_callback),
         Command("test", ZUMO::test_callback)
     });
@@ -62,6 +128,8 @@ void ZUMO::init() {
     PrintManager::setPrintFunction(printUart1);
     uart1.setRedirectHandler(ReadManager::putChar);
     ws2812b.init();
+    bme280.init();
+    mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2);
 
     // Hello
     command_manager.printer.print("Hello world");
