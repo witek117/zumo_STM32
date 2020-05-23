@@ -108,6 +108,12 @@ STM32_GPIO ZUMO::fault(FAULT_GPIO_Port, FAULT_Pin);
 
 DRV8833 ZUMO::motor_driver = {ZUMO::PWM_1, ZUMO::PWM_2, ZUMO::PWM_3, ZUMO::PWM_4,ZUMO::nSleep, ZUMO::fault };
 
+void ZUMO::set_motors_callback(const char* data) {
+    auto [m1, m2] = parser::get<float, float>(data);
+    motor_driver.Motor_A.set_duty_cycle(m1);
+    motor_driver.Motor_B.set_duty_cycle(m2);
+}
+
 // ZUMO ENCODERS
 STM32_GPIO ZUMO::MOT_L_A = {MOT_L_A_GPIO_Port, MOT_L_A_Pin};
 STM32_GPIO ZUMO::MOT_L_B = {MOT_L_A_GPIO_Port, MOT_L_B_Pin};
@@ -125,6 +131,7 @@ ZUMO::CommandManagerTempalte ZUMO::command_manager(enableInterrupts, disableInte
         Command("mg?", ZUMO::get_mpu_gyroscope_value_callback),
         Command("b?", ZUMO::get_bme280_value_callback),
         Command("t?", get_mcp9700_value_callback),
+        Command("m", set_motors_callback),
         Command("ma", set_mpu_accelerometer_enable_callback),
         Command("mg", set_mpu_gyroscope_enable_callback),
         Command("t", set_mcp9700_enable_callback),

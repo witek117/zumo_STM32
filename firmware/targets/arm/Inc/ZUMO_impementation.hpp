@@ -51,6 +51,8 @@ public:
 
     static DRV8833 motor_driver;
 
+    static void set_motors_callback(const char* data);
+
     // ENCODERS
     static STM32_GPIO MOT_L_A;
     static STM32_GPIO MOT_L_B;
@@ -64,7 +66,7 @@ public:
     static Uart uart1;
 
     // COMMAND MANAGER
-    using CommandManagerTempalte = CommandManager <10>;
+    using CommandManagerTempalte = CommandManager <11>;
     static CommandManagerTempalte command_manager;
     static void test_callback(const char*);
 
