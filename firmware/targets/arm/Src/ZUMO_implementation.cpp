@@ -1,6 +1,11 @@
 #include "ZUMO_impementation.hpp"
 #include "STM_hal.h"
 
+volatile uint16_t sensors[11];
+volatile uint16_t *TEMP = &sensors[8];
+volatile uint16_t *V_CURRENT_SENS = &sensors[9];
+volatile uint16_t *V_BAT = &sensors[10];
+
 bool static get_enable(const char* data) {
     auto [l] = parser::get<int>(data);
     return (1 == l);
@@ -75,6 +80,20 @@ void ZUMO::set_mpu_accelerometer_enable_callback(const char* data) {
 void ZUMO::set_mpu_gyroscope_enable_callback(const char* data)  {
     mpu6050.gyroscope.set_enable(get_enable(data));
 }
+
+// ZUMO MCP9700
+MCP9700<uint16_t > ZUMO::mcp9700((uint16_t&)(*TEMP), 4095, 3.3f);
+
+void ZUMO::set_mcp9700_enable_callback(const char* data) {
+    mcp9700.set_enable(get_enable(data));
+}
+
+void ZUMO::get_mcp9700_value_callback(const char* data) {
+    (void) data;
+    command_manager.printer.print("t ");
+    command_manager.printer.print(mcp9700.get_last_temperature());
+}
+
 // ZUMO MOTORS
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim15;
@@ -105,8 +124,10 @@ ZUMO::CommandManagerTempalte ZUMO::command_manager(enableInterrupts, disableInte
         Command("ma?", ZUMO::get_mpu_accelerometer_value_callback),
         Command("mg?", ZUMO::get_mpu_gyroscope_value_callback),
         Command("b?", ZUMO::get_bme280_value_callback),
+        Command("t?", get_mcp9700_value_callback),
         Command("ma", set_mpu_accelerometer_enable_callback),
         Command("mg", set_mpu_gyroscope_enable_callback),
+        Command("t", set_mcp9700_enable_callback),
         Command("b", ZUMO::set_bme280_enable_callback),
         Command("ws", ZUMO::set_value_value_callback),
         Command("test", ZUMO::test_callback)
@@ -121,7 +142,11 @@ void printUart1(uint8_t c) {
     ZUMO::uart1.write(c);
 }
 
+extern ADC_HandleTypeDef hadc1;
+
 void ZUMO::init() {
+    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
+
     motor_driver.init();
     uart1.init();
     command_manager.init();
@@ -130,7 +155,23 @@ void ZUMO::init() {
     ws2812b.init();
     bme280.init();
     mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2);
+    mcp9700.init();
 
     // Hello
     command_manager.printer.print("Hello world");
+}
+
+void ZUMO::loop() {
+    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
+    command_manager.run();
+    bme280.run_measurements();
+    mpu6050.run_measurements();
+    mcp9700.get_temperature();
+
+    static uint32_t k = 0;
+    k++;
+    if (k > 100000) {
+        k =  0;
+        LED1.toggle();
+    }
 }

@@ -48,54 +48,54 @@ void get_hcsro4_value_callback(const char* data) {
     hcsr04_flag = true;
 }
 
-void set_mcp9700_enable_callback(const char* data) {
-//    zumo().mcp9700.set_enable(get_enable(data));
-}
+//void set_mcp9700_enable_callback(const char* data) {
+////    zumo().mcp9700.set_enable(get_enable(data));
+//}
+//
+//volatile bool mcp9700_flag = false;
+//void get_mcp9700_value_callback(const char* data) {
+//    (void) data;
+//    mcp9700_flag = true;
+//}
 
-volatile bool mcp9700_flag = false;
-void get_mcp9700_value_callback(const char* data) {
-    (void) data;
-    mcp9700_flag = true;
-}
-
-void set_bme280_enable_callback (const char* data) {
-//    zumo().bme280.set_enable(get_enable(data));
-}
-
-volatile bool bme280_flag = false;
-void get_bme280_value_callback(const char* data) {
-    (void) data;
-    bme280_flag = true;
-}
+//void set_bme280_enable_callback (const char* data) {
+////    zumo().bme280.set_enable(get_enable(data));
+//}
+//
+//volatile bool bme280_flag = false;
+//void get_bme280_value_callback(const char* data) {
+//    (void) data;
+//    bme280_flag = true;
+//}
 
 
-volatile bool mpu_accelerometer_flag = false;
-void get_mpu_accelerometer_value_callback(const char* data) {
-    (void) data;
-    mpu_accelerometer_flag = true;
-}
+//volatile bool mpu_accelerometer_flag = false;
+//void get_mpu_accelerometer_value_callback(const char* data) {
+//    (void) data;
+//    mpu_accelerometer_flag = true;
+//}
+//
+//volatile bool mpu_gyroscope_flag = false;
+//void get_mpu_gyroscope_value_callback(const char* data) {
+//    (void) data;
+//    mpu_gyroscope_flag = true;
+//}
 
-volatile bool mpu_gyroscope_flag = false;
-void get_mpu_gyroscope_value_callback(const char* data) {
-    (void) data;
-    mpu_gyroscope_flag = true;
-}
+//void set_mpu_accelerometer_enable_callback(const char* data) {
+////    zumo().mpu6050.accelerometer.set_enable(get_enable(data));
+//}
+//
+//void set_mpu_gyroscope_enable_callback(const char* data) {
+////    zumo().mpu6050.gyroscope.set_enable(get_enable(data));
+//}
 
-void set_mpu_accelerometer_enable_callback(const char* data) {
-//    zumo().mpu6050.accelerometer.set_enable(get_enable(data));
-}
-
-void set_mpu_gyroscope_enable_callback(const char* data) {
-//    zumo().mpu6050.gyroscope.set_enable(get_enable(data));
-}
-
-volatile bool ws2812b_flag = false;
-void set_ws2812B_value_callback(const char* data) {
-    (void) data;
-    auto [index, r, g, b] = parser::get<int, int, int, int>(data);
-//    zumo().ws2812b.set_color(index, r, g, b);
-    ws2812b_flag = true;
-}
+//volatile bool ws2812b_flag = false;
+//void set_ws2812B_value_callback(const char* data) {
+//    (void) data;
+//    auto [index, r, g, b] = parser::get<int, int, int, int>(data);
+////    zumo().ws2812b.set_color(index, r, g, b);
+//    ws2812b_flag = true;
+//}
 
 void callbacks_runner(PrintManager& command_manager) {
     if (get_sensors_flag) {
@@ -125,49 +125,49 @@ void callbacks_runner(PrintManager& command_manager) {
 //        command_manager.print(zumo().hcsr04.get_last_value());
     }
 
-    if (mcp9700_flag) {
-        mcp9700_flag = false;
-        command_manager.print("t ");
-//        command_manager.print(zumo().mcp9700.get_last_temperature());
-    }
+//    if (mcp9700_flag) {
+//        mcp9700_flag = false;
+//        command_manager.print("t ");
+////        command_manager.print(zumo().mcp9700.get_last_temperature());
+//    }
 
-    if (bme280_flag) {
-        bme280_flag = false;
-        command_manager.print("b ");
-//        command_manager.print(zumo().bme280.get_last_temperature());
-        command_manager.print(' ');
-//        command_manager.print(zumo().bme280.get_last_humidity());
-        command_manager.print(' ');
-//        command_manager.print(zumo().bme280.get_last_pressure());
-        command_manager.print('\r');
-    }
+//    if (bme280_flag) {
+//        bme280_flag = false;
+//        command_manager.print("b ");
+////        command_manager.print(zumo().bme280.get_last_temperature());
+//        command_manager.print(' ');
+////        command_manager.print(zumo().bme280.get_last_humidity());
+//        command_manager.print(' ');
+////        command_manager.print(zumo().bme280.get_last_pressure());
+//        command_manager.print('\r');
+//    }
 
-    if (mpu_accelerometer_flag) {
-        mpu_accelerometer_flag = false;
-        command_manager.print("ma ");
-//        auto raw_data = zumo().mpu6050.accelerometer.get_last_normalised_data();
-//        command_manager.print(raw_data.x);
-        command_manager.print(' ');
-//        command_manager.print(raw_data.y);
-        command_manager.print(' ');
-//        command_manager.print(raw_data.z);
-        command_manager.print('\r');
-    }
+//    if (mpu_accelerometer_flag) {
+//        mpu_accelerometer_flag = false;
+//        command_manager.print("ma ");
+////        auto raw_data = zumo().mpu6050.accelerometer.get_last_normalised_data();
+////        command_manager.print(raw_data.x);
+//        command_manager.print(' ');
+////        command_manager.print(raw_data.y);
+//        command_manager.print(' ');
+////        command_manager.print(raw_data.z);
+//        command_manager.print('\r');
+//    }
 
-    if (mpu_gyroscope_flag) {
-        mpu_gyroscope_flag = false;
-        command_manager.print("mg ");
-//        auto raw_data = zumo().mpu6050.gyroscope.get_last_normalised_data();
-//        command_manager.print(raw_data.x);
-        command_manager.print(' ');
-//        command_manager.print(raw_data.y);
-        command_manager.print(' ');
-//        command_manager.print(raw_data.z);
-        command_manager.print('\r');
-    }
+//    if (mpu_gyroscope_flag) {
+//        mpu_gyroscope_flag = false;
+//        command_manager.print("mg ");
+////        auto raw_data = zumo().mpu6050.gyroscope.get_last_normalised_data();
+////        command_manager.print(raw_data.x);
+//        command_manager.print(' ');
+////        command_manager.print(raw_data.y);
+//        command_manager.print(' ');
+////        command_manager.print(raw_data.z);
+//        command_manager.print('\r');
+//    }
 
-    if (ws2812b_flag) {
-        ws2812b_flag = false;
-//        zumo().ws2812b.send();
-    }
+//    if (ws2812b_flag) {
+//        ws2812b_flag = false;
+////        zumo().ws2812b.send();
+//    }
 }

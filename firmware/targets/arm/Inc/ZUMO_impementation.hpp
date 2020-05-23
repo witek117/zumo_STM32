@@ -8,6 +8,7 @@
 #include "UART.hpp"
 #include "STM_WS2812B.hpp"
 #include "BME280.hpp"
+#include "MCP9700.hpp"
 #include "command_terminal/command_manager.h"
 
 class ZUMO {
@@ -34,6 +35,11 @@ public:
     static void set_mpu_accelerometer_enable_callback(const char*);
     static void set_mpu_gyroscope_enable_callback(const char*);
 
+    // MCP9700
+    static MCP9700<uint16_t > mcp9700; //((uint16_t&)(*TEMP), 4095, 3.3f);
+    static void set_mcp9700_enable_callback(const char* data);
+    static void get_mcp9700_value_callback(const char* data);
+
     // MOTORS
     static STM32_PWM<1000> PWM_1;
     static STM32_PWM<1000> PWM_2;
@@ -58,7 +64,7 @@ public:
     static Uart uart1;
 
     // COMMAND MANAGER
-    using CommandManagerTempalte = CommandManager <8>;
+    using CommandManagerTempalte = CommandManager <10>;
     static CommandManagerTempalte command_manager;
     static void test_callback(const char*);
 
@@ -84,18 +90,7 @@ public:
         return staticZumo;
     }
 
-    static void loop() {
-        command_manager.run();
-        bme280.run_measurements();
-        mpu6050.run_measurements();
-
-        static uint32_t k = 0;
-        k++;
-        if (k > 100000) {
-            k =  0;
-            LED1.toggle();
-        }
-    }
+    static void loop();
 
 
 

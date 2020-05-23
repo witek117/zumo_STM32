@@ -9,7 +9,7 @@
 //#include "commands_runner.h"
 #include "ZUMO_impementation.hpp"
 
-extern ADC_HandleTypeDef hadc1;
+//extern ADC_HandleTypeDef hadc1;
 //extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 //extern TIM_HandleTypeDef htim15;
@@ -36,10 +36,10 @@ void hal::disable_interrupts() {
 //
 //STM32_I2C IMU_I2C(hi2c1);
 
-volatile uint16_t sensors[11];
-volatile uint16_t *TEMP = &sensors[8];
-volatile uint16_t *V_CURRENT_SENS = &sensors[9];
-volatile uint16_t *V_BAT = &sensors[10];
+//volatile uint16_t sensors[11];
+//volatile uint16_t *TEMP = &sensors[8];
+//volatile uint16_t *V_CURRENT_SENS = &sensors[9];
+//volatile uint16_t *V_BAT = &sensors[10];
 
 //extern Comman_manager_template command_manager;
 
@@ -106,7 +106,7 @@ void Main() {
 //    uart2.write("siema", 5);
 //    uart3.write("siema", 5);
 
-    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
+//    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
 
     HAL_TIM_Base_Start_IT(&htim2);
 //    command_manager.init();
