@@ -121,8 +121,8 @@ public:
             if (command.parse(data, command_title_len)) {
                 return;
             }
-            printer.print("undefined\n");
         }
+        printer.print("undefined\n");
     }
 
     char *copy_from_fifo_to_buffer() {
