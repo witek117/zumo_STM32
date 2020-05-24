@@ -34,6 +34,9 @@ public:
     }
 
     float get_last_temperature() {
+        if (!enable) {
+            return 0.0;
+        }
         return temperature;
     }
 
@@ -44,6 +47,10 @@ public:
 
     void set_enable(bool enable_) override {
         enable = enable_;
+    }
+
+    bool get_enable() {
+        return enable;
     }
 
     void init() { }

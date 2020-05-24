@@ -1,6 +1,8 @@
 import serial
 import WS2812
 import communication
+import mcp9700
+
 print("ZUMO test program")
 print("COM PORT: ")
 # com_port = input()
@@ -12,5 +14,7 @@ print("Connecting to " + com_port)
 ser = serial.Serial('COM3', 230400, timeout=0.1)
 
 communication.test(ser)
+
+mcp9700.test(ser)
 
 WS2812.test(ser)
