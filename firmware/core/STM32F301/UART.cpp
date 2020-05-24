@@ -178,6 +178,10 @@ void UART_IRQ(Uart* uartHandler) {
         uartHandler->uart->ICR |=  USART_ICR_IDLECF;
     }
 
+    if (isrflags & USART_ISR_ORE) {
+        uartHandler->uart->ICR |=  USART_ICR_ORECF;
+    }
+
     if (isrflags & USART_ISR_TC) {
         uartHandler->uart->ICR |= USART_ICR_TCCF;
     }
@@ -185,6 +189,11 @@ void UART_IRQ(Uart* uartHandler) {
     if (isrflags & USART_ISR_TXE) {
         uartHandler->uart->RQR |= USART_RQR_TXFRQ;
     }
+
+//    isrflags   = READ_REG(uartHandler->uart->ISR);
+//    if(isrflags) {
+//        READ_REG(uartHandler->uart->ISR);
+//    }
 }
 
 extern "C" {
