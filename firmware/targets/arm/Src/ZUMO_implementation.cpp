@@ -30,7 +30,7 @@ void ZUMO::set_value_value_callback(const char* data) {
 }
 
 // ZUMO BME280
-BME280 ZUMO::bme280 = {IMU_I2C, 0b1110110};
+BME280 ZUMO::bme280 = {IMU_I2C, 0b1111110};
 void ZUMO::set_bme280_enable_callback (const char* data) {
     LED2.toggle();
     bme280.set_enable(get_enable(data));
@@ -93,6 +93,9 @@ void ZUMO::get_mcp9700_value_callback(const char* data) {
     command_manager.printer.print("t ");
     command_manager.printer.print(mcp9700.get_last_temperature());
 }
+
+// ZUMO BHI160
+BHYSensor ZUMO::bhi160 = {IMU_I2C, 0x68};
 
 // ZUMO MOTORS
 extern TIM_HandleTypeDef htim1;
@@ -165,7 +168,12 @@ void ZUMO::init() {
     mcp9700.init();
 
     // Hello
-    command_manager.printer.print("Hello world");
+    command_manager.printer.print("Hello world\r\n");
+
+    bhi160.init();
+    bhi160.run();
+
+
 }
 
 void ZUMO::loop() {
@@ -181,4 +189,13 @@ void ZUMO::loop() {
         k =  0;
         LED1.toggle();
     }
+}
+
+void print(const char *str){
+    ZUMO::command_manager.printer.print(str);
+}
+
+void BHIInit(void){
+    print("BHI init\r\n");
+
 }

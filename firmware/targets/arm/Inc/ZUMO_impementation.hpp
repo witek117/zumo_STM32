@@ -1,5 +1,8 @@
 # pragma once
 
+#ifndef ZUMO_H_
+#define ZUMO_H_
+
 #include "MPU6050.hpp"
 #include "main.h"
 #include "STM_hal.h"
@@ -10,6 +13,7 @@
 #include "BME280.hpp"
 #include "MCP9700.hpp"
 #include "command_terminal/command_manager.h"
+#include "bhy.hpp"
 
 class ZUMO {
     // I2C
@@ -39,6 +43,9 @@ public:
     static MCP9700<uint16_t > mcp9700; //((uint16_t&)(*TEMP), 4095, 3.3f);
     static void set_mcp9700_enable_callback(const char* data);
     static void get_mcp9700_value_callback(const char* data);
+
+    // BHI160
+    static BHYSensor bhi160;
 
     // MOTORS
     static STM32_PWM<1000> PWM_1;
@@ -94,6 +101,10 @@ public:
 
     static void loop();
 
-
-
 };
+
+
+void print(const char *s);
+void BHIInit(void);
+
+#endif

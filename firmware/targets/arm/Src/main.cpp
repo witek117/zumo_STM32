@@ -3,6 +3,7 @@
 //#include "cores/UART_crossing.h"
 #include "main.h"
 #include "STM_hal.h"
+#include "BHI160.h"
 
 //#include "STM_WS2812B.hpp"
 //#include "UART.hpp"
@@ -90,6 +91,7 @@ void Main() {
     ZUMO& zumo = ZUMO::zumo();
     zumo.init();
 
+
 //    zumo().init();
 //    Uart uart1 = {USART1, 230400};
 //    Uart uart2 = {USART2, 230400};
@@ -102,14 +104,25 @@ void Main() {
 //    uart1.init();
 //    uart2.init();
 //    uart3.init();
-//    uart1.write("siema", 5);
+//    uart1.write("siem1", 5);
 //    uart2.write("siema", 5);
 //    uart3.write("siema", 5);
 
 //    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
-
+    BHIInit();
     HAL_TIM_Base_Start_IT(&htim2);
 //    command_manager.init();
+    uint32_t k = 0;
+    while(true){
+        zumo.bhi160.wait(1000);
+        zumo.LED1.toggle();
+        zumo.command_manager.printer.print("dupa\r\n");
+//        k++;
+//        if (k > 1000000) {
+//            k =  0;
+//            zumo.LED1.toggle();
+//        }
+    }
     while(true) {
         ZUMO::loop();
 

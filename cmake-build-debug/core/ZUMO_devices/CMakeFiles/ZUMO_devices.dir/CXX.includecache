@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../core/ZUMO_hal/HALina_I2C.hpp
+cstdint
+-
+
+../core/cores/commands_interface.h
+
+C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/MPU6050.cpp
+cmath
+-
+MPU6050.hpp
+C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/MPU6050.hpp
+
+C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/MPU6050.hpp
+cstdint
+-
+cstdlib
+-
+cmath
+-
+cores/commands_interface.h
+C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/cores/commands_interface.h
+ZUMO_hal/HALina_I2C.hpp
+C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/ZUMO_hal/HALina_I2C.hpp
+

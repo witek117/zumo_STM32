@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/CMakeFiles/gsl_source"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/CMakeFiles/gsl_source.rule"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/CMakeFiles/gsl_source-complete.rule"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/gsl/src/gsl_source-stamp/gsl_source-install.rule"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/gsl/src/gsl_source-stamp/gsl_source-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/gsl/src/gsl_source-stamp/gsl_source-download.rule"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/gsl/src/gsl_source-stamp/gsl_source-patch.rule"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/gsl/src/gsl_source-stamp/gsl_source-configure.rule"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/gsl/src/gsl_source-stamp/gsl_source-build.rule"
+		},
+		{
+			"file" : "C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release/core/external/gsl/gsl/src/gsl_source-stamp/gsl_source-skip-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"gsl_source"
+		],
+		"name" : "gsl_source"
+	}
+}

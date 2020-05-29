@@ -1,0 +1,10 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal/HALina_ZUMO.cpp
+

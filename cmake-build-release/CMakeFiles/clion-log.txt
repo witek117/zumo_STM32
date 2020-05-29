@@ -1,0 +1,28 @@
+"C:\Program Files\JetBrains\CLion 2019.2.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - MinGW Makefiles" C:\Users\eitowiec\Desktop\02_zumo\03_zumo_NEW_IMPL
+-- Build type: Release
+-- Target platform arm
+CMake Deprecation Warning at C:/Program Files/JetBrains/CLion 2019.2.3/bin/cmake/win/share/cmake-3.15/Modules/CMakeForceCompiler.cmake:75 (message):
+  The CMAKE_FORCE_C_COMPILER macro is deprecated.  Instead just set
+  CMAKE_C_COMPILER and allow CMake to identify the compiler.
+Call Stack (most recent call first):
+  targets/arm/toolchain.cmake:20 (CMAKE_FORCE_C_COMPILER)
+  CMakeLists.txt:16 (include)
+
+
+CMake Deprecation Warning at C:/Program Files/JetBrains/CLion 2019.2.3/bin/cmake/win/share/cmake-3.15/Modules/CMakeForceCompiler.cmake:89 (message):
+  The CMAKE_FORCE_CXX_COMPILER macro is deprecated.  Instead just set
+  CMAKE_CXX_COMPILER and allow CMake to identify the compiler.
+Call Stack (most recent call first):
+  targets/arm/toolchain.cmake:21 (CMAKE_FORCE_CXX_COMPILER)
+  CMakeLists.txt:16 (include)
+
+
+-- Using C compiler from C:/Program Files (x86)/GNU Tools Arm Embedded/9 2019-q4-major/bin/arm-none-eabi-gcc.exe
+-- Using C++ compiler from C:/Program Files (x86)/GNU Tools Arm Embedded/9 2019-q4-major/bin/arm-none-eabi-g++.exe
+-- cortex-m4 fpv4-sp-d16 hard -DUSE_HAL_DRIVER;-DSTM32F301x8
+C_DEFS: -DUSE_HAL_DRIVER -DSTM32F301x8
+SOURCES: C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/LineDebounce.h;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/PID.h;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/UART_crossing.cpp;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/UART_crossing.h;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/commands_interface.h;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/commands_runner.cpp;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/commands_runner.h;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/hal.h;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/main.cpp;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/main.hpp;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/mean.h
+Device STM32F301R8
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-release

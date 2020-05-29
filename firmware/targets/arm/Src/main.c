@@ -69,8 +69,10 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
+int __io_putchar(int ch) {
+    
+    // Code to write character 'ch' on the UART
+}
 
 /**
   * @brief  The application entry point.
@@ -148,6 +150,7 @@ int main(void)
 //  HAL_UART_Transmit(&huart2, ddd, 5, 10);
     void Main();
     Main();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

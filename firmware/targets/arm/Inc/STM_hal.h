@@ -120,6 +120,9 @@ public:
         uint8_t buffer[3] = {uint8_t (register_address), uint8_t(data >> 8u), uint8_t(data)};
         HAL_I2C_Master_Transmit((I2C_HandleTypeDef*)&hi2c, address, buffer, 3, 10);
     }
+    void write(uint8_t address, uint8_t *data, uint8_t len_data) override{
+        HAL_I2C_Master_Transmit((I2C_HandleTypeDef*)&hi2c, address, data, len_data, 10);
+    }
 
     uint8_t read(uint8_t address, uint8_t register_address) override {
         HAL_I2C_Master_Transmit((I2C_HandleTypeDef*)&hi2c, address, (uint8_t*)&register_address, 1, 10);

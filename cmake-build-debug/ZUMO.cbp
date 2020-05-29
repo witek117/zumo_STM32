@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="ZUMO"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\targets\;CMake Files\targets\arm\;CMake Files\core\;CMake Files\core\STM32F301\;CMake Files\core\ZUMO_hal\;CMake Files\core\ZUMO_devices\;CMake Files\core\external\;CMake Files\core\external\gsl\;CMake Files\core\command_terminal\;CMake Files\core\cores\;CMake Files\cmake-build-debug\;CMake Files\cmake-build-debug\core\;CMake Files\cmake-build-debug\core\external\;CMake Files\cmake-build-debug\core\external\gsl\;CMake Files\cmake-build-debug\core\external\gsl\gsl\;CMake Files\cmake-build-debug\core\external\gsl\gsl\tmp\;CMake Files\jlink\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="STM32F301">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libSTM32F301.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/CMSIS/Device/ST/STM32F3xx/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/CMSIS/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Inc"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301/Makefile&quot;  VERBOSE=1 STM32F301"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="STM32F301/fast">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libSTM32F301.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/CMSIS/Device/ST/STM32F3xx/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/CMSIS/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Inc"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301/Makefile&quot;  VERBOSE=1 STM32F301/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/STM32F301/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ZUMO_hal">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libZUMO_hal.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal/Makefile&quot;  VERBOSE=1 ZUMO_hal"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ZUMO_hal/fast">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libZUMO_hal.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal/Makefile&quot;  VERBOSE=1 ZUMO_hal/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_hal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ZUMO_devices">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libZUMO_devices.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices/Makefile&quot;  VERBOSE=1 ZUMO_devices"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ZUMO_devices/fast">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libZUMO_devices.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices/Makefile&quot;  VERBOSE=1 ZUMO_devices/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/ZUMO_devices/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="gsl_source">
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/Makefile&quot;  VERBOSE=1 gsl_source"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="command_terminal">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libcommand_terminal.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal/Makefile&quot;  VERBOSE=1 command_terminal"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="command_terminal/fast">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libcommand_terminal.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal/Makefile&quot;  VERBOSE=1 command_terminal/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/command_terminal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="core">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libcore.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/gsl/src/gsl_source/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores/Makefile&quot;  VERBOSE=1 core"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="core/fast">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/lib/libcore.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/gsl/src/gsl_source/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores/Makefile&quot;  VERBOSE=1 core/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/cores/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="arm.flash_stlink">
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 arm.flash_stlink"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="arm">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/bin/arm" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Inc"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc/Legacy"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/CMSIS/Device/ST/STM32F3xx/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/CMSIS/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/../../core"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/gsl/src/gsl_source/include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/CMSIS/Device/ST/STM32F3xx/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/CMSIS/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Inc"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 arm"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="arm/fast">
+				<Option output="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/bin/arm" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/build/arm/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Inc"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc/Legacy"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/CMSIS/Device/ST/STM32F3xx/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/CMSIS/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/../../core"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/gsl/src/gsl_source/include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../cores"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/CMSIS/Device/ST/STM32F3xx/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/CMSIS/Include"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Drivers/STM32F3xx_HAL_Driver/Inc"/>
+					<Add directory="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/../../targets/arm/Inc"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/arm-none-eabi"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include/c++/9.2.1/backward"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/include-fixed"/>
+					<Add directory="c:\program files (x86)\gnu tools arm embedded\9 2019-q4-major\bin\../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 arm/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="arm.flash_jlink">
+				<Option working_dir="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 arm.flash_jlink"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/targets/arm/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/GPIO.cpp">
+			<Option target="STM32F301"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/GPIO.hpp">
+			<Option target="STM32F301"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/UART.cpp">
+			<Option target="STM32F301"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/UART.hpp">
+			<Option target="STM32F301"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/ring_buffer.cpp">
+			<Option target="STM32F301"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/ring_buffer.h">
+			<Option target="STM32F301"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/BME280.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/DRV8833.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/HC-SR04.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/KTIR0711S.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/MCP9700.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/MPU6050.cpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/MPU6050.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/WS2812B.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/ZUMO.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/encoder.hpp">
+			<Option target="ZUMO_devices"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal/HALina_GPIO.hpp">
+			<Option target="ZUMO_hal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal/HALina_I2C.hpp">
+			<Option target="ZUMO_hal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal/HALina_PWM.hpp">
+			<Option target="ZUMO_hal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal/HALina_UART.hpp">
+			<Option target="ZUMO_hal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal/HALina_ZUMO.cpp">
+			<Option target="ZUMO_hal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal/Command.h">
+			<Option target="command_terminal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal/argumets_parser.cpp">
+			<Option target="command_terminal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal/command_manager.cpp">
+			<Option target="command_terminal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal/command_manager.h">
+			<Option target="command_terminal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal/cyclicBuffer.hpp">
+			<Option target="command_terminal"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/LineDebounce.h">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/PID.h">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/UART_crossing.cpp">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/UART_crossing.h">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/commands_interface.h">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/commands_runner.cpp">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/commands_runner.h">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/hal.h">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/main.cpp">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/main.hpp">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/mean.h">
+			<Option target="core"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_adc.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_adc_ex.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Src/ZUMO_implementation.cpp">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Src/main.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Src/main.cpp">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Src/stm32f3xx_hal_msp.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Src/stm32f3xx_it.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Src/syscalls.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/Src/system_stm32f3xx.c">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/startup_stm32f301x8.s">
+			<Option target="arm"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/functions.cmake">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\targets\arm\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/settings.cmake">
+			<Option virtualFolder="CMake Files\targets\arm\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/targets/arm/toolchain.cmake">
+			<Option virtualFolder="CMake Files\targets\arm\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\core\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/STM32F301/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\core\STM32F301\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_hal/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\core\ZUMO_hal\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/ZUMO_devices/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\core\ZUMO_devices\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/external/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\core\external\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/external/gsl/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\core\external\gsl\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/command_terminal/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\core\command_terminal\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/core/cores/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\core\cores\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/cmake-build-debug/core/external/gsl/gsl/tmp/gsl_source-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\core\external\gsl\gsl\tmp\"/>
+		</Unit>
+		<Unit filename="C:/Users/eitowiec/Desktop/02_zumo/03_zumo_NEW_IMPL/jlink/flash.jlink.template">
+			<Option virtualFolder="CMake Files\jlink\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

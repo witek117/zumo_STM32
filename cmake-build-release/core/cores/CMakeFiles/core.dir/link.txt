@@ -1,0 +1,2 @@
+C:\PROGRA~2\GNUTOO~1\92019-~1\bin\AR743F~1.EXE qc ..\..\build\arm\lib\libcore.a  CMakeFiles/core.dir/UART_crossing.cpp.obj CMakeFiles/core.dir/commands_runner.cpp.obj CMakeFiles/core.dir/main.cpp.obj
+C:\PROGRA~2\GNUTOO~1\92019-~1\bin\AR738D~1.EXE ..\..\build\arm\lib\libcore.a
