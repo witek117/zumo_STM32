@@ -62,8 +62,8 @@ public:
     static Encoder encoderL;
     static Encoder encoderR;
 
-    static inline uint16_t encoderLeftValue = 0;
-    static inline uint16_t encoderRightValue = 0;
+    static inline int16_t encoderLeftValue = 0;
+    static inline int16_t encoderRightValue = 0;
 
     static void get_encoders_callback(const char* );
 
