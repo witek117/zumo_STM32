@@ -109,7 +109,6 @@ void Main() {
 //    uart3.write("siema", 5);
 
 //    HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
-    BHIInit();
     HAL_TIM_Base_Start_IT(&htim2);
 //    command_manager.init();
     uint32_t k = 0;

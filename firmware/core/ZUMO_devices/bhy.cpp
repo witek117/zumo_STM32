@@ -120,15 +120,18 @@ int8_t BHYSensor::init(void)
     uint8_t tries = nTries;
     uint8_t data;
 
- //   i2c->begin();
-
     while (tries > 0)
     {
         status = read(BHY_REG_PRODUCT_ID_ADDR, &data);
         --tries;
 
-        if (data == BHY_PRODUCT_ID)
+        if (data == BHY_PRODUCT_ID){
+            bhiPrint("Readed product id is");
+            bhiPrint(data);
+            bhiPrint("\r\n");
             break;
+        }
+
 #ifdef DEBUG_MODE
         if (debugOut && (debugLevel >= BHY_INFORMATIVE))
         {
@@ -141,7 +144,7 @@ int8_t BHYSensor::init(void)
             bhiPrint(data);
             bhiPrint(" [read return code ");
             bhiPrint(status);
-            bhiPrint("]");
+            bhiPrint("]\r\n");
         }
 #endif
 
@@ -156,6 +159,7 @@ int8_t BHYSensor::init(void)
 
     productId = data;
 
+
     // Request reset
     status = write(BHY_REG_RESET_REQUEST_ADDR, BHY_ENABLE);
 
@@ -165,7 +169,7 @@ int8_t BHYSensor::init(void)
 #ifdef DEBUG_MODE
     if (debugOut && (debugLevel >= BHY_DEBUG) && methodTrace)
     {
-        bhiPrint("/begin()");
+        bhiPrint("/begin()\r\n");
     }
 #endif
 
@@ -180,7 +184,7 @@ int8_t BHYSensor::loadFirmware(const uint8_t *bhyFW)
     {
         bhiPrint("loadFirmware(0x");
         bhiPrint((long)bhyFW);
-        bhiPrint(")");
+        bhiPrint(")\r\n");
     }
 #endif
 
@@ -210,12 +214,14 @@ int8_t BHYSensor::loadFirmware(const uint8_t *bhyFW)
         bhiPrint(signatureFlag);
         bhiPrint(", Expected ROM Version: 0x");
         bhiPrint(romVerExp);
+        bhiPrint("\r\n");
 
         bhiPrint("Read ROM Version: 0x");
         bhiPrint(romVersion);
         bhiPrint(" [read return code ");
         bhiPrint(status);
         bhiPrint("]");
+        bhiPrint("\r\n");
     }
 #endif
 
@@ -234,6 +240,7 @@ int8_t BHYSensor::loadFirmware(const uint8_t *bhyFW)
     {
         bhiPrint("Binary to load size: ");
         bhiPrint(dataToProcess);
+        bhiPrint("\r\n");
     }
 #endif
 
@@ -311,8 +318,10 @@ int8_t BHYSensor::loadFirmware(const uint8_t *bhyFW)
     {
         bhiPrint("Expected CRC: 0x");
         bhiPrint(crcFromFw);
+        bhiPrint("\r\n");
         bhiPrint("Device CRC: 0x");
         bhiPrint(crcFromDevice);
+        bhiPrint("\r\n");
     }
 #endif
 
@@ -326,8 +335,10 @@ int8_t BHYSensor::loadFirmware(const uint8_t *bhyFW)
         {
             bhiPrint("Expected CRC: 0x");
             bhiPrint(crcFromFw);
+            bhiPrint("\r\n");
             bhiPrint("Host CRC: 0x");
             bhiPrint(crcFromDevice);
+            bhiPrint("\r\n");
         }
 #endif
 
@@ -1270,6 +1281,11 @@ void BHYSensor::run(void)
     {
         processEvent();
     } while (nextEventDataType != BHY_INVALID_DATA_TYPE);
+}
+
+void BHYSensor::test() {
+    print("\r\nStart bhi testing in while loop\r\n");
+
 }
 
 void BHYSensor::processEvent(void)
@@ -2446,7 +2462,7 @@ int8_t BHYSensor::read(uint8_t regAddr, uint8_t *data, uint16_t length)
     uint8_t *ptrbuf = NULL;
     ptrbuf = i2c.read(deviceId, regAddr, length);
 
-    if(NULL){
+    if(ptrbuf){
         memcpy(data, ptrbuf, length);
     }else{
 #ifdef DEBUG_MODE

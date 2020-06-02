@@ -105,6 +105,8 @@ public:
 
 
 void print(const char *s);
-void BHIInit(void);
+void BHIInit(BHYSensor &bhi160);
+bool checkSensorStatus(BHYSensor &bhi160);
+void orientationHandler(bhyVector data, bhyVirtualSensor type);
 
 #endif

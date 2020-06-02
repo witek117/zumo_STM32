@@ -108,6 +108,8 @@ void setEventDump(bool enable);
     int8_t init(void);
     void  init2(void);
 
+    void test(void);
+
     void wait(uint16_t delay_ms);
 
     void bhiPrint(const char* str);
@@ -209,7 +211,7 @@ int8_t getPhysicalSensorStatus(bhyPhysicalStatus *accel, bhyPhysicalStatus *gyro
 protected:
 
     #ifdef DEBUG_MODE
-bhyDebugLevel debugLevel = BHY_NONE;
+bhyDebugLevel debugLevel = BHY_ALL;
 bool commDump = false;
 bool methodTrace = false;
 bool eventDump = false;

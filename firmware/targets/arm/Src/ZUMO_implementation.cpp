@@ -95,7 +95,7 @@ void ZUMO::get_mcp9700_value_callback(const char* data) {
 }
 
 // ZUMO BHI160
-BHYSensor ZUMO::bhi160 = {IMU_I2C, 0x68};
+BHYSensor ZUMO::bhi160 = {IMU_I2C, BHY_I2C_ADDR};
 
 // ZUMO MOTORS
 extern TIM_HandleTypeDef htim1;
@@ -172,7 +172,7 @@ void ZUMO::init() {
 
     bhi160.init();
     bhi160.run();
-
+    BHIInit(bhi160);
 
 }
 
@@ -195,7 +195,110 @@ void print(const char *str){
     ZUMO::command_manager.printer.print(str);
 }
 
-void BHIInit(void){
-    print("BHI init\r\n");
+volatile bool intrToggled = false;
+bool newOrientationData = false;
+float heading, roll, pitch;
+uint8_t status;
 
+void bhyInterruptHandler(void)
+{
+    intrToggled = true;
+}
+void waitForBhyInterrupt(void)
+{
+    while (!intrToggled)
+        ;
+    intrToggled = false;
+}
+
+void orientationHandler(bhyVector data, bhyVirtualSensor type)
+{
+    heading = data.x;
+    roll = data.z;
+    pitch = data.y;
+    status = data.status;
+    newOrientationData = true;
+}
+
+void BHIInit(BHYSensor &bhi160){
+
+    print("BHI testing\r\n");
+
+    /* Check to see if something went wrong. */
+    if (!checkSensorStatus(bhi160))
+        return;
+
+    /* Install a vector callback function to process the data received from the wake up Orientation sensor */
+
+    if (bhi160.installSensorCallback(BHY_VS_ORIENTATION, true, orientationHandler))
+    {
+        checkSensorStatus(bhi160);
+
+        return;
+    }
+    else{
+        bhi160.bhiPrint("Orientation callback installed\r\n");
+    }
+
+
+    /* Enable the Orientation virtual sensor that gives you the heading, roll, pitch
+       based of data from the accelerometer, gyroscope and magnetometer.
+       The sensor is set into wake up mode so as to interrupt the host when a new sample is available
+       Additionally, the FIFO buffer of the sensor is flushed for all previous data
+       The maximum report latency of the sensor sample, the sensitivity and the dynamic range
+       are set to 0
+     */
+    if (bhi160.configVirtualSensor(BHY_VS_ORIENTATION, true, BHY_FLUSH_ALL, 200, 0, 0, 0))
+    {
+        bhi160.bhiPrint("Loaded firmware may not support requested sensor id.\r\n");
+    }else {
+        //bhi160.bhiPrint(bhi160.getSensorName(BHY_VS_ORIENTATION));
+        bhi160.bhiPrint(" virtual sensor enabled\r\n");
+    }
+
+    while(true){
+        bhi160.wait(2000);
+        bhi160.run();
+        if(!checkSensorStatus(bhi160)){
+            bhi160.bhiPrint("\r\nsomething is wrong");
+            bhi160.bhiPrint("\r\n");
+        }
+        if (newOrientationData)
+        {
+            /* Can also be viewed using the plotter */
+            bhi160.bhiPrint((uint32_t)heading);
+            bhi160.bhiPrint((uint32_t)pitch);
+            bhi160.bhiPrint((uint32_t)roll);
+            bhi160.bhiPrint("\r\n");
+            newOrientationData = false;
+        }else{
+            bhi160.bhiPrint("no more data orientation\r\n");
+        }
+    }
+}
+
+bool checkSensorStatus(BHYSensor &bhi160)
+{
+    if (bhi160.status == BHY_OK)
+        return true;
+
+    if (bhi160.status < BHY_OK) /* All error codes are negative */
+    {
+        bhi160.bhiPrint("Error code: (");
+        bhi160.bhiPrint(bhi160.status);
+        bhi160.bhiPrint("). ");
+        bhi160.bhiPrint(bhi160.status); //to do---------------------------
+
+        return false; /* Something has gone wrong */
+    }
+    else /* All warning codes are positive */
+    {
+        bhi160.bhiPrint("Warning code: (");
+        bhi160.bhiPrint(bhi160.status);
+        bhi160.bhiPrint(").");
+
+        return true;
+    }
+
+    return true;
 }
