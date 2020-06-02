@@ -130,6 +130,11 @@ void ZUMO::get_encoders_callback(const char* ) {
     command_manager.printer.print(encoderRightValue);
 }
 
+// ZUMO current
+void ZUMO::get_current_callback(const char*) {
+    command_manager.printer.print(*V_CURRENT_SENS);
+}
+
 // ZUMO get battery value
 void ZUMO::get_battery_value_callback(const char*) {
     command_manager.printer.print("bt ");
@@ -147,6 +152,7 @@ ZUMO::CommandManagerTempalte ZUMO::command_manager(enableInterrupts, disableInte
         Command("b?", ZUMO::get_bme280_value_callback),
         Command("t?", get_mcp9700_value_callback),
         Command("e?", get_encoders_callback),
+        Command("c?", get_current_callback),
         Command("m", set_motors_callback),
         Command("ma", set_mpu_accelerometer_enable_callback),
         Command("mg", set_mpu_gyroscope_enable_callback),

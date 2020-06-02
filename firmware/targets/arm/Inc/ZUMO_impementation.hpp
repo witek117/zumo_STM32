@@ -67,6 +67,9 @@ public:
 
     static void get_encoders_callback(const char* );
 
+    // get actual current
+    static void get_current_callback(const char*);
+
     // get battery value
     static void get_battery_value_callback(const char*);
 
@@ -74,7 +77,7 @@ public:
     static Uart uart1;
 
     // COMMAND MANAGER
-    using CommandManagerTempalte = CommandManager <13>;
+    using CommandManagerTempalte = CommandManager <14>;
     static CommandManagerTempalte command_manager;
     static void test_callback(const char*);
 
