@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=D:/Git/zumo_STM32/targets/arm/Inc
+HeaderPath=D:/Git/zumo_STM32/firmware/targets/arm/Inc
 HeaderFiles=stm32f3xx_it.h;stm32f3xx_hal_conf.h;main.h;
-SourcePath=D:/Git/zumo_STM32/targets/arm/Src
+SourcePath=D:/Git/zumo_STM32/firmware/targets/arm/Src
 SourceFiles=stm32f3xx_it.c;stm32f3xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]

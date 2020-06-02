@@ -62,11 +62,14 @@ public:
     static Encoder encoderL;
     static Encoder encoderR;
 
+    // get battery value
+    static void get_battery_value_callback(const char*);
+
     // UARTS
     static Uart uart1;
 
     // COMMAND MANAGER
-    using CommandManagerTempalte = CommandManager <11>;
+    using CommandManagerTempalte = CommandManager <12>;
     static CommandManagerTempalte command_manager;
     static void test_callback(const char*);
 

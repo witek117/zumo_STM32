@@ -123,6 +123,14 @@ STM32_GPIO ZUMO::MOT_R_B = {MOT_R_B_GPIO_Port, MOT_R_B_Pin};
 Encoder ZUMO::encoderL = {MOT_L_A, MOT_L_B, 1};
 Encoder ZUMO::encoderR = {MOT_R_A, MOT_R_B, 1};
 
+// ZUMO get battery value
+void ZUMO::get_battery_value_callback(const char*) {
+    command_manager.printer.print("bt ");
+    float batteryValue = *V_BAT;
+    batteryValue /= 256.0;
+    command_manager.printer.print(batteryValue);
+}
+
 // ZUMO UARTS
 Uart ZUMO::uart1 = {USART1, 230400};
 
@@ -137,6 +145,7 @@ ZUMO::CommandManagerTempalte ZUMO::command_manager(enableInterrupts, disableInte
         Command("t", set_mcp9700_enable_callback),
         Command("b", ZUMO::set_bme280_enable_callback),
         Command("ws", ZUMO::set_value_value_callback),
+        Command("bt?", ZUMO::get_battery_value_callback),
         Command("test", ZUMO::test_callback)
     });
 
