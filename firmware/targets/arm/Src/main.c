@@ -683,12 +683,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MOT_L_A_Pin ECHO_Pin FAULT_Pin MOT_L_B_Pin 
-                           MOT_R_A_Pin MOT_R_B_Pin */
-  GPIO_InitStruct.Pin = MOT_L_A_Pin|ECHO_Pin|FAULT_Pin|MOT_L_B_Pin 
-                          |MOT_R_A_Pin|MOT_R_B_Pin;
+  /*Configure GPIO pins : MOT_L_A_Pin MOT_L_B_Pin MOT_R_A_Pin MOT_R_B_Pin */
+  GPIO_InitStruct.Pin = MOT_L_A_Pin|MOT_L_B_Pin|MOT_R_A_Pin|MOT_R_B_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : TRIG_Pin SHDN_MOTOR_TPS_Pin */
@@ -696,6 +694,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : ECHO_Pin FAULT_Pin */
+  GPIO_InitStruct.Pin = ECHO_Pin|FAULT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PG_6V_Pin SW1_Pin */

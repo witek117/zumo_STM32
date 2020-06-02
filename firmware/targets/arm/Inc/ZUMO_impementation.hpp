@@ -62,6 +62,11 @@ public:
     static Encoder encoderL;
     static Encoder encoderR;
 
+    static inline uint16_t encoderLeftValue = 0;
+    static inline uint16_t encoderRightValue = 0;
+
+    static void get_encoders_callback(const char* );
+
     // get battery value
     static void get_battery_value_callback(const char*);
 
@@ -69,7 +74,7 @@ public:
     static Uart uart1;
 
     // COMMAND MANAGER
-    using CommandManagerTempalte = CommandManager <12>;
+    using CommandManagerTempalte = CommandManager <13>;
     static CommandManagerTempalte command_manager;
     static void test_callback(const char*);
 
@@ -88,6 +93,15 @@ public:
     static void ISR_10kHz() {
         encoderL.encoder10kHzTickISR();
         encoderR.encoder10kHzTickISR();
+
+        static uint16_t index = 0;
+
+        index ++;
+        if (index > 500) {
+            index = 0;
+            encoderLeftValue = encoderL.encoderGetCountAndReset();
+            encoderRightValue = encoderR.encoderGetCountAndReset();
+        }
     }
 
     static ZUMO& zumo() {

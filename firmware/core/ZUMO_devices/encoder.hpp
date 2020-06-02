@@ -25,18 +25,18 @@ public:
 
     int encoderGetCountAndReset() {
 
-#ifdef __arm__
-        hal::disable_interrupts();
-//        __disable_irq();
-#endif
+//#ifdef __arm__
+//        hal::disable_interrupts();
+////        __disable_irq();
+//#endif
         int toReturn = encoderCount / encoder_prescaler;
         if (toReturn != 0) {
             encoderCount = 0;
         }
-#ifdef __arm__
-        hal::enable_interrupts();
-//        __enable_irq();
-#endif
+//#ifdef __arm__
+//        hal::enable_interrupts();
+////        __enable_irq();
+//#endif
         return toReturn;
     }
 

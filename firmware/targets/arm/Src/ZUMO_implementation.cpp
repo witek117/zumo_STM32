@@ -120,8 +120,15 @@ STM32_GPIO ZUMO::MOT_L_B = {MOT_L_A_GPIO_Port, MOT_L_B_Pin};
 STM32_GPIO ZUMO::MOT_R_A = {MOT_R_A_GPIO_Port, MOT_R_A_Pin};
 STM32_GPIO ZUMO::MOT_R_B = {MOT_R_B_GPIO_Port, MOT_R_B_Pin};
 
-Encoder ZUMO::encoderL = {MOT_L_A, MOT_L_B, 1};
+Encoder ZUMO::encoderL = {MOT_L_B, MOT_L_A, 1};
 Encoder ZUMO::encoderR = {MOT_R_A, MOT_R_B, 1};
+
+void ZUMO::get_encoders_callback(const char* ) {
+    command_manager.printer.print("e ");
+    command_manager.printer.print(encoderLeftValue);
+    command_manager.printer.print(' ');
+    command_manager.printer.print(encoderRightValue);
+}
 
 // ZUMO get battery value
 void ZUMO::get_battery_value_callback(const char*) {
@@ -139,6 +146,7 @@ ZUMO::CommandManagerTempalte ZUMO::command_manager(enableInterrupts, disableInte
         Command("mg?", ZUMO::get_mpu_gyroscope_value_callback),
         Command("b?", ZUMO::get_bme280_value_callback),
         Command("t?", get_mcp9700_value_callback),
+        Command("e?", get_encoders_callback),
         Command("m", set_motors_callback),
         Command("ma", set_mpu_accelerometer_enable_callback),
         Command("mg", set_mpu_gyroscope_enable_callback),
