@@ -109,4 +109,5 @@ void BHIInit(BHYSensor &bhi160);
 bool checkSensorStatus(BHYSensor &bhi160);
 void orientationHandler(bhyVector data, bhyVirtualSensor type);
 
+
 #endif

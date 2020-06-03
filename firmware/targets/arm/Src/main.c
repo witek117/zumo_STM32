@@ -69,10 +69,9 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int __io_putchar(int ch) {
-    
-    // Code to write character 'ch' on the UART
-}
+
+
+/* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
@@ -665,9 +664,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, TRIG_Pin|SHDN_MOTOR_TPS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PG_3V3_Pin EN_PWR_ESP_Pin INT_MPU_6050_Pin DIP_SW_Pin 
-                           PG_5V_Pin INT_CHARGER_Pin PG_3V3_ESP_Pin INT_BHI_Pin */
+                           PG_5V_Pin INT_CHARGER_Pin PG_3V3_ESP_Pin */
   GPIO_InitStruct.Pin = PG_3V3_Pin|EN_PWR_ESP_Pin|INT_MPU_6050_Pin|DIP_SW_Pin 
-                          |PG_5V_Pin|INT_CHARGER_Pin|PG_3V3_ESP_Pin|INT_BHI_Pin;
+                          |PG_5V_Pin|INT_CHARGER_Pin|PG_3V3_ESP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
@@ -707,11 +706,21 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : INT_BHI_Pin */
+  GPIO_InitStruct.Pin = INT_BHI_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(INT_BHI_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : INT_MPU_9250_Pin */
   GPIO_InitStruct.Pin = INT_MPU_9250_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(INT_MPU_9250_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
 

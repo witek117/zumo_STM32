@@ -1,5 +1,8 @@
 #include "ZUMO_impementation.hpp"
 #include "STM_hal.h"
+#include "stm32f3xx_hal.h"
+#include "Bosch_PCB_7183_di03_BMI160-7183_di03.2.1.11696_170103.h"
+
 
 volatile uint16_t sensors[11];
 volatile uint16_t *TEMP = &sensors[8];
@@ -171,7 +174,7 @@ void ZUMO::init() {
     command_manager.printer.print("Hello world\r\n");
 
     bhi160.init();
-    bhi160.run();
+    //bhi160.run();
     BHIInit(bhi160);
 
 }
@@ -220,60 +223,64 @@ void orientationHandler(bhyVector data, bhyVirtualSensor type)
     newOrientationData = true;
 }
 
+extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+    print("\r\ninterrupt working\r\n");
+    intrToggled = true;
+}
+
 void BHIInit(BHYSensor &bhi160){
 
     print("BHI testing\r\n");
 
-    /* Check to see if something went wrong. */
+    // Check to see if something went wrong.
     if (!checkSensorStatus(bhi160))
         return;
 
-    /* Install a vector callback function to process the data received from the wake up Orientation sensor */
 
-    if (bhi160.installSensorCallback(BHY_VS_ORIENTATION, true, orientationHandler))
-    {
-        checkSensorStatus(bhi160);
+    bhi160.bhiPrint("Uploading Firmware.");
+    bhi160.loadFirmware(bhy1_fw);
 
+    if (!checkSensorStatus(bhi160))
         return;
-    }
-    else{
-        bhi160.bhiPrint("Orientation callback installed\r\n");
-    }
+
+    intrToggled = false; /* Clear interrupt status received during firmware upload */
+    waitForBhyInterrupt();  /* Wait for meta events from boot up */
+    bhi160.bhiPrint("Firmware booted");
+
+    /* Install a metaevent callback handler and a timestamp callback handler here if required before the first run */
+    bhi160.run(); /* The first run processes all boot events */
+
+    /* Link callbacks and configure desired virtual sensors here */
+
+    if (checkSensorStatus(bhi160))
+        bhi160.bhiPrint("All ok");
 
 
-    /* Enable the Orientation virtual sensor that gives you the heading, roll, pitch
-       based of data from the accelerometer, gyroscope and magnetometer.
-       The sensor is set into wake up mode so as to interrupt the host when a new sample is available
-       Additionally, the FIFO buffer of the sensor is flushed for all previous data
-       The maximum report latency of the sensor sample, the sensitivity and the dynamic range
-       are set to 0
-     */
-    if (bhi160.configVirtualSensor(BHY_VS_ORIENTATION, true, BHY_FLUSH_ALL, 200, 0, 0, 0))
-    {
-        bhi160.bhiPrint("Loaded firmware may not support requested sensor id.\r\n");
-    }else {
-        //bhi160.bhiPrint(bhi160.getSensorName(BHY_VS_ORIENTATION));
-        bhi160.bhiPrint(" virtual sensor enabled\r\n");
-    }
+
 
     while(true){
-        bhi160.wait(2000);
-        bhi160.run();
-        if(!checkSensorStatus(bhi160)){
-            bhi160.bhiPrint("\r\nsomething is wrong");
-            bhi160.bhiPrint("\r\n");
-        }
-        if (newOrientationData)
-        {
-            /* Can also be viewed using the plotter */
-            bhi160.bhiPrint((uint32_t)heading);
-            bhi160.bhiPrint((uint32_t)pitch);
-            bhi160.bhiPrint((uint32_t)roll);
-            bhi160.bhiPrint("\r\n");
-            newOrientationData = false;
-        }else{
-            bhi160.bhiPrint("no more data orientation\r\n");
-        }
+
+            bhi160.wait(2000);
+            bhi160.run();
+            if(!checkSensorStatus(bhi160)){
+                bhi160.bhiPrint("\r\nsomething is wrong");
+                bhi160.bhiPrint("\r\n");
+            }
+//            if (newOrientationData)
+//            {
+                bhi160.bhiPrint("Readed data: ");
+                /* Can also be viewed using the plotter */
+//                sprintf(buf, "%f ", heading);
+//                bhi160.bhiPrint(buf);
+                bhi160.bhiPrint((uint32_t)pitch);
+                bhi160.bhiPrint((uint32_t)roll);
+                bhi160.bhiPrint("\r\n");
+                newOrientationData = false;
+//            }else{
+//                bhi160.bhiPrint("no more data orientation\r\n");
+//            }
+
+
     }
 }
 
@@ -284,10 +291,11 @@ bool checkSensorStatus(BHYSensor &bhi160)
 
     if (bhi160.status < BHY_OK) /* All error codes are negative */
     {
+        char buf[10];
         bhi160.bhiPrint("Error code: (");
-        bhi160.bhiPrint(bhi160.status);
+        sprintf(buf, "%d", bhi160.status);
+        bhi160.bhiPrint(buf);
         bhi160.bhiPrint("). ");
-        bhi160.bhiPrint(bhi160.status); //to do---------------------------
 
         return false; /* Something has gone wrong */
     }

@@ -128,6 +128,7 @@ void Error_Handler(void);
 #define SW1_GPIO_Port GPIOA
 #define INT_BHI_Pin GPIO_PIN_12
 #define INT_BHI_GPIO_Port GPIOC
+#define INT_BHI_EXTI_IRQn EXTI15_10_IRQn
 #define INT_MPU_9250_Pin GPIO_PIN_2
 #define INT_MPU_9250_GPIO_Port GPIOD
 #define MOT_L_B_Pin GPIO_PIN_5

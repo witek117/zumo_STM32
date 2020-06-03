@@ -74,11 +74,7 @@ void hal::disable_interrupts() {
 
 volatile bool print_flag = false;
 
-extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == GPIO_PIN_0) {
-//        zumo().hcsr04.edge_detected();
-    }
-}
+
 
 volatile bool refresh_values = false;
 volatile bool _10Hz_flag = false;
