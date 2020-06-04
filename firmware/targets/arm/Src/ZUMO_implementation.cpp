@@ -214,7 +214,7 @@ void waitForBhyInterrupt(void)
     intrToggled = false;
 }
 
-void orientationHandler(bhyVector data, bhyVirtualSensor type)
+void accelerometerHandler(bhyVector data, bhyVirtualSensor type)
 {
     heading = data.x;
     roll = data.z;
@@ -224,8 +224,10 @@ void orientationHandler(bhyVector data, bhyVirtualSensor type)
 }
 
 extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    print("\r\ninterrupt working\r\n");
-    intrToggled = true;
+    if(GPIO_Pin == INT_BHI_Pin) {
+        print("\r\ninterrupt working\r\n");
+        intrToggled = true;
+    }
 }
 
 void BHIInit(BHYSensor &bhi160){
@@ -238,6 +240,7 @@ void BHIInit(BHYSensor &bhi160){
 
 
     bhi160.bhiPrint("Uploading Firmware.");
+    bhi160.wait(1000);
     bhi160.loadFirmware(bhy1_fw);
 
     if (!checkSensorStatus(bhi160))
@@ -250,36 +253,51 @@ void BHIInit(BHYSensor &bhi160){
     /* Install a metaevent callback handler and a timestamp callback handler here if required before the first run */
     bhi160.run(); /* The first run processes all boot events */
 
+
+    if (bhi160.installSensorCallback(BHY_VS_ACCELEROMETER, true, accelerometerHandler))
+    {
+        checkSensorStatus(bhi160);
+        return;
+    }
+    else {
+        bhi160.bhiPrint("ACCELEROMETER callback installed");
+        bhi160.bhiPrint("\r\n");
+    }
     /* Link callbacks and configure desired virtual sensors here */
+
+    if (bhi160.configVirtualSensor(BHY_VS_ORIENTATION, true, BHY_FLUSH_ALL, 200, 0, 0, 0))
+    {
+        bhi160.bhiPrint("Failed to enable virtual sensor ");
+    }
+    else {
+        bhi160.bhiPrint(" virtual sensor enabled");
+    }
 
     if (checkSensorStatus(bhi160))
         bhi160.bhiPrint("All ok");
 
-
-
-
     while(true){
-
-            bhi160.wait(2000);
+        if(intrToggled) {
+            intrToggled = false;
             bhi160.run();
-            if(!checkSensorStatus(bhi160)){
+            if (!checkSensorStatus(bhi160)) {
                 bhi160.bhiPrint("\r\nsomething is wrong");
                 bhi160.bhiPrint("\r\n");
             }
 //            if (newOrientationData)
 //            {
-                bhi160.bhiPrint("Readed data: ");
-                /* Can also be viewed using the plotter */
+            bhi160.bhiPrint("Readed data: ");
+            /* Can also be viewed using the plotter */
 //                sprintf(buf, "%f ", heading);
 //                bhi160.bhiPrint(buf);
-                bhi160.bhiPrint((uint32_t)pitch);
-                bhi160.bhiPrint((uint32_t)roll);
-                bhi160.bhiPrint("\r\n");
-                newOrientationData = false;
+            bhi160.bhiPrint((uint32_t) pitch);
+            bhi160.bhiPrint((uint32_t) roll);
+            bhi160.bhiPrint("\r\n");
+            newOrientationData = false;
 //            }else{
 //                bhi160.bhiPrint("no more data orientation\r\n");
 //            }
-
+        }
 
     }
 }

@@ -63,6 +63,34 @@ void BHYSensor::bhiPrint(const char* str){
     print(str);
 }
 
+void BHYSensor::bhiPrint(const char* str, int8_t num){
+    char str1[10];
+    print(str);
+    sprintf(str1, "%d", num);
+    print(str1);
+}
+
+void BHYSensor::bhiPrint(const char* str, uint8_t num){
+    char str1[10];
+    print(str);
+    sprintf(str1, "%u", num);
+    print(str1);
+}
+
+void BHYSensor::bhiPrint(const char* str, uint16_t num){
+    char str1[10];
+    print(str);
+    sprintf(str1, "%u", num);
+    print(str1);
+}
+
+void BHYSensor::bhiPrint(const char* str, uint32_t num){
+    char str1[10];
+    print(str);
+    sprintf(str1, "%lu", num);
+    print(str1);
+}
+
 void BHYSensor::bhiPrint(uint32_t num) {
     char str[100];
     sprintf(str, "%lu", num);
@@ -210,21 +238,19 @@ int8_t BHYSensor::loadFirmware(const uint8_t *bhyFW)
 #ifdef DEBUG_MODE
     if (debugOut && (debugLevel >= BHY_INFORMATIVE))
     {
-        bhiPrint("Firmware Signature Flag: 0x");
-        bhiPrint(signatureFlag);
-        bhiPrint(", Expected ROM Version: 0x");
-        bhiPrint(romVerExp);
+        bhiPrint("Firmware Signature Flag: ", signatureFlag);
+        bhiPrint("\r\n");
+        bhiPrint("Expected ROM Version: ", romVerExp);
         bhiPrint("\r\n");
 
-        bhiPrint("Read ROM Version: 0x");
-        bhiPrint(romVersion);
-        bhiPrint(" [read return code ");
-        bhiPrint(status);
-        bhiPrint("]");
+        bhiPrint("Read ROM Version: ", romVersion);
+        bhiPrint("\r\n");
+        bhiPrint("read return code ", status);
         bhiPrint("\r\n");
     }
 #endif
 
+    if(0)
     if (!(romVerExp == BHY_ROM_VER_DI01 && romVersion == BHY_ROM_VERSION_DI01) &&
         !(romVerExp == BHY_ROM_VER_DI03 && romVersion == BHY_ROM_VERSION_DI03))
     {
@@ -238,8 +264,7 @@ int8_t BHYSensor::loadFirmware(const uint8_t *bhyFW)
 #ifdef DEBUG_MODE
     if (debugOut && (debugLevel >= BHY_INFORMATIVE))
     {
-        bhiPrint("Binary to load size: ");
-        bhiPrint(dataToProcess);
+        bhiPrint("Binary to load size: ", dataToProcess);
         bhiPrint("\r\n");
     }
 #endif
@@ -2517,8 +2542,16 @@ int8_t BHYSensor::write(uint8_t regAddr, uint8_t *data, uint16_t length)
 
     // Begin I2C communication with provided I2C address
     //Wire.beginTransmission(deviceId);
+    uint8_t buf[50];
 
-    i2c.write(deviceId,data, length);
+    if(length>49){
+        bhiPrint("Too long write buffer\r\n");
+        return 1;
+    }
+
+    memcpy(&buf[1], data, length);
+    buf[0] = regAddr;
+    i2c.write(deviceId,buf, length + 1);
 
     // The following code switches out Wire library code for the older
     // implementation if using the older version of the library.

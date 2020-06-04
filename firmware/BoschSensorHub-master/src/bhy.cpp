@@ -1469,6 +1469,7 @@ void BHYSensor::parseBufferVector(void)
     switch (nextEventSensorId)
     {
     case BHY_VS_ACCELEROMETER:
+        bhiPrint("Case VS accelerometer\r\n");
         break;
     case BHY_VS_GEOMAGNETIC_FIELD:
         break;

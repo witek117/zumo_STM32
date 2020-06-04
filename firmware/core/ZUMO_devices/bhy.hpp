@@ -103,6 +103,22 @@ void setEventDump(bool enable);
 
     BHYSensor(HALina_I2C& i2c_interface, uint8_t address) : i2c(i2c_interface), deviceId(address << 1u){
         debugOut = true;
+        for (uint8_t i = 0; i < SENSOR_CALLBACK_LIST_NUM + 1; i++)
+            callbacks[i].invalid = NULL;
+        productId = 0;
+        bytesWaiting = 0;
+        bufferEnd = 0;
+        bufferStart = 0;
+        bufferUsed = 0;
+        lastTimestamp = 0;
+        nextEventId = BHY_SID_NONE;
+        nextEventDataType = BHY_INVALID_DATA_TYPE;
+        nextEventDataSize = 0;
+        nextEventSensorId = BHY_VS_INVALID;
+        nextEventIsWakeup = false;
+        for (uint32_t j = 0; j < BHY_FIFO_BUFFER_SIZE; j++)
+            buffer[j] = 0;
+        status = BHY_OK;
     }
 
     int8_t init(void);
@@ -113,6 +129,10 @@ void setEventDump(bool enable);
     void wait(uint16_t delay_ms);
 
     void bhiPrint(const char* str);
+    void bhiPrint(const char* str, int8_t num);
+    void bhiPrint(const char* str, uint8_t num);
+    void bhiPrint(const char* str, uint16_t num);
+    void bhiPrint(const char* str, uint32_t num);
     void bhiPrint(uint32_t num);
     void bhiPrint(uint32_t num1, uint32_t num2);
 
@@ -213,7 +233,7 @@ protected:
     #ifdef DEBUG_MODE
 bhyDebugLevel debugLevel = BHY_ALL;
 bool commDump = false;
-bool methodTrace = false;
+bool methodTrace = true;
 bool eventDump = false;
 #endif
 bhySensorStatusBank sensorStatusBank;

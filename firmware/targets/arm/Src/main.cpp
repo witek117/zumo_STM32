@@ -111,7 +111,7 @@ void Main() {
     while(true){
         zumo.bhi160.wait(1000);
         zumo.LED1.toggle();
-        zumo.command_manager.printer.print("dupa\r\n");
+        zumo.command_manager.printer.print("dziala\r\n");
 //        k++;
 //        if (k > 1000000) {
 //            k =  0;
