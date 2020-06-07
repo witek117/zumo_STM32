@@ -5,3 +5,5 @@
 */cmake-build-release/
 **/__Previews/
 **/History/
+*.exe
+*.config
