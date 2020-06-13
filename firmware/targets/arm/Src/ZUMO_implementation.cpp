@@ -265,7 +265,7 @@ void BHIInit(BHYSensor &bhi160){
     }
     /* Link callbacks and configure desired virtual sensors here */
 
-    if (bhi160.configVirtualSensor(BHY_VS_ORIENTATION, true, BHY_FLUSH_ALL, 200, 0, 0, 0))
+    if (bhi160.configVirtualSensor(BHY_VS_ORIENTATION, true, BHY_FLUSH_ALL, 100, 250, 0, 0))
     {
         bhi160.bhiPrint("Failed to enable virtual sensor ");
     }
@@ -277,7 +277,8 @@ void BHIInit(BHYSensor &bhi160){
         bhi160.bhiPrint("All ok");
 
     while(true){
-        if(intrToggled) {
+        //if(intrToggled) {
+            bhi160.wait(1000);
             intrToggled = false;
             bhi160.run();
             if (!checkSensorStatus(bhi160)) {
@@ -297,7 +298,7 @@ void BHIInit(BHYSensor &bhi160){
 //            }else{
 //                bhi160.bhiPrint("no more data orientation\r\n");
 //            }
-        }
+        //}
 
     }
 }

@@ -250,7 +250,7 @@ int8_t BHYSensor::loadFirmware(const uint8_t *bhyFW)
     }
 #endif
 
-    if(0)
+
     if (!(romVerExp == BHY_ROM_VER_DI01 && romVersion == BHY_ROM_VERSION_DI01) &&
         !(romVerExp == BHY_ROM_VER_DI03 && romVersion == BHY_ROM_VERSION_DI03))
     {
