@@ -82,6 +82,8 @@ volatile bool _10Hz_flag = false;
 //Mean <uint16_t, 20>current_mean;
 
 extern "C"
+
+
 void Main() {
 
     ZUMO& zumo = ZUMO::zumo();

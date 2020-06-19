@@ -1,7 +1,7 @@
 #include "ZUMO_impementation.hpp"
 #include "STM_hal.h"
 #include "stm32f3xx_hal.h"
-#include "Bosch_PCB_7183_di03_BMI160-7183_di03.2.1.11696_170103.h"
+#include "Bosch_PCB_7183_di01_BMI160-7183_di01.2.1.10836_170103.h"
 
 
 volatile uint16_t sensors[11];
@@ -160,22 +160,22 @@ extern ADC_HandleTypeDef hadc1;
 void ZUMO::init() {
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
 
-    motor_driver.init();
-    uart1.init();
-    command_manager.init();
-    PrintManager::setPrintFunction(printUart1);
-    uart1.setRedirectHandler(ReadManager::putChar);
-    ws2812b.init();
-    bme280.init();
-    mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2);
-    mcp9700.init();
+  // motor_driver.init();
+     uart1.init();
+     command_manager.init();
+     PrintManager::setPrintFunction(printUart1);
+     uart1.setRedirectHandler(ReadManager::putChar);
+  // ws2812b.init();
+  // bme280.init();
+  // mpu6050.init(MPU6050::GyroscopeData::Scale::DPS_2000, MPU6050::AccelerometerData::Range::G2);
+  // mcp9700.init();
 
     // Hello
     command_manager.printer.print("Hello world\r\n");
 
-    bhi160.init();
+    //bhi160.init();
     //bhi160.run();
-    BHIInit(bhi160);
+    //BHIInit(bhi160);
 
 }
 
@@ -214,13 +214,14 @@ void waitForBhyInterrupt(void)
     intrToggled = false;
 }
 
-void accelerometerHandler(bhyVector data, bhyVirtualSensor type)
+void orientationHandler(bhyVector data, bhyVirtualSensor type)
 {
     heading = data.x;
     roll = data.z;
     pitch = data.y;
     status = data.status;
     newOrientationData = true;
+   // print("\r\nORIENTATION!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
 }
 
 extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
@@ -239,67 +240,56 @@ void BHIInit(BHYSensor &bhi160){
         return;
 
 
-    bhi160.bhiPrint("Uploading Firmware.");
-    bhi160.wait(1000);
-    bhi160.loadFirmware(bhy1_fw);
-
     if (!checkSensorStatus(bhi160))
         return;
 
     intrToggled = false; /* Clear interrupt status received during firmware upload */
-    waitForBhyInterrupt();  /* Wait for meta events from boot up */
-    bhi160.bhiPrint("Firmware booted");
 
     /* Install a metaevent callback handler and a timestamp callback handler here if required before the first run */
     bhi160.run(); /* The first run processes all boot events */
 
-
-    if (bhi160.installSensorCallback(BHY_VS_ACCELEROMETER, true, accelerometerHandler))
+    if (bhi160.installSensorCallback(BHY_VS_ORIENTATION, true, orientationHandler))
     {
         checkSensorStatus(bhi160);
+
         return;
     }
-    else {
-        bhi160.bhiPrint("ACCELEROMETER callback installed");
-        bhi160.bhiPrint("\r\n");
-    }
-    /* Link callbacks and configure desired virtual sensors here */
+    else
+        bhi160.bhiPrint("Orientation callback installed");
 
-    if (bhi160.configVirtualSensor(BHY_VS_ORIENTATION, true, BHY_FLUSH_ALL, 100, 250, 0, 0))
+    /* Enable the Orientation virtual sensor that gives you the heading, roll, pitch
+       based of data from the accelerometer, gyroscope and magnetometer.
+       The sensor is set into wake up mode so as to interrupt the host when a new sample is available
+       Additionally, the FIFO buffer of the sensor is flushed for all previous data
+       The maximum report latency of the sensor sample, the sensitivity and the dynamic range
+       are set to 0
+     */
+    if (bhi160.configVirtualSensor(BHY_VS_ORIENTATION, true, BHY_FLUSH_ALL, 200, 0, 0, 0))
     {
-        bhi160.bhiPrint("Failed to enable virtual sensor ");
-    }
-    else {
-        bhi160.bhiPrint(" virtual sensor enabled");
+        bhi160.bhiPrint("Error installed sensor\r\n");
+    }else {
+        bhi160.bhiPrint(" virtual sensor enabled\r\n");
     }
 
     if (checkSensorStatus(bhi160))
         bhi160.bhiPrint("All ok");
 
     while(true){
-        //if(intrToggled) {
-            bhi160.wait(1000);
+        bhi160.wait(1000);
+        //if (intrToggled)
+        //{
             intrToggled = false;
             bhi160.run();
-            if (!checkSensorStatus(bhi160)) {
-                bhi160.bhiPrint("\r\nsomething is wrong");
+            checkSensorStatus(bhi160);
+            if (newOrientationData)
+            {
+                /* Can also be viewed using the plotter */
+                bhi160.bhiPrint((uint32_t) pitch);
+                bhi160.bhiPrint((uint32_t) roll);
                 bhi160.bhiPrint("\r\n");
+                newOrientationData = false;
             }
-//            if (newOrientationData)
-//            {
-            bhi160.bhiPrint("Readed data: ");
-            /* Can also be viewed using the plotter */
-//                sprintf(buf, "%f ", heading);
-//                bhi160.bhiPrint(buf);
-            bhi160.bhiPrint((uint32_t) pitch);
-            bhi160.bhiPrint((uint32_t) roll);
-            bhi160.bhiPrint("\r\n");
-            newOrientationData = false;
-//            }else{
-//                bhi160.bhiPrint("no more data orientation\r\n");
-//            }
         //}
-
     }
 }
 
