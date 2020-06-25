@@ -13,11 +13,6 @@ namespace imu_v3
         static SerialPort mySerialPort;
         static string allReceivedData;
         static bool receivedFlag = false;
-        /// <summary>
-        /// Główny punkt wejścia dla aplikacji.
-        /// </summary>
-        // [STAThread]
-
         static AHRS.MadgwickAHRS AHRS = new AHRS.MadgwickAHRS(1f / 100f, 0.1f);
 
         static float deg2rad(float degrees)
@@ -37,14 +32,11 @@ namespace imu_v3
             mySerialPort.StopBits = StopBits.One;
             mySerialPort.DataBits = 8;
             mySerialPort.Handshake = Handshake.None;
-            // mySerialPort.RtsEnable = true;
-
+          
 
             mySerialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
 
             mySerialPort.Open();
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
             Console.WriteLine("Searching for x-IMU...");
             Form_3Dcuboid form_3DcuboidA = new Form_3Dcuboid(new string[] { "Form_3Dcuboid/RightInv.png", "Form_3Dcuboid/LeftInv.png", "Form_3Dcuboid/BackInv.png", "Form_3Dcuboid/FrontInv.png", "Form_3Dcuboid/TopInv.png", "Form_3Dcuboid/BottomInv.png" });
             form_3DcuboidA.Text += " A";
@@ -59,8 +51,7 @@ namespace imu_v3
 
 
 
-            // Console.ReadKey();
-            // AHRS.Update(deg2rad(-10000), deg2rad(1000), deg2rad(100), 1, 2, 8);
+  
             
 
             while(true)
@@ -68,22 +59,20 @@ namespace imu_v3
                 if (receivedFlag)
                 {
                     receivedFlag = false;
-                    x_IMU_API.QuaternionData chuj = new x_IMU_API.QuaternionData(AHRS.Quaternion);
-                    form_3DcuboidA.RotationMatrix = chuj.ConvertToRotationMatrix();
+                    x_IMU_API.QuaternionData zumo = new x_IMU_API.QuaternionData(AHRS.Quaternion);
+                    form_3DcuboidA.RotationMatrix = zumo.ConvertToRotationMatrix();
                 }
             }
             
             mySerialPort.Close();
-            // Application.Run(new Form1());
+           
         }
 
         private static void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
-            // string indata = sp.ReadExisting();
 
             allReceivedData += sp.ReadExisting();
-            // int index = 
             while (allReceivedData.IndexOf('\n') != -1)
             {
                 string oneLine = allReceivedData.Substring(0, allReceivedData.IndexOf('\n'));
@@ -105,20 +94,10 @@ namespace imu_v3
                 }
                 
             }
-            // AHRS.Update(deg2rad(-10000), deg2rad(1000), deg2rad(100), 1, 2, 8);
-
-
-
-
-            // Console.WriteLine("Data Received:");
-            // Console.Write(indata);
+            
         }
 
 
-        /* static void kupa()
-        {
-            AHRS.Update(deg2rad(e.Gyroscope[0]), deg2rad(e.Gyroscope[1]), deg2rad(e.Gyroscope[2]), e.Accelerometer[0], e.Accelerometer[1], e.Accelerometer[2]);
-        }
-        */
+       
     }
 }
