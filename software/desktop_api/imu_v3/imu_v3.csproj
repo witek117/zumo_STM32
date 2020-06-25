@@ -92,9 +92,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Form_3Dcuboid\Back.png" />
     <Content Include="Form_3Dcuboid\BackInv.png" />
     <Content Include="Form_3Dcuboid\Bottom.png" />
