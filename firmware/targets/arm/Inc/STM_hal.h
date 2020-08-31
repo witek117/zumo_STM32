@@ -127,7 +127,12 @@ public:
         return data_buffer[0];
     }
 
-    uint8_t* read(uint8_t address, uint8_t register_address, size_t size) override {
+    void read(uint8_t address, uint8_t register_address, uint32_t size, uint8_t* buff) override {
+        HAL_I2C_Master_Transmit((I2C_HandleTypeDef*)&hi2c, address, (uint8_t*)&register_address, 1, 10);
+        HAL_I2C_Master_Receive((I2C_HandleTypeDef*)&hi2c, address, buff, size, 10);
+    }
+
+    uint8_t* read(uint8_t address, uint8_t register_address, uint32_t size) override {
         (void) size;
         HAL_I2C_Master_Transmit((I2C_HandleTypeDef*)&hi2c, address, (uint8_t*)&register_address, 1, 10);
         HAL_I2C_Master_Receive((I2C_HandleTypeDef*)&hi2c, address, data_buffer, size, 10);

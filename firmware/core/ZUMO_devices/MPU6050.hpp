@@ -75,14 +75,14 @@ public:
         RegisterNames offset_register;
         Axis<int16_t> raw_data;
         Axis<float> normalised_data;
-        bool enable = false;
+//        bool enable = false;
     public:
         virtual Axis<float> get_normalised_data() = 0;
 
         DeviceData(MPU6050& mpu, RegisterNames data_register, RegisterNames offset_register) : mpu(mpu), data_register(data_register), offset_register(offset_register){ }
 
         Axis<int16_t> get_raw_data() {
-            if (enable) {
+            if (mpu.enable) {
                 uint8_t* data = mpu.i2c.read(mpu.address, uint8_t(data_register), 6);
                 raw_data.x = (int16_t)(uint16_t(data[0] << 8u) | data[1]);
                 raw_data.y = (int16_t)(uint16_t(data[2] << 8u) | data[3]);
@@ -100,7 +100,7 @@ public:
         }
 
         void set_enable(bool enable_) override {
-            enable = enable_;
+            mpu.enable = enable_;
         }
 
         Axis<float> get_last_normalised_data() {
@@ -121,7 +121,7 @@ public:
         AccelerometerData(MPU6050& mpu) : DeviceData(mpu, RegisterNames::ACCEL_XOUT_H, RegisterNames::ACCEL_XOFFS_H) { }
 
         Axis<float> get_normalised_data() override {
-            if (!enable) {
+            if (!mpu.enable) {
                 return normalised_data;
             }
             get_raw_data();
@@ -179,7 +179,7 @@ public:
         GyroscopeData(MPU6050& mpu) : DeviceData(mpu, RegisterNames::GYRO_XOUT_H, RegisterNames::GYRO_XOFFS_H){ }
 
         Axis<float> get_normalised_data() override {
-            if (!enable) {
+            if (!mpu.enable) {
                 return normalised_data;
             }
 

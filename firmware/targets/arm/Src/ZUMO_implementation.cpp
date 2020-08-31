@@ -1,6 +1,6 @@
 #include "ZUMO_impementation.hpp"
 #include "STM_hal.h"
-
+#include "MPU9250.h"
 volatile uint16_t sensors[11];
 volatile uint16_t *TEMP = &sensors[8];
 volatile uint16_t *V_CURRENT_SENS = &sensors[9];
@@ -174,6 +174,10 @@ void printUart1(uint8_t c) {
 
 extern ADC_HandleTypeDef hadc1;
 
+
+//MPU9250 IMU(ZUMO::IMU_I2C, 0x68);
+
+
 void ZUMO::init() {
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)sensors, 11);
 
@@ -189,6 +193,17 @@ void ZUMO::init() {
 
     // Hello
     command_manager.printer.print("Hello world");
+
+//    mpu6050.set_enable(true);
+
+//    int  status = IMU.begin();
+//    if (status < 0) {
+//        command_manager.printer.print("IMU initialization unsuccessful\n");
+//        command_manager.printer.print("Check IMU wiring or try cycling power\n");
+//        command_manager.printer.print("Status: ");
+//        command_manager.printer.print((float)status);
+//        while(1) {}
+//    }
 }
 
 void ZUMO::loop() {
@@ -204,4 +219,32 @@ void ZUMO::loop() {
         k =  0;
         LED1.toggle();
     }
+//
+//
+//    if(printFlag) {
+//        printFlag = false;
+//
+//        auto raw_data = mpu6050.accelerometer.get_raw_data();
+//        command_manager.printer.print("a ");
+//        command_manager.printer.print(raw_data.x);
+//        command_manager.printer.print(' ');
+//        command_manager.printer.print(raw_data.y);
+//        command_manager.printer.print(' ');
+//        command_manager.printer.print(raw_data.z);
+//        command_manager.printer.print('\n');
+//
+////        auto raw_data = mpu6050.gyroscope.get_last_normalised_data();
+////        command_manager.printer.print("g ");
+////        command_manager.printer.print(raw_data.x);
+////        command_manager.printer.print(' ');
+////        command_manager.printer.print(raw_data.y);
+////        command_manager.printer.print(' ');
+////        command_manager.printer.print(raw_data.z);
+////        command_manager.printer.print('\n');
+//
+//
+////        command_manager.printer.print('.');
+//
+//
+//    }
 }

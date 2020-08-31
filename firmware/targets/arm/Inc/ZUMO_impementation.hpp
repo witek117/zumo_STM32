@@ -12,8 +12,6 @@
 #include "command_terminal/command_manager.h"
 
 class ZUMO {
-    // I2C
-    static STM32_I2C IMU_I2C;
 public:
     // LEDS
     static STM32_GPIO LED1; //(LED1_GPIO_Port, LED1_Pin);
@@ -93,6 +91,8 @@ public:
 
     void init();
 
+//    inline static bool printFlag = false;
+
     static void ISR_10kHz() {
         encoderL.encoder10kHzTickISR();
         encoderR.encoder10kHzTickISR();
@@ -105,6 +105,14 @@ public:
             encoderLeftValue = encoderL.encoderGetCountAndReset();
             encoderRightValue = encoderR.encoderGetCountAndReset();
         }
+//
+//        static uint16_t indexPrint = 0;
+//
+//        indexPrint++;
+//        if (indexPrint > 10000) {
+//            indexPrint = 0;
+//            printFlag = true;
+//        }
     }
 
     static ZUMO& zumo() {
@@ -115,5 +123,6 @@ public:
     static void loop();
 
 
-
+// I2C
+static STM32_I2C IMU_I2C;
 };

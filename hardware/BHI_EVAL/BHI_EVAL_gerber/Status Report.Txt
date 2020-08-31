@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [BHI_EVAL.PcbDoc]
+   Generated File[BHI_EVAL-Plated.TXT]
+   Generated File[BHI_EVAL.LDP]
+   Generated File[BHI_EVAL.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 01:18:28 On 29.08.2020
