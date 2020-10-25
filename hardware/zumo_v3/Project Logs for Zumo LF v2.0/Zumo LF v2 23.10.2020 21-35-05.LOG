@@ -1,0 +1,33 @@
+Removed Pin From Net: NetName=BCM3/SCL Pin=R53-1
+Removed Pin From Net: NetName=BCM2/SDA Pin=R54-1
+Removed Pin From Net: NetName=+3V3 Pin=R54-2
+Change Component Designator: OldDesignator=C? NewDesignator=C65
+Added Component: Designator=R50(R_0603_1608)
+Add component (AddParameter): Name = "HelpURL"; Value = "http://www.farnell.com/datasheets/2167052.pdf?_ga=2.156163131.1690599162.1548417389-1379097396.1542296996&_gac=1.18389067.1547230258.Cj0KCQiAmuHhBRD0ARIsAFWyPwhX8HcvXnM3tA0ZBodZLzDIjH2ZxLpjT5LWo9bad_HPRbU8LfPq44UaAhEwEALw_wcB"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "Yageo"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "RC0603FR-074K7L"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Part Number"; Value = "R_4.7k_0603_1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Power"; Value = "100mW"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SCH_Footprint"; Value = "0603"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "TME"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 2"; Value = "RS Components"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 3"; Value = "Farnell"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 4"; Value = "Mouser"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 5"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 6"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "RC0603FR-074K7"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 2"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 3"; Value = "9238565"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 4"; Value = "603-RC0603FR-074K7L"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 5"; Value = "311-4.70KHRCT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 6"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Tolerance"; Value = "1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "4.7k"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Voltage"; Value = "75V"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=BCM3/SCL Pin=R50-1
+Added Pin To Net: NetName=+3V3 Pin=R50-2
+Added Pin To Net: NetName=BCM2/SDA Pin=R53-1
+Change Net Name : Old Net Name=NetC?_1 New Net Name=NetC65_1
+Added Member To Class: ClassName=U_CPU Member=Component C65 Ceramic X5R
+Added Member To Class: ClassName=U_CPU Member=Component R50 Resistor
+Added Member To Class: ClassName=U_CPU Member=Component R53 Resistor

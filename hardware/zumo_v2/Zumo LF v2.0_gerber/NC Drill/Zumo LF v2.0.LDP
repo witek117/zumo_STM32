@@ -1,4 +1,0 @@
-Layer Pairs Export File for PCB: D:\01_Praca_AGH\Zadania\moja in¿ynierka\sch_pcb\zumo_v2\Zumo LF v2.0.PcbDoc
-LayersSetName=Top_Bot_Plated_Thru_Holes|DrillFile=zumo lf v2.0-roundholes-plated.txt|DrillLayers=gtl,gp1,g1,gbl
-LayersSetName=Top_Bot_NonPlated_Thru_Holes|DrillFile=zumo lf v2.0-roundholes-nonplated.txt|DrillLayers=gtl,gp1,g1,gbl
-LayersSetName=Top_Bot_NonPlated_Slot_Holes|DrillFile=zumo lf v2.0-slotholes-nonplated.txt|DrillLayers=gtl,gp1,g1,gbl

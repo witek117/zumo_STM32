@@ -1,0 +1,4 @@
+Change Net Name : Old Net Name=NetU7_24 New Net Name=INT_ICM
+Change Net Name : Old Net Name=NetU7_28 New Net Name=INT_BHI
+Change Net Name : Old Net Name=NetU7_53 New Net Name=USART2_TX
+Change Net Name : Old Net Name=NetU7_54 New Net Name=USART2_RX

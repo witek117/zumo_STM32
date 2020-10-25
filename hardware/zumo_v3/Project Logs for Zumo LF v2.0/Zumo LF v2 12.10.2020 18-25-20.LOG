@@ -1,0 +1,7 @@
+Change Component Designator: OldDesignator=R? NewDesignator=R24
+Change Component Designator: OldDesignator=R? NewDesignator=R49
+Change Net Name : Old Net Name=NetR?_1 New Net Name=NetR24_1
+Added Pin To Net: NetName=NetR49_1 Pin=R49-1
+Added Pin To Net: NetName=NetR49_1 Pin=U14-21
+Added Net: Name=NetR49_1
+Added Member To Class: ClassName=U_IMU Member=Component R49 Resistor

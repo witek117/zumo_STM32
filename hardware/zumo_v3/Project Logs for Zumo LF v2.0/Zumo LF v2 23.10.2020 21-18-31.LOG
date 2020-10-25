@@ -1,0 +1,9 @@
+Change Net Name : Old Net Name=NetD8_1 New Net Name=FAULT
+Change Net Name : Old Net Name=NetP4_7 New Net Name=MOT_L_FB1
+Change Net Name : Old Net Name=NetP4_8 New Net Name=MOT_R_FB1
+Change Net Name : Old Net Name=NetP4_9 New Net Name=MOT_L_FB2
+Change Net Name : Old Net Name=NetP4_10 New Net Name=MOT_R_FB2
+Change Net Name : Old Net Name=NetU7_26 New Net Name=MOT_R_PWM1
+Change Net Name : Old Net Name=NetU7_27 New Net Name=MOT_R_PWM2
+Change Net Name : Old Net Name=NetU7_34 New Net Name=MOT_L_PWM1
+Change Net Name : Old Net Name=NetU7_35 New Net Name=MOT_L_PWM2
