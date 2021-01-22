@@ -1,5 +1,9 @@
 Record=TopLevelDocument|FileName=MultiBoardSchematic1.MbsDoc
-Record=DiagramHierarchy|SourceDocument=MultiBoardSchematic1.MbsDoc|Kind=Multi-board Schematic Module|Designator=2|Source=..\reflactance_sensors_v1\Reflectance Sensors.PrjPCB
+Record=DiagramHierarchy|SourceDocument=MultiBoardSchematic1.MbsDoc|Kind=Multi-board Schematic Module|Designator=1|Source=..\battery\battery.PrjPcb
+Record=SubProject|SourceDocument=MultiBoardSchematic1.MbsDoc|ProjectPath=..\battery\battery.PrjPcb
+Record=DiagramHierarchy|SourceDocument=MultiBoardSchematic1.MbsDoc|Kind=Multi-board Schematic Module|Designator=connector|Source=..\motor_connector\motor_connector.PrjPcb
+Record=SubProject|SourceDocument=MultiBoardSchematic1.MbsDoc|ProjectPath=..\motor_connector\motor_connector.PrjPcb
+Record=DiagramHierarchy|SourceDocument=MultiBoardSchematic1.MbsDoc|Kind=Multi-board Schematic Module|Designator=sensors|Source=..\reflactance_sensors_v1\Reflectance Sensors.PrjPCB
 Record=SubProject|SourceDocument=MultiBoardSchematic1.MbsDoc|ProjectPath=..\reflactance_sensors_v1\Reflectance Sensors.PrjPCB
-Record=DiagramHierarchy|SourceDocument=MultiBoardSchematic1.MbsDoc|Kind=Multi-board Schematic Module|Designator=1|Source=..\zumo_v2\Zumo LF v2.0.PrjPcb
-Record=SubProject|SourceDocument=MultiBoardSchematic1.MbsDoc|ProjectPath=..\zumo_v2\Zumo LF v2.0.PrjPcb
+Record=DiagramHierarchy|SourceDocument=MultiBoardSchematic1.MbsDoc|Kind=Multi-board Schematic Module|Designator=Zumo|Source=..\zumo_v3\Zumo LF v3.0.PrjPcb
+Record=SubProject|SourceDocument=MultiBoardSchematic1.MbsDoc|ProjectPath=..\zumo_v3\Zumo LF v3.0.PrjPcb

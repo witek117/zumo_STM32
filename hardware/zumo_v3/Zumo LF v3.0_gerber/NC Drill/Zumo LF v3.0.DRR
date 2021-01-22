@@ -1,0 +1,25 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: Zumo LF v3.0.PcbDoc   23.12.2020  19:47:09
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII Plated RoundHoles File : Zumo LF v3.0-RoundHoles-Plated.TXT
+ASCII Non-Plated RoundHoles File : Zumo LF v3.0-RoundHoles-NonPlated.TXT
+ASCII Non-Plated SlotHoles File : Zumo LF v3.0-SlotHoles-NonPlated.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      12mil (0.3mm)                                             Round             569       PTH        0.00inch (0.00mm)
+T2      28mil (0.7mm)                                             Round             4         PTH        0.00inch (0.00mm)
+T3      35mil (0.9mm)                                             Round             97        PTH        0.00inch (0.00mm)
+T4      39mil (1mm)                                               Round             4         PTH        0.00inch (0.00mm)
+T5      40mil (1.02mm)                                            Round             40        PTH        0.00inch (0.00mm)
+T6      43mil (1.1mm)                                             Round             8         PTH        0.00inch (0.00mm)
+T7      108mil (2.75mm)                                           Round             4         PTH        0.00inch (0.00mm)
+T8      23mil (0.58mm)                                            Slot              1         NPTH       0.00inch (0.00mm)
+T9      26mil (0.66mm)                                            Round             1         NPTH       0.00inch (0.00mm)
+T10     122mil (3.1mm)                                            Round             8         NPTH       0.00inch (0.00mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              736
+
+Total Processing Time (hh:mm:ss) : 00:00:01

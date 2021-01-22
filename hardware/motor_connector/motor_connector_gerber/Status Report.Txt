@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [motor_connector.PcbDoc]
+   Generated File[motor_connector-Plated.TXT]
+   Generated File[motor_connector.LDP]
+   Generated File[motor_connector.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 16:01:00 On 23.12.2020

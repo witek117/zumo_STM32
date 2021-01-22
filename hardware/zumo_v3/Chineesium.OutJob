@@ -21,7 +21,7 @@ TargetOutputMedium=Folder Structure
 VariantName=[No Variations]
 VariantScope=1
 CurrentConfigurationName=
-TargetPrinter=Brother PCL5e Driver
+TargetPrinter=Brother HL-5270DN series
 PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|PrintWhat=1
 OutputMedium1=Print Job
 OutputMedium1_Type=Printer
@@ -63,7 +63,7 @@ Configuration2_Item1=BoardEdgeRoutToolDia=2000000|GenerateBoardEdgeRout=False|Ge
 [PublishSettings]
 OutputFilePath2=
 ReleaseManaged2=1
-OutputBasePath2=Project Outputs for Free Documents
+OutputBasePath2=Project Outputs for HiCRI_v52
 OutputPathMedia2=
 OutputPathMediaValue2=
 OutputPathOutputer2=[Output Type]
@@ -88,7 +88,7 @@ ShowComponentParameters2=1
 GlobalBookmarks2=0
 PDFACompliance2=Disabled
 PDFVersion2=Default
-OutputFilePath3=E:\WSN\SVN\actislink_grant_pcb\SDR_Supply\./\SDR_Supply_gerber\
+OutputFilePath3=D:\Git\zumo_STM32\hardware\zumo_v3\./\Zumo LF v3.0_gerber\
 ReleaseManaged3=0
 OutputBasePath3=./\
 OutputPathMedia3==ProjectName+'_gerber'
@@ -103,7 +103,7 @@ OutputFileNameSpecial3=
 OpenOutput3=1
 OutputFilePath4=
 ReleaseManaged4=1
-OutputBasePath4=Project Outputs for Free Documents
+OutputBasePath4=Project Outputs for HiCRI_v52
 OutputPathMedia4=
 OutputPathMediaValue4=
 OutputPathOutputer4=[Output Type]
@@ -142,7 +142,7 @@ WmvQuality4=80
 [GeneratedFilesSettings]
 RelativeOutputPath2=
 OpenOutputs2=1
-RelativeOutputPath3=E:\WSN\SVN\actislink_grant_pcb\SDR_Supply\./\SDR_Supply_gerber\
+RelativeOutputPath3=D:\Git\zumo_STM32\hardware\zumo_v3\./\Zumo LF v3.0_gerber\
 OpenOutputs3=1
 AddToProject3=1
 TimestampFolder3=0

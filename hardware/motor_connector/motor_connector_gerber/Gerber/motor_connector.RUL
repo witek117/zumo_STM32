@@ -1,0 +1,5 @@
+DRC Rules Export File for PCB: D:\Git\zumo_STM32\hardware\motor_connector\motor_connector.PcbDoc
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=6.00
+RuleKind=Clearance|RuleName=All|Scope=Board|Minimum=7.00

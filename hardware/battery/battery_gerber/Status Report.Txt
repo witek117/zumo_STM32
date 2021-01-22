@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [battery.PcbDoc]
+   Generated File[battery-Plated.TXT]
+   Generated File[battery.LDP]
+   Generated File[battery.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 19:30:53 On 23.12.2020

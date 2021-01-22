@@ -1,0 +1,14 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [Zumo LF v3.0.PcbDoc]
+   Generated File[Zumo LF v3.0-RoundHoles-Plated.TXT]
+   Generated File[Zumo LF v3.0-RoundHoles-NonPlated.TXT]
+   Generated File[Zumo LF v3.0-SlotHoles-NonPlated.TXT]
+   Generated File[Zumo LF v3.0.LDP]
+   Generated File[Zumo LF v3.0.DRR]
+
+
+Files Generated   : 5
+Documents Printed : 0
+
+Finished Output Generation At 19:47:10 On 23.12.2020
